@@ -165,6 +165,20 @@ Clipboard_ExtractLink()
 /**
  * @returns {String}
  */
+Clipboard_GetBlockquote()
+{
+  html := Clipboard_GetHtml()
+  if !html
+    return ""
+  sourceUrl := ""
+  if RegExMatch(html, "(?m)^SourceURL:(.+?)[\r\n]", &m)
+    sourceUrl := Trim(m[1])
+  return Document_CreateBlockquoteElement(sourceUrl, A_Clipboard)
+}
+
+/**
+ * @returns {String}
+ */
 Clipboard_GetHtml()
 {
   static CF_HTML := RegisterClipboardFormat("HTML Format")

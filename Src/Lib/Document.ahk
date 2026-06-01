@@ -1,7 +1,7 @@
 ﻿#Requires AutoHotkey v2.0
 
 /**
- * @param {String} href
+ * @param {String} url
  * @param {String} text
  * @returns {String}
  */
@@ -14,6 +14,33 @@ Document_CreateAnchorElement(url, text)
   a.target := '_blank'
   a.innerText := text ? text : url
   return a.outerHTML
+}
+/**
+ * @param {String} url
+ * @param {String} text
+ * @returns {String}
+ */
+Document_CreateBlockquoteElement(url, text)
+{
+  document := ComObject("HTMLFile")
+  blockquote := document.createElement("blockquote")
+  if url
+    blockquote.cite := url
+  blockquote.innerText := text
+  return blockquote.outerHTML
+}
+/**
+ * @param {String} text
+ * @returns {String}
+ */
+Document_CreateCodeElement(text)
+{
+  document := ComObject("HTMLFile")
+  pre := document.createElement("pre")
+  code := document.createElement("code")
+  code.innerText := text
+  pre.appendChild(code)
+  return pre.outerHTML
 }
 /**
  * @param {Array<String>} items

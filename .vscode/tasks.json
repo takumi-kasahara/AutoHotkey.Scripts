@@ -1,0 +1,46 @@
+{
+  "version": "2.0.0",
+  "options": {},
+  "presentation": {
+    "reveal": "silent",
+    "revealProblems": "onProblem",
+  },
+  "tasks": [
+    {
+      "label": "build",
+      "type": "shell",
+      "command": "${workspaceFolder}\\Src\\Build.ahk",
+      "problemMatcher": [],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
+    },
+    {
+      "label": "build.exe",
+      "type": "shell",
+      "command": "${workspaceFolder}\\Src\\Build.exe.ahk",
+      "problemMatcher": [],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
+    },
+    {
+      "label": "install",
+      "type": "shell",
+      "command": "${workspaceFolder}\\Src\\Install.ahk",
+      "problemMatcher": [],
+    },
+    {
+      "label": "test",
+      "type": "shell",
+      "command": "${workspaceFolder}\\Src\\Tests.ahk",
+      "problemMatcher": [],
+      "group": {
+        "kind": "test",
+        "isDefault": true
+      }
+    }
+  ],
+}

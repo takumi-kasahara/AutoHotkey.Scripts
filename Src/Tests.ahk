@@ -1,0 +1,7 @@
+﻿#Include "Tests\Array.Tests.ahk"
+#Include "Tests\Clipboard.Tests.ahk"
+#Include "Tests\Map.Tests.ahk"
+#Include "Tests\Path.Tests.ahk"
+#Include "Tests\Stream.Tests.ahk"
+#Include "Tests\String.Tests.ahk"
+#Include "Tests\Url.Tests.ahk"

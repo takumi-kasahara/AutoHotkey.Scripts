@@ -107,6 +107,8 @@ Open_Explorer(path)
 Open_Find(paths*)
 {
   static exe := Reg_Find()
+  if exe == ""
+    return 0
   if paths.Length == 0
     return Open(exe)
   else
@@ -126,6 +128,8 @@ Open_Grep(paths*)
     return WinGetPID(id)
   }
   static exe := Reg_Grep()
+  if exe == ""
+    return 0
   if paths.Length = 0
     return Open(exe)
   else

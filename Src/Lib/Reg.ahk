@@ -43,7 +43,10 @@ Reg_FolderDescriptions(name)
  */
 Reg_Find()
 {
-  static exe := RegRead("HKLM\SOFTWARE\voidtools\Everything 1.5a", "ExePath")
+  try
+    static exe := RegRead("HKLM\SOFTWARE\voidtools\Everything 1.5a", "ExePath")
+  catch
+    return ""
   if !FileExist(exe)
     throw TargetError(Format('Everything.exe not found at "{}"', exe))
   return exe
@@ -53,7 +56,10 @@ Reg_Find()
  */
 Reg_Grep()
 {
-  static exe := Path_Combine(RegRead("HKCU\Software\AstroGrep"), "AstroGrep.exe")
+  try
+    static exe := Path_Combine(RegRead("HKCU\Software\AstroGrep"), "AstroGrep.exe")
+  catch
+    return ""
   if !FileExist(exe)
     throw TargetError(Format('AstroGrep.exe not found at "{}"', exe))
   return exe

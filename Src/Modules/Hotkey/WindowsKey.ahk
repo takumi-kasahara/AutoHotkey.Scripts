@@ -100,12 +100,12 @@
  * Run Terminal.
  * @hotkey  Win + Ctrl + X
  */
-#^x:: Open("wt.exe")
+#^x:: Open(Config_Get("Path", "TERMINAL"))
 /**
  * Run Terminal as Administrator.
  * @hotkey  Win + Ctrl + Shift + X
  */
-#^+x:: Open_RunAs("wt.exe")
+#^+x:: Open_RunAs(Config_Get("Path", "TERMINAL"))
 /**
  * Run Registry Editor.
  * @hotkey  Win + Ctrl + R

@@ -47,8 +47,12 @@ ContextMenu_Open(input)
       ctx.AddSubMenu(Format("Send to ({})", paths.Length), ContextMenu_SendTo(paths*))
       targets := Array_Unique(Stream(paths).ToArray(path => Path_IsDirectory(path) ? path : Path_GetParent(path)), , , Path_Compare)
       ctx.Add(Format("Open with Terminal ({})", targets.Length), (xs => Stream(xs).Each(x => Open('wt.exe -d "{}"', x))).Bind(targets), Path_Resolve("pwsh.exe"))
-      ctx.Add(Format("Find ({})", targets.Length), Open_Find.Bind(targets*), Reg_Find())
-      ctx.Add(Format("Grep ({})", targets.Length), (xs => Stream(xs).Each(x => Open_Grep(x))).Bind(targets), Reg_Grep())
+      find := Reg_Find()
+      if find !== ""
+        ctx.Add(Format("Find ({})", targets.Length), Open_Find.Bind(targets*), find)
+      grep := Reg_Grep()
+      if grep !== ""
+        ctx.Add(Format("Grep ({})", targets.Length), (xs => Stream(xs).Each(x => Open_Grep(x))).Bind(targets), grep)
     }
     if urls.Length > 0
     {
@@ -111,9 +115,12 @@ ContextMenu_OpenPath(path, depth := 0)
     ctx.AddSubMenu(Format("Open parents ({})", parents.Length), ctxParents)
   }
   target := Path_IsDirectory(path) ? path : Path_GetParent(path)
-  ctx.Add("Open with Terminal", Open.Bind('wt.exe -d "{}"', target), Path_Resolve("pwsh.exe"))
-  ctx.Add("Find", Open_Find.Bind(target), Reg_Find())
-  ctx.Add("Grep", Open_Grep.Bind(target), Reg_Grep())
+  find := Reg_Find()
+  if find !== ""
+    ctx.Add("Find", Open_Find.Bind(target), Reg_Find())
+  grep := Reg_Grep()
+  if grep !== ""
+    ctx.Add("Grep", Open_Grep.Bind(target), Reg_Grep())
   ctx.AddSubMenu("Shell", ContextMenu_Shell(path))
   ctx.AddSubMenu("Send to", ContextMenu_SendTo(path))
   ctx.AddSubMenu("Copy to clipboard", ContextMenu_CopyPath(path))

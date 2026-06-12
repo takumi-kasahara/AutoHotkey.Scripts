@@ -22,6 +22,20 @@
  * @send    Alt -> H -> V
  */
 sc07B & v:: Send("!hv")
+; #region Paragraph
+/**
+ * Increase List Level
+ * @hotkey  無変換 + Tab
+ * @send    Alt -> H -> A -> I
+ */
+sc07B & Tab:: Send("!hai")
+/**
+ * Decrease List Level
+ * @hotkey  無変換 + CapsLock
+ * @send    Alt -> H -> A -> O
+ */
+sc07B & sc03A:: Send("!hao")
+; #endregion
 ; #endregion
 ; #endregion
 ; #region View (Alt -> W)

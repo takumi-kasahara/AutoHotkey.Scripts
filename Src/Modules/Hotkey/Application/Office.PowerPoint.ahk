@@ -34,4 +34,23 @@ sc07B & Tab:: Send("!hai")
 sc07B & sc03A:: Send("!hao")
 ; #endregion
 ; #endregion
+; #region Review (Alt -> R)
+; #region Comments
+/**
+ * New Comment
+ * @default
+ * @hotkey  Ctrl + Alt + M
+ */
+; #endregion
+; #endregion
+; #region View (Alt -> W)
+; #region Zoom
+/**
+ * Fit to Window
+ * @hotkey  Ctrl + Alt + 0
+ * @send    Alt -> W -> F
+ */
+^!0:: Send("!wf")
+; #endregion
+; #endregion
 #HotIf

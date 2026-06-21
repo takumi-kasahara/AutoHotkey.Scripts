@@ -5,6 +5,54 @@
  * @see {@link https://support.microsoft.com/en-us/office/use-keyboard-shortcuts-to-deliver-powerpoint-presentations-1524ffce-bd2a-45f4-9a7f-f18b992b93a0}
  */
 #HotIf WinActive("ahk_class PPTFrameClass")
+; #region ComObjActive
+/**
+ * Copy Table
+ * @hotkey  Ctrl + Alt + C
+ */
+^!c::
+{
+  app := ComObjActive("PowerPoint.Application")
+  selection := app.ActiveWindow.Selection
+  ppSelectionShapes := 2
+  if selection.Type !== ppSelectionShapes
+    return
+
+  shape := selection.ShapeRange.Item(1)
+
+  if shape.HasTable
+  {
+    tbl := shape.Table
+    rows := tbl.Rows.Count
+    cols := tbl.Columns.Count
+
+    tsv := ""
+    loop rows
+    {
+      r := A_Index
+      rowText := ""
+      loop cols
+      {
+        c := A_Index
+        cell := tbl.Cell(r, c)
+        text := cell.Shape.TextFrame.TextRange.Text
+        text := StrReplace(text, "`r`n", " ")
+        rowText .= text (c < cols ? "`t" : "")
+      }
+      tsv .= rowText (r < rows ? "`r`n" : "")
+    }
+    Clipboard_SetText(tsv)
+    return
+  }
+  if shape.HasTextFrame && shape.TextFrame.HasText
+  {
+    text := shape.TextFrame.TextRange.Text
+    text := StrReplace(text, "`r`n", "`n")
+    Clipboard_SetText(text)
+    return
+  }
+}
+; #endregion
 ; #region Home (Alt -> H)
 ; #region Clipboard
 /**

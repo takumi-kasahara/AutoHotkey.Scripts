@@ -4,6 +4,14 @@
  * @see {@link https://support.microsoft.com/en-us/office/keyboard-shortcuts-in-word-95ef89dd-7142-4b50-afb2-f762f663ceb2}
  */
 #HotIf WinActive("ahk_class OpusApp")
+; #region File (Alt -> F)
+/**
+ * Create a PDF/XPS Document
+ * @hotkey  Ctrl + Alt + E
+ * @send    Alt -> F -> E -> A
+ */
+^!e:: Send("!fea")
+; #endregion
 ; #region Home (Alt -> H)
 ; #region Clipboard
 /**

@@ -39,6 +39,14 @@ F11:: return
  */
 ^!s:: Send("{F12}")
 ; #endregion
+; #region File (Alt -> F)
+/**
+ * Create a PDF/XPS Document
+ * @hotkey  Ctrl + Alt + E
+ * @send    Alt -> F -> E -> A
+ */
+^!e:: Send("!fea")
+; #endregion
 ; #region Home (Alt -> H)
 ; #region Clipboard
 /**

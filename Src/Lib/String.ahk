@@ -128,7 +128,9 @@ String_ExtractPath(pathLike)
   loop
   {
     parent := Path_GetParent(path)
-    if FileExist(parent)
+    if parent == ""
+      return
+    if FileExist(parent) && Path_IsAbsolute(parent) && Path_IsLiteral(parent)
       return parent
     path := parent
     if Path_IsRoot(path)
@@ -136,7 +138,7 @@ String_ExtractPath(pathLike)
   }
   while Path_IsRoot(path)
   {
-    if FileExist(path)
+    if FileExist(path) && Path_IsAbsolute(path) && Path_IsLiteral(path)
       return RTrim(path, "\")
     path := RTrim(SubStr(path, 1, StrLen(path) - 1), "\")
     if path == parent

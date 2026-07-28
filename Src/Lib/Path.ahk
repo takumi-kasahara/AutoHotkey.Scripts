@@ -435,11 +435,9 @@ Path_GetLinkTarget(path)
  */
 Path_GetChildren(dir, pattern := "*", mode := "F", filter := () => !(A_LoopFileAttrib ~= "i)[HS]"))
 {
-  static MAX_CHILDREN := Integer(Config_Get("Path", "MAX_CHILDREN"))
   children := []
   loop files, Path_Combine(dir, pattern), mode
-    if filter.Call() && (!IsSet(MAX_CHILDREN) || children.Length < MAX_CHILDREN)
-      children.Push(A_LoopFileFullPath)
+    children.Push(A_LoopFileFullPath)
   return Array_Sort(children, , , Path_Compare)
 }
 /**

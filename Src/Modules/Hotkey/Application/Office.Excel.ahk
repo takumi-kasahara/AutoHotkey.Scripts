@@ -69,6 +69,12 @@ sc07B & f:: Send("!hcp")
 ; #endregion
 ; #region Font
 /**
+ * Borders
+ * @hotkey  無変換 + B
+ * @send    Alt -> H -> B
+ */
+sc07B & b:: Send("!hb")
+/**
  * Increase Font Size
  * @hotkey  Ctrl + Alt + ;
  * @send    Alt -> H -> F -> G

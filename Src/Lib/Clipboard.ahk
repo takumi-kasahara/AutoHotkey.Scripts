@@ -16,6 +16,61 @@ Clipboard_SetText(input)
     A_Clipboard := value
 }
 /**
+ * @returns {String}
+ */
+Clipboard_GetText() => String_Dedent(Trim(A_Clipboard, "`r`n"))
+/**
+ * @returns {String}
+ */
+Clipboard_GetHtml()
+{
+  static CF_HTML := RegisterClipboardFormat("HTML Format")
+  return GetClipboardData(CF_HTML)
+  /**
+   * @see {@link https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-getclipboarddata}
+   * @param {Integer} uFormat
+   * @returns {String}
+   */
+  GetClipboardData(uFormat)
+  {
+    if !OpenClipboard()
+      return
+    try
+    {
+      /** @see {@link https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-getclipboarddata} */
+      hMem := DllCall("GetClipboardData"
+        , "UInt", uFormat ; UINT  uFormat
+        , "Ptr"           ; HANDLE
+      )
+      if hMem == NULL
+        return
+      try
+      {
+        pMem := GlobalLock(hMem)
+        data := StrGet(pMem, "UTF-8")
+        return data
+      }
+      finally
+        GlobalUnlock(hMem)
+    }
+    finally
+      CloseClipboard()
+  }
+}
+/**
+ * @returns {String}
+ */
+Clipboard_GetBlockquote()
+{
+  html := Clipboard_GetHtml()
+  if !html
+    return ""
+  sourceUrl := ""
+  if RegExMatch(html, "(?m)^SourceURL:(.+?)[\r\n]", &m)
+    sourceUrl := Trim(m[1])
+  return Document_CreateBlockquoteElement(sourceUrl, A_Clipboard)
+}
+/**
  * @param {String | Array | Func | BoundFunc} input
  */
 Clipboard_SetHtml(input)
@@ -161,56 +216,4 @@ Clipboard_ExtractLink()
   .Map(path => ({ href: Url_Load(path), title: Path_GetBaseName(path) }))
   .Filter(link => !String_IsNullOrWhitespace(link.href))
   .ToArray()
-}
-/**
- * @returns {String}
- */
-Clipboard_GetBlockquote()
-{
-  html := Clipboard_GetHtml()
-  if !html
-    return ""
-  sourceUrl := ""
-  if RegExMatch(html, "(?m)^SourceURL:(.+?)[\r\n]", &m)
-    sourceUrl := Trim(m[1])
-  return Document_CreateBlockquoteElement(sourceUrl, A_Clipboard)
-}
-
-/**
- * @returns {String}
- */
-Clipboard_GetHtml()
-{
-  static CF_HTML := RegisterClipboardFormat("HTML Format")
-  return GetClipboardData(CF_HTML)
-  /**
-   * @see {@link https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-getclipboarddata}
-   * @param {Integer} uFormat
-   * @returns {String}
-   */
-  GetClipboardData(uFormat)
-  {
-    if !OpenClipboard()
-      return
-    try
-    {
-      /** @see {@link https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-getclipboarddata} */
-      hMem := DllCall("GetClipboardData"
-        , "UInt", uFormat ; UINT  uFormat
-        , "Ptr"           ; HANDLE
-      )
-      if hMem == NULL
-        return
-      try
-      {
-        pMem := GlobalLock(hMem)
-        data := StrGet(pMem, "UTF-8")
-        return data
-      }
-      finally
-        GlobalUnlock(hMem)
-    }
-    finally
-      CloseClipboard()
-  }
 }

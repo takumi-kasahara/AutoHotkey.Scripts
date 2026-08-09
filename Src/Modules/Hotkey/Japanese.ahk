@@ -105,7 +105,7 @@ sc079 & vkBB:: Send("^{vkBB}") ; ;
 #HotIf WinActive("ahk_group grpExplorer")
 sc079 & vkBA:: Paste(Date_ToString("HHmmss")) ; :
 sc079 & vkBB:: Paste(Date_ToString("yyyyMMdd")) ; ;
-sc079 & vkBF:: Paste(Date_ToString("yyyyMMdd")) ; ;
+sc079 & vkBF:: Paste(Date_ToString("yyyyMMdd")) ; /
 sc079 & vkC0:: Paste(A_Now) ; @
 #HotIf !WinActive("ahk_group grpExplorer")
 sc079 & vkBA:: Paste(Date_ToString("HH:mm:ss")) ; :

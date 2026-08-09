@@ -9,7 +9,7 @@ SetWorkingDir(A_ScriptDir "\..\..")
 OnError(HandleError)
 OnExit(HandleExit)
 
-ContextMenu_Edit(String_Dedent(Trim(A_Clipboard, "`r`n"))).Show()
+ContextMenu_Edit(Clipboard_GetText()).Show()
 
 /**
  * @param {String} input
@@ -107,7 +107,7 @@ ContextMenu_Edit(input)
   ctx.AddSubMenu("Convert", ctxConvert)
 
   ctxMarkdown := ContextMenu()
-  ctxMarkdown.Add("Blockquote", () => View_Text(String_Edit(input, field => "> " field), "md"))
+  ctxMarkdown.Add("Blockquote", () => View_Text(StrReplace(input, "`n", "`n> "), "md"))
   if StrSplit(input, "`n").Length == 1
     ctxMarkdown.Add("Code", () => View_Text("``" input "``", "md"))
   else

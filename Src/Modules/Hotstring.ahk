@@ -38,4 +38,37 @@
 ::`:`:ws::workspace
 ::`:`:wt::Windows Terminal
 ::`:`:xl::Excel
+:X:`:`:date::
+{
+  if WinActive("ahk_group grpExplorer")
+    Paste(Date_ToString("yyyyMMdd"))
+  else
+    Paste(Date_ToString("yyyy-MM-dd"))
+}
+:X:`:`:time::
+{
+  if WinActive("ahk_group grpExplorer")
+    Paste(Date_ToString("HHmmss"))
+  else
+    Paste(Date_ToString("HH:mm:ss"))
+}
+:X:`:`:code::
+{
+  input := Clipboard_GetText()
+  StrSplit(input, "`n").Length == 1
+    ? Paste("``" input "``")
+    : Paste("```````n" input "`n``````")
+}
+:X:`:`:quot::
+{
+  input := Clipboard_GetText()
+  if input
+    Paste("> " StrReplace(input, "`n", "`n> "))
+}
+:X:`:`:link::
+{
+  links := Stream(Clipboard_ExtractLink()).Filter(link => Url_GetProtocol(link.href) ~= "^(?i:https?)$").ToArray(link => Format("[{}]({})", link.title, link.href))
+  if links.Length > 0
+    Paste(ConvertTo_String(links))
+}
 #HotIf

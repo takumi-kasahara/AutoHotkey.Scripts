@@ -5,6 +5,14 @@
  */
 HandleClipboardChange(dataType)
 {
+  static MAX_FILE_AGE := Integer(Config_Get("Clipboard", "MAX_FILE_AGE"))
+  loop files, Path_Combine(A_Temp, "*.clip"), 'F'
+    if A_Now - FileGetTime(A_LoopFileFullPath, "C") > MAX_FILE_AGE
+      FileRecycle(A_LoopFileFullPath)
+  static enabled := Config_Get("Clipboard", "ENABLED", false)
+  if !enabled
+    return
+
   static delay := Integer(Config_Get("Delay", "CLIP"))
   Sleep(delay)
   suffix := ""
@@ -21,10 +29,6 @@ HandleClipboardChange(dataType)
       FileAppend(ClipboardAll(), name)
       Log_Trace("Saved", name, FileGetSize(name))
   }
-  static MAX_FILE_AGE := Integer(Config_Get("Clipboard", "MAX_FILE_AGE"))
-  loop files, Path_Combine(A_Temp, "*.clip"), 'F'
-    if A_Now - FileGetTime(A_LoopFileFullPath, "C") > MAX_FILE_AGE
-      FileRecycle(A_LoopFileFullPath)
 }
 /**
  * @param {Error} thrown

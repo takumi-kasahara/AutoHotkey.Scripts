@@ -9,6 +9,9 @@ SetWorkingDir(A_ScriptDir)
 
 Install()
 
+/**
+ * Installs AutoHotkey scripts and settings based on the configuration.
+ */
 Install()
 {
   switch Config_Get("Install", "Startup")
@@ -32,16 +35,20 @@ Install()
   ; https://learn.microsoft.com/en-us/windows/win32/inputdev/wm-appcommand
   app1 := Config_Get("Install", "Launch_App1")
   app1Key := "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\AppKey\17"
-  if app1 == ""
-    RegDelete(app1Key, "ShellExecute")
-  else
+  if RegRead(app1Key, "ShellExecute", "")
+    RegCreateKey(app1Key)
+  if app1 != ""
     RegWrite(app1, "REG_SZ", app1Key, "ShellExecute")
+  else
+    RegDelete(app1Key, "ShellExecute")
   app2 := Config_Get("Install", "Launch_App2")
   app2Key := "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\AppKey\18"
-  if app2 == ""
-    RegDelete(app2Key, "ShellExecute")
-  else
+  if RegRead(app2Key, "ShellExecute", "")
+    RegCreateKey(app2Key)
+  if app2 != ""
     RegWrite(app2, "REG_SZ", app2Key, "ShellExecute")
+  else if app2 == ""
+    RegDelete(app2Key, "ShellExecute")
 
   sendTo := Reg_FolderDescriptions("SendTo")
   loop files, "Scripts\SendTo\*.ahk", "F"

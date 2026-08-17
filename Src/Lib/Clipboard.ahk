@@ -211,9 +211,8 @@ Clipboard_ExtractLink()
   html := Clipboard_GetHtml()
   if html
     return Document_ExtractLinks(html)
-  return Stream(Clipboard_ExtractPath())
-  .Filter(path => Path_GetExtensionName(path) ~= "^(?i:url)$")
-  .Map(path => ({ href: Url_Load(path), title: Path_GetBaseName(path) }))
-  .Filter(link => !String_IsNullOrWhitespace(link.href))
-  .ToArray()
+  paths := Clipboard_ExtractPath()
+  if paths.Length > 0
+    return Stream(paths).Map(path => Path_GetExtensionName(path) ~= "^(?i:url)$" ? ({ href: Url_Load(path), title: Path_GetBaseName(path) }) : ({ href: Url_Encode(Path_ToURL(path)), title: Path_GetName(path) })).ToArray()
+  return []
 }

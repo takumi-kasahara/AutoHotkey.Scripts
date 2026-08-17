@@ -47,13 +47,15 @@ ContextMenu_Edit(input)
   {
     ctxUrl := ContextMenu()
     ctxUrl.Add("Plaintext", () => View_Text(Stream(urls).ToArray(url => Url_Decode(url))))
-    links := Stream(Clipboard_ExtractLink()).Filter(link => Url_GetProtocol(link.href) ~= "^(?i:https?)$").ToArray()
+    links := Clipboard_ExtractLink()
     if links.Length > 0
     {
       ctxHtml := ContextMenu()
       ctxHtml.Add("Copy Title", () => View_Text(Stream(links).ToArray(link => link.title)))
       ctxHtml.Add("Copy Link as HTML", () => View_Text(Stream(links).ToArray(link => Document_CreateAnchorElement(link.href, link.title)), "html"))
       ctxHtml.Add("Copy Link as Markdown", () => View_Text(Stream(links).ToArray(link => Format("[{}]({})", link.title, link.href)), "md"))
+      ctxHtml.Add("Copy Link as Markdown List", () => View_Text(Stream(links).ToArray(link => Format("- [{}]({})", link.title, link.href)), "md"))
+      ctxHtml.Add("Copy Link as Markdown List (Ordered)", () => View_Text(Stream(links).ToArray(link => Format("1. [{}]({})", link.title, link.href)), "md"))
       ctxHtml.Add("Save", Dialog_SaveUrl.Bind(links))
       ctxUrl.AddSeparator()
       ctxUrl.AddSubMenu(Format("Links ({})", links.Length), ctxHtml)

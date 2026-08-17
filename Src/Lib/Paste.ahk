@@ -15,6 +15,7 @@ Paste(input)
   try
   {
     A_Clipboard := value
+    Sleep(delay)
     Send("+{Insert}")
     Sleep(delay)
   }

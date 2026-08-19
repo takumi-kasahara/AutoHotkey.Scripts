@@ -76,8 +76,8 @@ ContextMenu_OpenPath(path, depth := 0)
   if !FileExist(path)
     return ctx
   ToolTip(path)
-  name := Path_FriendlyDocName(path)
-  ctx.Add(name == "" ? "Open" : "Open " name, Open.Bind(path), path)
+  friendlyName := Path_IsDirectory(path) ? "" : Path_FriendlyDocName(path)
+  ctx.Add(friendlyName == "" ? "Open" : "Open " friendlyName, Path_IsDirectory(path) ? Open_Explorer.Bind(path) : Open.Bind(path), path)
   target := Path_GetLinkTarget(path)
   if target !== path
     ctx.AddSubMenu("Open target", ContextMenu_OpenPath(target, depth + 1))

@@ -91,11 +91,11 @@ Open_File(path)
 Open_Explorer(path)
 {
   try
-    return Open('files.exe "{}" ', path)
+    return Open('files-preview.exe "{}" ', path)
   catch
   {
     try
-      return Open('files-preview.exe "{}" ', path)
+      return Open('files-stable.exe "{}" ', path)
     catch
       return Open(path)
   }

@@ -68,8 +68,12 @@ ScrollLock::
   static delay := Integer(Config_Get("Delay", "KEY"))
   state := GetKeyState("NumLock", "T")
   SetNumLockState(state ? "AlwaysOff" : "AlwaysOn")
+  text := Format("NumLock: {}", state ? "Off" : "On")
   try
-    ToolTip("NumLock:" (state ? "Off" : "On"))
+    if CaretGetPos(&x, &y)
+      ToolTip(text, x, y)
+    else
+      ToolTip(text)
   finally
     SetTimer(() => ToolTip(), -delay)
 }

@@ -60,8 +60,12 @@ IME_Set(state)
   Sleep(delay)
   if IME_Get() !== state
     Send("{sc029}")
+  text := Format("IME: {}", state ? "On" : "Off")
   try
-    ToolTip("IME " (IME_Get() ? "On" : "Off"))
+    if CaretGetPos(&x, &y)
+      ToolTip(text, x, y)
+    else
+      ToolTip(text)
   finally
     SetTimer(() => ToolTip(), -delay)
 }

@@ -6,8 +6,12 @@ sc029::
   static delay := Integer(Config_Get("Delay", "KEY"))
   Send("{sc029}")
   Sleep(delay)
+  text := Format("IME: {}", IME_Get() ? "On" : "Off")
   try
-    ToolTip("IME:" (IME_Get() ? "On" : "Off"))
+    if CaretGetPos(&x, &y)
+      ToolTip(text, x, y)
+    else
+      ToolTip(text)
   finally
     SetTimer(() => ToolTip(), -delay)
 }

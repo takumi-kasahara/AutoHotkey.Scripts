@@ -3,7 +3,7 @@
   "options": {},
   "presentation": {
     "reveal": "silent",
-    "revealProblems": "onProblem",
+    "revealProblems": "onProblem"
   },
   "tasks": [
     {
@@ -14,7 +14,7 @@
       "group": {
         "kind": "build",
         "isDefault": true
-      },
+      }
     },
     {
       "label": "build",
@@ -25,15 +25,13 @@
         "kind": "build",
         "isDefault": true
       },
-      "dependsOn": [
-        "preproc",
-      ],
+      "dependsOn": ["preproc"]
     },
     {
       "label": "install",
       "type": "shell",
       "command": "${workspaceFolder}\\Src\\Install.ahk",
-      "problemMatcher": [],
+      "problemMatcher": []
     },
     {
       "label": "test",
@@ -43,7 +41,7 @@
       "group": {
         "kind": "test",
         "isDefault": true
-      },
-    },
-  ],
+      }
+    }
+  ]
 }

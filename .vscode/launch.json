@@ -5,7 +5,7 @@
       "type": "ahk2",
       "request": "launch",
       "name": "AutoHotkey v2 Debugger",
-      "program": "${file}",
-    },
-  ],
+      "program": "${file}"
+    }
+  ]
 }

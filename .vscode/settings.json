@@ -1,8 +1,8 @@
 {
   "[ahk]": {
-    "files.encoding": "utf8bom",
+    "files.encoding": "utf8bom"
   },
   "[ahk2]": {
-    "files.encoding": "utf8bom",
-  },
+    "files.encoding": "utf8bom"
+  }
 }

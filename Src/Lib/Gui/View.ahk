@@ -115,27 +115,32 @@ View_Csv(input, header := 0)
   if value == ""
     return
 
+  static delay := Integer(Config_Get("Delay", "KEY"))
   headers := []
   rows := []
   maxColumns := 0
-  loop parse, value, "`n", "`r"
-  {
-    if A_Index < header
-      continue
-    if A_Index == header
+  try
+    loop parse, value, "`n", "`r"
     {
+      ToolTip(Format("Parsing:{}", A_Index))
+      if A_Index < header
+        continue
+      if A_Index == header
+      {
+        loop parse, A_LoopField, "CSV"
+          headers.Push(A_LoopField)
+        continue
+      }
+      row := []
       loop parse, A_LoopField, "CSV"
-        headers.Push(A_LoopField)
-      continue
-    }
-    row := []
-    loop parse, A_LoopField, "CSV"
-      row.Push(A_LoopField)
+        row.Push(A_LoopField)
 
-    rows.Push(row)
-    if row.Length > maxColumns
-      maxColumns := row.Length
-  }
+      rows.Push(row)
+      if row.Length > maxColumns
+        maxColumns := row.Length
+    }
+  finally
+    SetTimer(() => ToolTip(), -delay)
 
   if headers.Length == 0
     loop maxColumns
@@ -165,13 +170,18 @@ View_Csv(input, header := 0)
     myGui.Destroy()
   ))
 
-  for row in rows
-  {
-    values := row.Clone()
-    while values.Length < maxColumns
-      values.Push("")
-    listView.Add(, values*)
-  }
+  digits := StrLen(String(rows.Length))
+  try
+    for row in rows
+    {
+      ToolTip(Format("Adding:{:0" digits "}/{}", A_Index, rows.Length))
+      values := row.Clone()
+      while values.Length < maxColumns
+        values.Push("")
+      listView.Add(, values*)
+    }
+  finally
+    SetTimer(() => ToolTip(), -delay)
 
   loop maxColumns
     listView.ModifyCol(A_Index, "AutoHdr")

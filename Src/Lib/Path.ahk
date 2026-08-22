@@ -150,7 +150,7 @@ Path_IsText(path)
     return cache.Get(ext)
   switch Path_GetAssociation(path)
   {
-    case "batfile", "regfile":
+    case "batfile", "regfile", "Excel.CSV":
       cache.Set(ext, true)
       return true
     case "exefile", "dllfile", "sysfile":

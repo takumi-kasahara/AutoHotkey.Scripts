@@ -20,10 +20,10 @@ ConvertTo_String(input, separator := "`n")
   }
 }
 /**
- * @param {String*} colomuns
+ * @param {String*} columns
  * @returns {String}
  */
-ConvertTo_Csv(colomuns*) => Enumerable_Join(Stream(colomuns).ToArray(column => String_Enclose(StrReplace(column, '"', '""'))), ",")
+ConvertTo_Csv(columns*) => Enumerable_Join(Stream(columns).ToArray(column => String_Enclose(StrReplace(column, '"', '""'))), ",")
 /**
  * @param {String} input
  * @returns {String}

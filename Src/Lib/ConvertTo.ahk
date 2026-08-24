@@ -81,3 +81,44 @@ ConvertTo_VisualBasic(input)
   tmp := StrReplace(tmp, "`t", '" & vbTab & "')
   return String_Enclose(tmp)
 }
+/**
+ * @param {String} input
+ * @returns {String}
+ */
+ConvertTo_ExcelFormula(input)
+{
+  parts := []
+  fromIndex := 1
+  implicitIndex := 1
+
+  while RegExMatch(input, "\{(\d*)\}", &matched, fromIndex)
+  {
+    literal := SubStr(input, fromIndex, matched.Pos - fromIndex)
+    if literal != ""
+      parts.Push(String_Enclose(StrReplace(literal, '"', '""')))
+
+    placeholderIndex := matched[1] != "" ? Integer(matched[1]) : implicitIndex++
+    if placeholderIndex < 1
+      throw ValueError(Format("Placeholder index must be greater than 0: {}", placeholderIndex))
+
+    column := ""
+    while placeholderIndex > 0
+    {
+      remainder := Mod(placeholderIndex - 1, 26)
+      column := Chr(65 + remainder) column
+      placeholderIndex := Floor((placeholderIndex - 1) / 26)
+    }
+    parts.Push(column "1")
+
+    fromIndex := matched.Pos + matched.Len
+  }
+
+  suffix := SubStr(input, fromIndex)
+  if suffix != ""
+    parts.Push(String_Enclose(StrReplace(suffix, '"', '""')))
+
+  if parts.Length = 0
+    parts.Push('""')
+
+  return "=" Enumerable_Join(parts, "&")
+}

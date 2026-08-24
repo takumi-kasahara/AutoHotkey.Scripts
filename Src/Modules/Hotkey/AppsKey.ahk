@@ -45,31 +45,32 @@ AppsKey & Down::Volume_Down
 ; https://learn.microsoft.com/en-us/windows/win32/shell/knownfolderid
 AppsKey & a:: Open_Choice("ms-settings:appsfeatures", { Shift: "ms-settings:defaultapps" })
 AppsKey & b:: Open_Choice("shell:RecycleBinFolder")
-AppsKey & c:: Open_Choice("control.exe /name Microsoft.CredentialManager")
-AppsKey & d:: Open_Choice("ms-settings:display")
+AppsKey & c:: Open_Choice("ms-settings:clipboard", { Shift: "control.exe /name Microsoft.CredentialManager" })
+AppsKey & d:: Open_Choice("ms-settings:display", { Shift: "ms-settings:display-advancedgraphics" })
 AppsKey & e:: Open_Choice("control.exe /name Microsoft.FolderOptions")
-AppsKey & i:: Open_Choice("ms-settings:regionlanguage-jpnime", { Shift: "control.exe input.dll,,{C07337D3-DB2C-4D0B-9A93-B722A6C106E2}" })
+AppsKey & i:: Open_Choice("control.exe input.dll,,{C07337D3-DB2C-4D0B-9A93-B722A6C106E2}")
 AppsKey & k:: Open_Choice("ms-settings:typing", { Shift: "control.exe /name Microsoft.Keyboard" })
 AppsKey & m:: Open_Choice("ms-settings:mousetouchpad", { Shift: "control.exe /name Microsoft.Mouse" })
 AppsKey & n:: Open_Choice("ms-settings:network-status", { Shift: "control.exe /name Microsoft.NetworkAndSharingCenter" })
+AppsKey & o:: Open_Choice(Reg_FolderDescriptions("OneDrive"))
 AppsKey & p:: Open_Choice("ms-settings:printers", { Shift: "mspaint.exe" })
 AppsKey & s:: Open_Choice("ms-settings:sound", { Shift: "control.exe /name Microsoft.Sound" })
-AppsKey & t:: Open_Choice("shell:SendTo")
-AppsKey & u:: Open_Choice("shell:Startup")
-AppsKey & w:: Open_Choice("ms-settings:windowsupdate")
-AppsKey & x:: Open_Choice("shell:ProgramFilesX64", { Shift: "shell:ProgramFilesX86" })
+AppsKey & t:: Open_Choice(Reg_FolderDescriptions("SendTo"))
+AppsKey & u:: Open_Choice(Reg_FolderDescriptions("Startup"))
+AppsKey & w:: Open_Choice("ms-settings:windowsupdate", { Shift: "ms-settings:windowsupdate-options" })
+AppsKey & x:: Open_Choice(Reg_FolderDescriptions("ProgramFilesX64"), { Shift: Reg_FolderDescriptions("ProgramFilesX86") })
 AppsKey & z:: Open_Choice("ms-settings:storagesense", { Shift: "ms-settings:disksandvolumes" })
 
 AppsKey & vkBA:: Open_Choice("ms-settings:regionlanguage", { Shift: "control.exe /name Microsoft.RegionAndLanguage" }) ; :
 AppsKey & vkBB:: Open_Choice("ms-settings:dateandtime", { Shift: "control.exe /name Microsoft.DateAndTime" }) ; ;
 AppsKey & vkBC:: Open_Choice("control.exe") ; ,
-AppsKey & vkBE:: Open_Choice("shell:Profile") ; .
-AppsKey & vkBF:: Open_Choice("shell:Desktop") ; /
-AppsKey & vkC0:: Open_Choice("shell:Personal") ; @
-AppsKey & vkE2:: Open_Choice("shell:Downloads") ; \
+AppsKey & vkBE:: Open_Choice(Reg_FolderDescriptions("Profile")) ; .
+AppsKey & vkBF:: Open_Choice(Reg_FolderDescriptions("Desktop")) ; /
+AppsKey & vkC0:: Open_Choice(Reg_FolderDescriptions("Personal")) ; @
+AppsKey & vkE2:: Open_Choice(Reg_FolderDescriptions("Downloads")) ; \
 
-AppsKey & BackSpace:: Open_Choice("ms-settings:bluetooth")
-AppsKey & PrintScreen:: Open_Choice("shell:Screenshots", { Shift: "shell:Captures" })
+AppsKey & BackSpace:: Open_Choice("ms-settings:bluetooth", { Shift: "ms-settings:batterysaver" })
+AppsKey & PrintScreen:: Open_Choice(Reg_FolderDescriptions("Screenshots"), { Shift: Reg_FolderDescriptions("Captures") })
 ; #endregion
 /**
  * Force Reboot

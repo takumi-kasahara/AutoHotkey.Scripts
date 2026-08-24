@@ -20,8 +20,14 @@ Open_Choice(default, dictionary := {})
 {
   for key, value in dictionary.OwnProps()
     if GetKeyState(key)
-      return Open(value)
-  return Open(default)
+      if DirExist(value)
+        return Open_Explorer(value)
+      else
+        return Open(value)
+  if DirExist(default)
+    return Open_Explorer(default)
+  else
+    return Open(default)
 }
 /**
  * @param {String} path

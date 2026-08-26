@@ -7,9 +7,9 @@
 Assert_AreEqual(expected, actual, comparer := (x, y) => x == y)
 {
   if comparer(expected, actual)
-    Log_Trace(Format("Expected:{}", expected))
+    Log_Trace("Expected:" expected)
   else
-    throw Error(Format("Expected:{},Actual:{}", expected, actual))
+    throw Error("Expected:" expected ", Actual:" actual)
 }
 /**
  * @param {Any} notExpected
@@ -18,9 +18,9 @@ Assert_AreEqual(expected, actual, comparer := (x, y) => x == y)
 Assert_AreNotEqual(notExpected, actual, comparer := (x, y) => x == y)
 {
   if comparer(notExpected, actual)
-    throw Error(Format("NotExpected:{}", notExpected))
+    throw Error("NotExpected:" notExpected)
   else
-    Log_Trace(Format("NotExpected:{},Actual:{}", notExpected, actual))
+    Log_Trace("NotExpected:" notExpected ", Actual:" actual)
 }
 /**
  * @param {Integer | Float} value
@@ -28,9 +28,9 @@ Assert_AreNotEqual(notExpected, actual, comparer := (x, y) => x == y)
 Assert_IsPositive(value)
 {
   if value > 0
-    Log_Trace(Format("Value:{} is positive.", value))
+    Log_Trace("Value:" value " is positive.")
   else
-    throw Error(Format("Value:{} is not positive.", value))
+    throw Error("Value:" value " is not positive.")
 }
 /**
  * @param {Integer | Float} value
@@ -38,9 +38,9 @@ Assert_IsPositive(value)
 Assert_IsNegative(value)
 {
   if value < 0
-    Log_Trace(Format("Value:{} is negative.", value))
+    Log_Trace("Value:" value " is negative.")
   else
-    throw Error(Format("Value:{} is not negative.", value))
+    throw Error("Value:" value " is not negative.")
 }
 /**
  * @param {Integer} value

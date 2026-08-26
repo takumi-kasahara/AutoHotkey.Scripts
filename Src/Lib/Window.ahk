@@ -5,11 +5,11 @@
  */
 Window_Close(id := "A")
 {
-  if MsgBox(Format("Close {} ({}) ?", WinGetProcessName(id), WinGetPID(id)), , 0x21) == "OK"
+  if MsgBox(Format("Close `"{}`" ?", WinGetTitle(id)), WinGetProcessName(id), 0x131) == "OK"
     try
       WinClose(id)
     catch
-      if MsgBox(Format("Kill {} ({}) ?", WinGetPID(id), WinGetList(Format("ahk_pid {}", WinGetPID(id))).Length), , 0x131) == "OK"
+      if MsgBox(Format("Kill PID={} ({} windows) ?", WinGetPID(id), WinGetList(Format("ahk_pid {}", WinGetPID(id))).Length), WinGetProcessName(id), 0x131) == "OK"
         WinKill(id)
 }
 /**

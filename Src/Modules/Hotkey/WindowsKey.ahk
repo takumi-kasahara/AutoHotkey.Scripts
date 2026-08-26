@@ -155,14 +155,7 @@
  * @override  Open widgets.
  * @alter     Win + Ctrl + W
  */
-#w::
-{
-  static root := Path_Combine(A_WorkingDir, "Scripts", "ContextMenu")
-  if A_IsCompiled
-    Open(Path_Combine(root, "WindowSelect.exe"))
-  else
-    Open(Path_Combine(root, "WindowSelect.ahk"))
-}
+#w:: WinActivateBottom("ahk_exe " WinGetProcessName("A"))
 #^w::#w
 /**
  * Maximize Window
@@ -188,8 +181,8 @@
 {
   static root := Path_Combine(A_WorkingDir, "Scripts", "ContextMenu")
   if A_IsCompiled
-    Open(Path_Combine(root, "WindowMove.exe"))
+    Open(Path_Combine(root, "Window.exe"))
   else
-    Open(Path_Combine(root, "WindowMove.ahk"))
+    Open(Path_Combine(root, "Window.ahk"))
 }
 ; #endregion

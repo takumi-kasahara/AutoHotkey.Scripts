@@ -87,6 +87,8 @@ ConvertTo_VisualBasic(input)
  */
 ConvertTo_ExcelFormula(input)
 {
+  input := StrReplace(input, "{{}", "{")
+  input := StrReplace(input, "{}}", "}")
   parts := []
   fromIndex := 1
   implicitIndex := 1
@@ -98,9 +100,6 @@ ConvertTo_ExcelFormula(input)
       parts.Push(String_Enclose(StrReplace(literal, '"', '""')))
 
     placeholderIndex := matched[1] != "" ? Integer(matched[1]) : implicitIndex++
-    if placeholderIndex < 1
-      throw ValueError(Format("Placeholder index must be greater than 0: {}", placeholderIndex))
-
     column := ""
     while placeholderIndex > 0
     {

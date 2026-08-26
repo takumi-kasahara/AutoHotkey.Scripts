@@ -179,5 +179,9 @@ class ConvertTo_Tests extends Test
     Assert_AreEqual('="mv "&A1&" "&B1', ConvertTo_ExcelFormula("mv {1} {2}"))
     Assert_AreEqual('="mv "&B1&" "&A1', ConvertTo_ExcelFormula("mv {2} {1}"))
   }
+  ConvertTo_ExcelFormula_EscapeBraces()
+  {
+    Assert_AreEqual('="{a}"', ConvertTo_ExcelFormula("{{}a{}}"))
+  }
 }
 ConvertTo_Tests()

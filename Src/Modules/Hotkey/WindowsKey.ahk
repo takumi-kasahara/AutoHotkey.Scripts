@@ -49,6 +49,7 @@
 #!F12:: Open(Path_Combine(Path_GetParent(A_AhkPath), "..\WindowSpy.ahk"))
 ; #endregion
 ; #region Win
+#Escape:: WinActivateBottom("ahk_exe " WinGetProcessName("A"))
 /**
  * Show Open Context Menu.
  * @hotkey    Win + C
@@ -97,15 +98,11 @@
     Open("mspaint.exe")
 }
 /**
- * Run Terminal.
- * @hotkey  Win + Ctrl + X
+ * Close Window.
+ * @hotkey    Win + Q
+ * @override  Open Search.
  */
-#^x:: Open(Config_Get("Path", "TERMINAL"))
-/**
- * Run Terminal as Administrator.
- * @hotkey  Win + Ctrl + Shift + X
- */
-#^+x:: Open_RunAs(Config_Get("Path", "TERMINAL"))
+#q:: Window_Close()
 /**
  * Run Registry Editor.
  * @hotkey  Win + Ctrl + R
@@ -150,27 +147,15 @@
   Paste(html ? html : Trim(A_Clipboard, "`r`n"))
 }
 /**
- * Show WindowSelect Context Menu.
- * @hotkey    Win + W
- * @override  Open widgets.
- * @alter     Win + Ctrl + W
+ * Run Terminal.
+ * @hotkey  Win + Ctrl + X
  */
-#w:: WinActivateBottom("ahk_exe " WinGetProcessName("A"))
-#^w::#w
+#^x:: Open(Config_Get("Path", "TERMINAL"))
 /**
- * Maximize Window
- * @hotkey  Win + Up
+ * Run Terminal as Administrator.
+ * @hotkey  Win + Ctrl + Shift + X
  */
-#Up:: Window_Maximize()
-/**
- * Minimize Window
- * @hotkey  Win + Down
- */
-#Down:: Window_Minimize()
-/**
- * Maximize Window
- * @hotkey  Win + Z
- */
+#^+x:: Open_RunAs(Config_Get("Path", "TERMINAL"))
 #z:: Window_Maximize()
 /**
  * Show WindowResize Context Menu.
@@ -185,4 +170,18 @@
   else
     Open(Path_Combine(root, "Window.ahk"))
 }
+/**
+ * Maximize Window
+ * @hotkey  Win + Up
+ */
+#Up:: Window_Maximize()
+/**
+ * Minimize Window
+ * @hotkey  Win + Down
+ */
+#Down:: Window_Minimize()
+/**
+ * Maximize Window
+ * @hotkey  Win + Z
+ */
 ; #endregion

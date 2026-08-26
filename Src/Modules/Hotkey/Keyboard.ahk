@@ -27,9 +27,6 @@ Browser_Favorites::Launch_App2
 sc03A::+Tab
 +sc03A::CapsLock
 ; #endregion
-; #region Esc
-#Esc:: Window_Close()
-; #endregion
 ; #region Disable Function Keys
 #HotIf WinActive("ahk_group grpF1Disabled")
 F1:: return

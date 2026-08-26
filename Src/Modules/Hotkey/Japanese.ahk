@@ -1,22 +1,5 @@
 ﻿#Requires AutoHotkey v2.0
 
-; 半角/全角 sc029 sends @ or `
-sc029::
-{
-  static delay := Integer(Config_Get("Delay", "KEY"))
-  Send("{sc029}")
-  Sleep(delay)
-  text := Format("IME: {}", IME_Get() ? "On" : "Off")
-  try
-    if CaretGetPos(&x, &y)
-      ToolTip(text, x, y)
-    else
-      ToolTip(text)
-  finally
-    SetTimer(() => ToolTip(), -delay)
-}
-*sc029:: Send("{Blind}{vkC0}")
-
 ; カタカナ/ひらがな/ローマ字 sc070
 *sc070:: IME_Set(true)
 

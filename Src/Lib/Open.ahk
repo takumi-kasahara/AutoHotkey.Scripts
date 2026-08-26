@@ -35,7 +35,7 @@ Open_Choice(default, dictionary := {})
  */
 Open_Property(path) => (
   Open('*Properties "{}"', path),
-  WinWaitClose(Format("ahk_id {}", WinWait("ahk_class #32770")))
+  WinWaitClose("ahk_id " WinWait("ahk_class #32770"))
 )
 /**
  * @param {String} path
@@ -119,25 +119,4 @@ Open_Find(paths*)
     return Open(exe)
   else
     return Open(exe ' "{}"', Enumerable_Join(paths, '" "'))
-}
-/**
- * @see {@link https://astrogrep.sourceforge.net/help/commandline.php}
- * @param {String*} paths
- * @returns {Integer} PID
- */
-Open_Grep(paths*)
-{
-  id := "ahk_exe AstroGrep.exe"
-  if WinExist(id)
-  {
-    WinActivate(id)
-    return WinGetPID(id)
-  }
-  static exe := Reg_Grep()
-  if exe == ""
-    return 0
-  if paths.Length = 0
-    return Open(exe)
-  else
-    return Open(exe ' /spath="{}"', Enumerable_Join(paths, '|'))
 }

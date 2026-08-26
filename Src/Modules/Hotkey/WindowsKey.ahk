@@ -77,11 +77,6 @@
  */
 #f:: Open_Find()
 /**
- * Run AstroGrep.
- * @hotkey  Win + Ctrl + F
- */
-#^f:: Open_Grep()
-/**
  * Minimize Window.
  * @hotkey  Win + M
  */

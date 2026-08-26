@@ -51,16 +51,3 @@ Reg_Find()
     throw TargetError(Format('Everything.exe not found at "{}"', exe))
   return exe
 }
-/**
- * @returns {String}
- */
-Reg_Grep()
-{
-  try
-    static exe := Path_Combine(RegRead("HKCU\Software\AstroGrep"), "AstroGrep.exe")
-  catch
-    return ""
-  if !FileExist(exe)
-    throw TargetError(Format('AstroGrep.exe not found at "{}"', exe))
-  return exe
-}

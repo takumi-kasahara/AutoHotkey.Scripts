@@ -7,16 +7,6 @@
   },
   "tasks": [
     {
-      "label": "preproc",
-      "type": "shell",
-      "command": "${workspaceFolder}\\Src\\preproc.ahk",
-      "problemMatcher": [],
-      "group": {
-        "kind": "build",
-        "isDefault": true
-      }
-    },
-    {
       "label": "build",
       "type": "shell",
       "command": "${workspaceFolder}\\Src\\Build.ahk",
@@ -31,7 +21,8 @@
       "label": "install",
       "type": "shell",
       "command": "${workspaceFolder}\\Src\\Install.ahk",
-      "problemMatcher": []
+      "problemMatcher": [],
+      "dependsOn": ["preproc"]
     },
     {
       "label": "test",
@@ -41,7 +32,15 @@
       "group": {
         "kind": "test",
         "isDefault": true
-      }
+      },
+      "dependsOn": ["preproc"]
+    },
+        {
+      "label": "preproc",
+      "type": "shell",
+      "command": "${workspaceFolder}\\Src\\Preproc.ahk",
+      "problemMatcher": [],
+      "hide": true
     }
   ]
 }

@@ -5,10 +5,7 @@
 #ClipboardTimeout -1
 #NoTrayIcon
 
-try
-  Build()
-catch
-  ExitApp(A_LastError)
+Build()
 
 Build()
 {

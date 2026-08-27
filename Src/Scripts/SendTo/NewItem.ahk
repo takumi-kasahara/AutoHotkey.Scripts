@@ -41,8 +41,8 @@ For:
         prompt := "Path is empty."
         continue
       }
-      destination := Path_IsAbsolute(input.Value) ? input.Value : Path_Combine(Path_GetParent(path), input.Value)
-      if !FileExist(Path_GetParent(destination))
+      destination := Path_IsAbsolute(input.Value) ? input.Value : Path_Combine(path, input.Value)
+      if !Stream(Path_GetParents(destination)).Some(DirExist)
       {
         prompt := Format('"{}" is invalid.', input.Value)
         continue

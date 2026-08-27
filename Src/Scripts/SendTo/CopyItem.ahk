@@ -36,7 +36,7 @@ For:
         prompt := "Path is empty."
         continue
       }
-      destination := Path_IsAbsolute(input.Value) ? input.Value : Path_Combine(Path_GetParent(path), input.Value)
+      destination := Path_IsAbsolute(input.Value) ? input.Value : Path_Combine(path, input.Value)
       if !DirExist(Path_GetParent(destination))
       {
         prompt := Format('"{}" is invalid.', input.Value)

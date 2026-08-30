@@ -166,6 +166,11 @@
     Open(Path_Combine(root, "Window.ahk"))
 }
 /**
+ * @hotkey  Win + /
+ * @send    無変換
+ */
+#vkBF::sc079
+/**
  * Maximize Window
  * @hotkey  Win + Up
  */

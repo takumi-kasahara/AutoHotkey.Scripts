@@ -1,6 +1,34 @@
 ﻿#Requires AutoHotkey v2.0
 
 /**
+ * @param {Gui} gui
+ * @param {Integer} width
+ * @param {Integer} height
+ * @param {Integer} left
+ * @param {Integer} top
+ * @param {Integer} right
+ * @param {Integer} bottom
+ */
+Gui_ShowCentered(gui, width, height, left, top, right, bottom)
+{
+  screenW := right - left
+  screenH := bottom - top
+  loop 2
+  {
+    gui.Show("Hide w" width " h" height)
+    gui.GetPos(, , &windowW, &windowH)
+    widthOverflow := Max(0, windowW - screenW)
+    heightOverflow := Max(0, windowH - screenH)
+    if !widthOverflow && !heightOverflow
+      break
+    width -= widthOverflow
+    height -= heightOverflow
+  }
+  x := left + Max(0, Floor((screenW - windowW) / 2))
+  y := top + Max(0, Floor((screenH - windowH) / 2))
+  gui.Show("x" x " y" y)
+}
+/**
  * @param {String | Array | Func | BoundFunc} input
  * @param {String} [extension="txt"]
  */
@@ -56,10 +84,8 @@ View_Text(input, extension := "txt")
   calculatedGuiW := Max(contentW, 2 * BUTTON_MARGIN + BUTTON_COUNT * BUTTON_WIDTH)
   calculatedGuiH := contentH + 2 * BUTTON_MARGIN + BUTTON_PADDING + BUTTON_HEIGHT
   Monitor_Find(, &left, &top, &right, &bottom)
-  screenW := right - left
-  screenH := bottom - top
-  width := Min(calculatedGuiW, screenW)
-  height := Min(calculatedGuiH, screenH)
+  width := Min(calculatedGuiW, right - left)
+  height := Min(calculatedGuiH, bottom - top)
 
   myGui.OnEvent("Escape", (*) => myGui.Destroy())
 
@@ -75,11 +101,7 @@ View_Text(input, extension := "txt")
   Init(width, height)
   myGui.OnEvent("Size", (this, minMax, newW, newH) => Init(newW, newH))
 
-  windowLeft := left
-  windowRight := right - width
-  windowTop := top
-  windowBottom := bottom - height
-  myGui.Show(Format("w{} h{} x{} y{}", width, height, (windowLeft + windowRight) / 2, (windowTop + windowBottom) / 2))
+  Gui_ShowCentered(myGui, width, height, left, top, right, bottom)
   /**
    * @param {Integer} newW
    * @param {Integer} newH
@@ -216,18 +238,12 @@ View_Csv(input, header := 0)
   calculatedGuiW := Max(contentW, 2 * BUTTON_MARGIN + BUTTON_COUNT * BUTTON_WIDTH)
   calculatedGuiH := contentH + 2 * BUTTON_MARGIN + BUTTON_PADDING + BUTTON_HEIGHT
   Monitor_Find(, &left, &top, &right, &bottom)
-  screenW := right - left
-  screenH := bottom - top
-  width := Min(calculatedGuiW, screenW)
-  height := Min(calculatedGuiH, screenH)
+  width := Min(calculatedGuiW, right - left)
+  height := Min(calculatedGuiH, bottom - top)
 
   Init(width, height)
   myGui.OnEvent("Size", (this, minMax, newW, newH) => Init(newW, newH))
-  windowLeft := left
-  windowRight := right - width
-  windowTop := top
-  windowBottom := bottom - height
-  myGui.Show(Format("w{} h{} x{} y{}", width, height, (windowLeft + windowRight) / 2, (windowTop + windowBottom) / 2))
+  Gui_ShowCentered(myGui, width, height, left, top, right, bottom)
   /**
    * @param {Integer} newW
    * @param {Integer} newH

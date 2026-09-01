@@ -42,12 +42,12 @@ ContextMenu_Edit(input)
     ctx.AddSubMenu(Format("Path ({})", paths.Length), ctxPath)
     ctx.AddSeparator()
   }
-  urls := Clipboard_ExtractUrl()
+  urls := Clipboard_ExtractUrl(true)
   if urls.Length > 0
   {
     ctxUrl := ContextMenu()
     ctxUrl.Add("Plaintext", () => View_Text(Stream(urls).ToArray(url => Url_Decode(url))))
-    links := Clipboard_ExtractLink()
+    links := Clipboard_ExtractLink(true)
     if links.Length > 0
     {
       ctxHtml := ContextMenu()

@@ -7,11 +7,6 @@
  */
 Open(fmt, args*) => (Run(Format(fmt, args*), A_Desktop, , &pid), pid)
 /**
- * @param {String} path
- * @returns {Integer} PID
- */
-Open_RunAs(path) => Open('*RunAs "{}"', path)
-/**
  * @param {String} default
  * @param {Object} [dictionary={}]
  * @returns {Integer} PID

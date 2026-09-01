@@ -145,12 +145,12 @@
  * Run Terminal.
  * @hotkey  Win + Ctrl + X
  */
-#^x:: Open(Config_Get("Path", "TERMINAL"))
+#^x:: Open(Config_Get("Path", "TERMINAL"), EnvGet("USERPROFILE"))
 /**
  * Run Terminal as Administrator.
  * @hotkey  Win + Ctrl + Shift + X
  */
-#^+x:: Open_RunAs(Config_Get("Path", "TERMINAL"))
+#^+x:: Open("*RunAs " Config_Get("Path", "TERMINAL"), EnvGet("USERPROFILE"))
 #z:: Window_Maximize()
 /**
  * Show WindowResize Context Menu.

@@ -89,6 +89,33 @@ Dialog_SaveUrl(links)
   }
 }
 /**
+ * @param {Array<{ href: String, title: String }>} links
+ */
+Dialog_Download(links)
+{
+  if links.Length == 0
+    return
+  if links.Length == 1
+  {
+    path := FileSelect("S" 0x10, Path_Combine(Reg_FolderDescriptions("Downloads"), links[1].title), "Save as", "All files (*.*)")
+    if path == ""
+      return
+    name := Path_GetName(path)
+    target := Path_GetParent(path)
+    Url_Download(links[1].href, target, name, true)
+  }
+  else
+  {
+    target := DirSelect(, , "Download Files")
+    if target == ""
+      return
+    if MsgBox(Format('Download {} files to "{}" ?', links.Length, target), , 0x24) !== "Yes"
+      return
+    for link in links
+      Url_Download(link.href, target, link.title, false)
+  }
+}
+/**
  * @param {Array<String>} paths
  */
 Dialog_OpenPath(paths)

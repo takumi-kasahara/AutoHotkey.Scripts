@@ -1,6 +1,7 @@
 ﻿#Include "Lib\Assert.ahk"
 #Include "Lib\Clipboard.ahk"
 #Include "Lib\Config.ahk"
+#Include "Lib\ContentType.ahk"
 #Include "Lib\ConvertFrom.ahk"
 #Include "Lib\ConvertTo.ahk"
 #Include "Lib\Date.ahk"

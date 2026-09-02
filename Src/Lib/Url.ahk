@@ -172,3 +172,69 @@ Url_Decode(url)
  * @returns {String}
  */
 Url_Load(path) => IniRead(path, "InternetShortcut", "URL", "")
+/**
+ * @see {@link https://learn.microsoft.com/en-us/office/client-developer/access/desktop-database-reference/stream-object-ado-reference}
+ * @see {@link https://learn.microsoft.com/en-us/windows/win32/winhttp/winhttprequest}
+ * @param {String} url
+ * @param {String} target
+ * @param {String} name
+ * @param {Boolean} [overwrite=false]
+ * @returns {Boolean}
+ * */
+Url_Download(url, target, name, overwrite := false)
+{
+  req := ComObject("WinHttp.WinHttpRequest.5.1")
+  ToolTip(Format('Fetching:"{}"', url))
+  try
+  {
+    req.Open("HEAD", url, false)
+    req.Send()
+    if (req.Status < 200 || req.Status >= 300)
+      throw Error("Failed to fetch URL: " url " with status: " req.Status)
+  }
+  finally
+    ToolTip()
+
+  name := Path_GetName(name)
+  if name == ""
+    throw Error("Invalid file name.")
+  ext := Path_GetExtensionName(name)
+  if ext == ""
+  {
+    mimeType := StrSplit(req.GetResponseHeader("Content-Type"), ";")[1]
+    ext := ContentType_ToExtension(mimeType)
+    if ext == ""
+      throw Error("Failed to determine file extension for URL: " url " with MIME type: " mimeType)
+
+    name .= ext
+  }
+  path := Path_Combine(target, name)
+  if FileExist(path)
+  {
+    if !overwrite
+      switch MsgBox(Format('"{}" already exists.`nDo you want to overwrite?', path), , 0x23)
+      {
+        case "No":
+          return false
+        case "Cancel":
+          throw Error("Canceled by user.")
+      }
+  }
+  ToolTip(Format('Downloading:"{}" as "{}"', url, name))
+  try
+  {
+    req.Open("GET", url, false)
+    req.Send()
+    if (req.Status < 200 || req.Status >= 300)
+      throw Error("Failed to download URL: " url " with status: " req.Status)
+    fs := ComObject("ADODB.Stream")
+    fs.Type := 1  ; adTypeBinary
+    fs.Open()
+    fs.Write(req.ResponseBody)
+    fs.SaveToFile(path, 2)  ; adSaveCreateOverWrite
+    fs.Close()
+    return true
+  }
+  finally
+    ToolTip()
+}

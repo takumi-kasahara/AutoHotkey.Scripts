@@ -68,5 +68,21 @@ class Url_Tests extends Test
     Assert_IsNegative(Url_Compare("https://example.com", "https://www.example.com"))
     Assert_IsNegative(Url_Compare("https://example.com/p1?k=v", "https://example.com/p1/p2"))
   }
+  Url_Download_Example()
+  {
+    folder := Reg_FolderDescriptions("Downloads")
+    Url_Download("https://www.example.com/", folder, "example")
+    path := Path_Combine(folder, "example" A_Now ".html")
+    Assert_IsTrue(FileExist(path) !== "")
+    FileDelete(path)
+  }
+  Url_Download_JsonPlaceholder()
+  {
+    folder := Reg_FolderDescriptions("Downloads")
+    Url_Download("https://jsonplaceholder.typicode.com/posts/1", folder, "jsonplaceholder")
+    path := Path_Combine(folder, "jsonplaceholder" A_Now ".json")
+    Assert_IsTrue(FileExist(path) !== "")
+    FileDelete(path)
+  }
 }
 Url_Tests()

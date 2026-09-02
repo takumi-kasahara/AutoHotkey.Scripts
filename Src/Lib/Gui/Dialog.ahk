@@ -47,7 +47,7 @@ Dialog_SaveUrl(links)
     target := DirSelect(, , "Create Shortcuts")
     if target == ""
       return
-    if MsgBox(Format('Create {} shortcuts in "{}" ?', links.Length, target), , 0x21) != "Yes"
+    if MsgBox(Format('Create {} shortcuts in "{}" ?', links.Length, target), , 0x24) !== "Yes"
       return
     for link in links
       Save(Path_Combine(target, link.title ".url"), link.href, false)

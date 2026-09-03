@@ -15,7 +15,7 @@ String_Edit(this, editor)
   loop parse, this, "`n", "`r"
   {
     edited .= sep
-    edited .= editor.Call(A_LoopField)
+    edited .= editor.Call(RegExReplace(A_LoopField, "(*UCP)\s+$"))
     sep := "`n"
   }
   return edited
@@ -82,7 +82,7 @@ String_Normalize(this, form := "NFC")
 /**
  * @param {String} input
  */
-String_Dedent(input)
+String_Clean(input)
 {
   commonIndent := ""
   loop parse, input, "`n", "`r"
@@ -98,14 +98,13 @@ String_Dedent(input)
       commonIndent := indent
       continue
     }
-    while commonIndent != "" && SubStr(indent, 1, StrLen(commonIndent)) != commonIndent
+    while commonIndent !== "" && SubStr(indent, 1, StrLen(commonIndent)) !== commonIndent
       commonIndent := SubStr(commonIndent, 1, -1)
-    if commonIndent == ""
-      return input
   }
   if commonIndent == ""
-    return input
-  return String_Edit(input, line => String_StartsWith(line, commonIndent) ? SubStr(line, StrLen(commonIndent) + 1) : line)
+    return String_Edit(input, line => line)
+  else
+    return String_Edit(input, line => String_StartsWith(line, commonIndent) ? SubStr(line, StrLen(commonIndent) + 1) : line)
 }
 /**
  * @param {String} pathLike

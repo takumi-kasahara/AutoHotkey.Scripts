@@ -73,5 +73,28 @@ class String_Tests extends Test
   }
   _a(url) => '<a href="' url '">title</a>'
   _md(url) => '[title](' url ')'
+  String_Clean_1()
+  {
+    Assert_AreEqual("foo", String_Clean("foo"))
+    Assert_AreEqual("foo", String_Clean("foo "))
+    Assert_AreEqual("foo", String_Clean(" foo"))
+    Assert_AreEqual("foo", String_Clean(" foo "))
+  }
+  String_Clean_2()
+  {
+    clean := "
+    ( Join`n
+      foo
+        bar
+          baz
+    )"
+    indented := "
+    ( LTrim0 Join`n
+      foo
+        bar
+          baz
+    )"
+    Assert_AreEqual(clean, String_Clean(indented))
+  }
 }
 String_Tests()

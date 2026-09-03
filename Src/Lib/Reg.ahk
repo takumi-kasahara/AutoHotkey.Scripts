@@ -44,7 +44,7 @@ Reg_FolderDescriptions(name)
 Reg_Find()
 {
   try
-    static exe := RegRead("HKLM\SOFTWARE\voidtools\Everything 1.5a", "ExePath")
+    static exe := RegRead("HKLM\SOFTWARE\voidtools\Everything", "ExePath")
   catch
     return ""
   if !FileExist(exe)

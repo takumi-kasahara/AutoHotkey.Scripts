@@ -15,7 +15,7 @@ String_Edit(this, editor)
   loop parse, this, "`n", "`r"
   {
     edited .= sep
-    edited .= editor.Call(A_LoopField)
+    edited .= editor.Call(RegExReplace(A_LoopField, "(*UCP)\s+$"))
     sep := "`n"
   }
   return edited
@@ -82,10 +82,10 @@ String_Normalize(this, form := "NFC")
 /**
  * @param {String} input
  */
-String_Dedent(input)
+String_Clean(input)
 {
-  commonIndent := ""
-  loop parse, input, "`n", "`r"
+  baseIndent := ""
+  loop parse, Trim(input, "`r`n"), "`n", "`r"
   {
     line := A_LoopField
     if String_IsNullOrWhitespace(line)
@@ -93,19 +93,23 @@ String_Dedent(input)
     if !RegExMatch(line, "(*UCP)^(?<indent>\s*)\S", &match)
       continue
     indent := match.indent
-    if commonIndent == ""
+    if indent == ""
     {
-      commonIndent := indent
+      baseIndent := ""
+      break
+    }
+    if baseIndent == ""
+    {
+      baseIndent := indent
       continue
     }
-    while commonIndent != "" && SubStr(indent, 1, StrLen(commonIndent)) != commonIndent
-      commonIndent := SubStr(commonIndent, 1, -1)
-    if commonIndent == ""
-      return input
+    while baseIndent !== "" && SubStr(indent, 1, StrLen(baseIndent)) !== baseIndent
+      baseIndent := SubStr(baseIndent, 1, -1)
   }
-  if commonIndent == ""
-    return input
-  return String_Edit(input, line => String_StartsWith(line, commonIndent) ? SubStr(line, StrLen(commonIndent) + 1) : line)
+  if baseIndent == ""
+    return String_Edit(Trim(input, "`r`n"), line => line)
+  else
+    return String_Edit(Trim(input, "`r`n"), line => String_StartsWith(line, baseIndent) ? SubStr(line, StrLen(baseIndent) + 1) : line)
 }
 /**
  * @param {String} pathLike

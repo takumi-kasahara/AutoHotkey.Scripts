@@ -131,15 +131,15 @@
  * Paste as Plaintext.
  * @hotkey  Win + Alt + V
  */
-#!v:: Paste(Trim(A_Clipboard, "`r`n"))
+#!v:: Paste(String_Clean(A_Clipboard))
 /**
  * Paste as HTML.
  * @hotkey  Win + Ctrl + Alt + V
  */
 #^!v::
 {
-  html := Trim(Clipboard_GetHtml(), "`r`n")
-  Paste(html ? html : Trim(A_Clipboard, "`r`n"))
+  html := String_Clean(Clipboard_GetHtml())
+  Paste(html ? html : String_Clean(A_Clipboard))
 }
 /**
  * Run Terminal.

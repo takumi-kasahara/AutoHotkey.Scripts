@@ -18,7 +18,7 @@ Clipboard_SetText(input)
 /**
  * @returns {String}
  */
-Clipboard_GetText() => String_Dedent(Trim(A_Clipboard, "`r`n"))
+Clipboard_GetText() => String_Clean(Trim(A_Clipboard, "`r`n"))
 /**
  * @returns {String}
  */

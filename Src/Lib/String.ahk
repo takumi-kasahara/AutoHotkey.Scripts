@@ -84,8 +84,8 @@ String_Normalize(this, form := "NFC")
  */
 String_Clean(input)
 {
-  commonIndent := ""
-  loop parse, input, "`n", "`r"
+  baseIndent := ""
+  loop parse, Trim(input, "`r`n"), "`n", "`r"
   {
     line := A_LoopField
     if String_IsNullOrWhitespace(line)
@@ -93,18 +93,23 @@ String_Clean(input)
     if !RegExMatch(line, "(*UCP)^(?<indent>\s*)\S", &match)
       continue
     indent := match.indent
-    if commonIndent == ""
+    if indent == ""
     {
-      commonIndent := indent
+      baseIndent := ""
+      break
+    }
+    if baseIndent == ""
+    {
+      baseIndent := indent
       continue
     }
-    while commonIndent !== "" && SubStr(indent, 1, StrLen(commonIndent)) !== commonIndent
-      commonIndent := SubStr(commonIndent, 1, -1)
+    while baseIndent !== "" && SubStr(indent, 1, StrLen(baseIndent)) !== baseIndent
+      baseIndent := SubStr(baseIndent, 1, -1)
   }
-  if commonIndent == ""
-    return String_Edit(input, line => line)
+  if baseIndent == ""
+    return String_Edit(Trim(input, "`r`n"), line => line)
   else
-    return String_Edit(input, line => String_StartsWith(line, commonIndent) ? SubStr(line, StrLen(commonIndent) + 1) : line)
+    return String_Edit(Trim(input, "`r`n"), line => String_StartsWith(line, baseIndent) ? SubStr(line, StrLen(baseIndent) + 1) : line)
 }
 /**
  * @param {String} pathLike

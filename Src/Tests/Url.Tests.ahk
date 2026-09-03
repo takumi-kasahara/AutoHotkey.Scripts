@@ -71,18 +71,30 @@ class Url_Tests extends Test
   Url_Download_Example()
   {
     folder := Reg_FolderDescriptions("Downloads")
-    Url_Download("https://www.example.com/", folder, "example")
-    path := Path_Combine(folder, "example" A_Now ".html")
-    Assert_IsTrue(FileExist(path) !== "")
-    FileDelete(path)
+    name := "example_" A_Now ".html"
+    path := Path_Combine(folder, name)
+    try
+    {
+      Url_Download("https://www.example.com/", folder, name)
+      Assert_IsTrue(FileExist(path) !== "")
+    }
+    finally
+      if FileExist(path)
+        FileDelete(path)
   }
   Url_Download_JsonPlaceholder()
   {
     folder := Reg_FolderDescriptions("Downloads")
-    Url_Download("https://jsonplaceholder.typicode.com/posts/1", folder, "jsonplaceholder")
-    path := Path_Combine(folder, "jsonplaceholder" A_Now ".json")
-    Assert_IsTrue(FileExist(path) !== "")
-    FileDelete(path)
+    name := "jsonplaceholder_" A_Now ".json"
+    path := Path_Combine(folder, name)
+    try
+    {
+      Url_Download("https://jsonplaceholder.typicode.com/posts/1", folder, name)
+      Assert_IsTrue(FileExist(path) !== "")
+    }
+    finally
+      if FileExist(path)
+        FileDelete(path)
   }
 }
 Url_Tests()

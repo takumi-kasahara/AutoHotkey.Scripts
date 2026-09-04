@@ -188,6 +188,19 @@ class Path_Tests extends Test
     Assert_AreEqual("file:///C:/日本語.txt", Path_ToURL("C:\日本語.txt"))
     Assert_AreEqual("file:///C:/%E6%97%A5%E6%9C%AC%E8%AA%9E.txt", Url_Encode(Path_ToURL("C:\日本語.txt")))
   }
+  Path_Escape()
+  {
+    Assert_AreEqual('foo.txt', Path_Escape('foo.txt'))
+    Assert_AreEqual('foo：bar.txt', Path_Escape('foo:bar.txt'))
+    Assert_AreEqual('foo？bar.txt', Path_Escape('foo?bar.txt'))
+    Assert_AreEqual('foo＊bar.txt', Path_Escape('foo*bar.txt'))
+    Assert_AreEqual('foo／bar.txt', Path_Escape('foo/bar.txt'))
+    Assert_AreEqual('foo＼bar.txt', Path_Escape('foo\bar.txt'))
+    Assert_AreEqual('foo＂bar.txt', Path_Escape('foo"bar.txt'))
+    Assert_AreEqual('foo＜bar.txt', Path_Escape('foo<bar.txt'))
+    Assert_AreEqual('foo＞bar.txt', Path_Escape('foo>bar.txt'))
+    Assert_AreEqual('foo｜bar.txt', Path_Escape('foo|bar.txt'))
+  }
   Path_Compare()
   {
     ; path1 < path2 < path3

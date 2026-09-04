@@ -37,7 +37,7 @@ Dialog_SaveUrl(links)
     return
   if links.Length == 1
   {
-    path := FileSelect("S" 0x10, Path_Combine(A_Desktop, links[1].title ".url"), "Create Shortcut", "Url shortcut (*.url)")
+    path := FileSelect("S" 0x10, Path_Combine(A_Desktop, Path_Escape(links[1].title) ".url"), "Create Shortcut", "Url shortcut (*.url)")
     if path == ""
       return
     Save(path, links[1].href, true)
@@ -50,7 +50,7 @@ Dialog_SaveUrl(links)
     if MsgBox(Format('Create {} shortcuts in "{}" ?', links.Length, target), , 0x24) !== "Yes"
       return
     for link in links
-      Save(Path_Combine(target, link.title ".url"), link.href, false)
+      Save(Path_Combine(target, Path_Escape(link.title) ".url"), link.href, false)
   }
   /**
    * @param {String} path
@@ -97,7 +97,7 @@ Dialog_Download(links)
     return
   if links.Length == 1
   {
-    path := FileSelect("S" 0x10, Path_Combine(Reg_FolderDescriptions("Downloads"), links[1].title), "Save as", "All files (*.*)")
+    path := FileSelect("S" 0x10, Path_Combine(Reg_FolderDescriptions("Downloads"), Path_Escape(links[1].title)), "Save as", "All files (*.*)")
     if path == ""
       return
     name := Path_GetName(path)
@@ -112,7 +112,7 @@ Dialog_Download(links)
     if MsgBox(Format('Download {} files to "{}" ?', links.Length, target), , 0x24) !== "Yes"
       return
     for link in links
-      Url_Download(link.href, target, link.title, false)
+      Url_Download(link.href, target, Path_Escape(link.title), false)
   }
 }
 /**

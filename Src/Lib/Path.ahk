@@ -634,6 +634,52 @@ Path_Canonicalize(path)
   return RegExReplace(RegExReplace(buf, "^\\{3,}", "\\"), "(?<!^)\\{2,}", "\")
 }
 /**
+ * @param {String} fileName
+ * @returns {String}
+ */
+Path_Escape(fileName)
+{
+  static GCT_INVALID := 0x0000
+  static GCT_WILD := 0x0004
+  static GCT_SEPARATOR := 0x0008
+  static LCMAP_FULLWIDTH := 0x00800000
+  static LOCALE_USER_DEFAULT := 0x0400
+  result := ""
+  loop parse fileName
+  {
+    ch := A_LoopField
+    if ch == "\"
+    {
+      result .= "＼"
+      continue
+    }
+    /** @see {@link https://learn.microsoft.com/en-us/windows/win32/api/shlwapi/nf-shlwapi-pathgetchartypew} */
+    charType := DllCall("shlwapi.dll\PathGetCharTypeW"
+      , "UInt", Ord(ch) ; WCHAR ch
+      , "UInt"          ; UINT
+    )
+    if charType == GCT_INVALID || charType & (GCT_WILD | GCT_SEPARATOR)
+    {
+      VarSetStrCapacity(&buf, 2 * 2)
+      /** @see {@link https://learn.microsoft.com/en-us/windows/win32/api/winnls/nf-winnls-lcmapstringw} */
+      if DllCall("LCMapStringW"
+        , "UInt", LOCALE_USER_DEFAULT ; LCID    Locale
+        , "UInt", LCMAP_FULLWIDTH     ; DWORD   dwMapFlags
+        , "WStr", ch                  ; LPCWSTR lpSrcStr
+        , "Int", -1                   ; int     cchSrc
+        , "WStr", buf                 ; LPWSTR  lpDestStr
+        , "Int", 2                    ; int     cchDest
+        , "Int"
+      ) == 0
+        throw OSError()
+      result .= buf
+    }
+    else
+      result .= ch
+  }
+  return result
+}
+/**
  * @description Compares two paths for sorting.
  * - `path1 == path2` => 0
  * - `path1 > path2` => 1

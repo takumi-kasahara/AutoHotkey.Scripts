@@ -26,6 +26,19 @@ ConvertTo_String(input, separator := "`n")
 ConvertTo_Csv(columns*) => Enumerable_Join(Stream(columns).ToArray(column => String_Enclose(StrReplace(column, '"', '""'))), ",")
 /**
  * @param {String} input
+ * @param {String} from
+ * @returns {String}
+ */
+ConvertTo_Html(input, from := "markdown")
+{
+  wshShell := ComObject("WScript.Shell")
+  exec := wshShell.Exec("pandoc -f " from " -t html")
+  exec.StdIn.Write(input)
+  exec.StdIn.Close()
+  return exec.StdOut.ReadAll()
+}
+/**
+ * @param {String} input
  * @returns {String}
  */
 ConvertTo_Json(input)

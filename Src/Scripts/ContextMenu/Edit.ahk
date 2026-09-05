@@ -68,10 +68,13 @@ ContextMenu_Edit(input)
   html := Clipboard_GetHtml()
   if html
   {
-    ctx.AddSeparator()
-    ctx.Add("Copy Raw HTML", () => View_Text(html, "html"))
-    ctx.Add("Copy as Blockquote", () => View_Text(Clipboard_GetBlockquote(), "html"))
-    ctx.Add("Copy as Code", () => View_Text(Document_CreateCodeElement(input), "html"))
+    ctxHtml := ContextMenu()
+    ctxHtml.Add("Blockquote", () => View_Text(Clipboard_GetBlockquote(), "html"))
+    ctxHtml.Add("Code", () => View_Text(Document_CreateCodeElement(input), "html"))
+    ctxHtml.Add("Markdown (CommonMark)", () => View_Text(ConvertFrom_Html(html)), "md")
+    ctxHtml.Add("Markdown (GFM)", () => View_Text(ConvertFrom_Html(html), "gfm"), "md")
+    ctxHtml.Add("Raw", () => View_Text(html, "html"))
+    ctx.AddSubMenu("HTML", ctxHtml)
   }
   ctx.AddSeparator()
   ctx.Add("Sort", () => View_Text(Array_Sort(StrSplit(input, "`n"))))
@@ -110,6 +113,7 @@ ContextMenu_Edit(input)
   ctx.AddSubMenu("Convert", ctxConvert)
 
   ctxMarkdown := ContextMenu()
+  ctxMarkdown.Add("HTML", () => View_Text(ConvertTo_Html(input), "html"))
   ctxMarkdown.Add("Blockquote", () => View_Text(StrReplace(input, "`n", "`n> "), "md"))
   if StrSplit(input, "`n").Length == 1
     ctxMarkdown.Add("Code", () => View_Text("``" input "``", "md"))

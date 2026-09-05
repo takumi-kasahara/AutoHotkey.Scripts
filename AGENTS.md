@@ -14,12 +14,19 @@ This repository is a collection of scripts for AutoHotkey v2. Below are the main
 
 ## Workflow
 
-1. `./Src/Lib.ahk`, `./Src/Modules.ahk`, and `./Src/Tests.ahk` are common include files.
+1. `./Src/Lib.ahk` and `./Src/Modules.ahk` are common include files.
    - If you add or remove files in `./Src/`, run `./Src/Include.ahk` to rebuild includes.
-1. Run `./Src/Tests.ahk` to execute tests.
-   - Place individual test scripts under `./Src/Tests/`.
-     - This file cannot be run directly.
-   - If a test script fails, a stack trace will be output to `./Log/`.
+1. Run tests from PowerShell with:
+
+   ```powershell
+   powershell.exe -NoLogo -NoProfile -File AutoHotkey.ps1 -Path .\Src\Tests\*.Tests.ahk
+   ```
+
+   To filter by test case name, pass it as an argument:
+
+   ```powershell
+   powershell.exe -NoLogo -NoProfile -File AutoHotkey.ps1 -LiteralPath .\Src\Tests\Array.Tests.ahk -ArgumentList Array_Equal
+   ```
 
 ## Coding Guidelines
 

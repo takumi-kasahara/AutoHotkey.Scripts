@@ -34,7 +34,7 @@ Log_Trace(messages*)
   if State_Debug()
     OutputDebug(text)
   else if State_ErrorStdOut()
-    FileAppend(text, "*")
+    FileAppend(String_Join("`t", messages*) "`n", "*")
   else
   {
     buf := Log_State("Buffer")
@@ -50,14 +50,14 @@ Log_Trace(messages*)
 Log_Error(thrown, mode?)
 {
   Log_Flush()
-  if !State_Debug()
+  if !(State_Debug() || State_ErrorStdOut())
     Notification_Show(thrown.What "`n" thrown.Message)
   static log := Path_Combine(A_Temp, A_ScriptName "." A_Now ".err.log")
   text := ConvertTo_Csv(A_Now, thrown.What, thrown.Message, thrown.Extra, IsSet(mode) ? mode : "")
   if State_Debug()
     OutputDebug(text)
   else if State_ErrorStdOut()
-    FileAppend(text, "*")
+    FileAppend(thrown.Message "`n" thrown.Stack, "**")
   else
     FileAppend(text, log)
 }

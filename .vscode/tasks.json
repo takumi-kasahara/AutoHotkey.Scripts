@@ -9,7 +9,17 @@
     {
       "label": "build",
       "type": "shell",
-      "command": "${workspaceFolder}\\Src\\Build.ahk",
+      "command": "powershell.exe",
+      "args": [
+        "-NoLogo",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "RemoteSigned",
+        "-File",
+        ".agents\\skills\\autohotkey\\scripts\\AutoHotkey.ps1",
+        "-LiteralPath",
+        ".\\Src\\Build.ahk"
+      ],
       "problemMatcher": [],
       "group": {
         "kind": "build",
@@ -20,14 +30,34 @@
     {
       "label": "install",
       "type": "shell",
-      "command": "${workspaceFolder}\\Src\\Install.ahk",
+      "command": "powershell.exe",
+      "args": [
+        "-NoLogo",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "RemoteSigned",
+        "-File",
+        ".agents\\skills\\autohotkey\\scripts\\AutoHotkey.ps1",
+        "-LiteralPath",
+        ".\\Src\\Install.ahk"
+      ],
       "problemMatcher": [],
       "dependsOn": ["preproc"]
     },
     {
       "label": "test",
       "type": "shell",
-      "command": "${workspaceFolder}\\Src\\Tests.ahk",
+      "command": "powershell.exe",
+      "args": [
+        "-NoLogo",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "RemoteSigned",
+        "-File",
+        ".agents\\skills\\autohotkey\\scripts\\AutoHotkey.ps1",
+        "-Path",
+        ".\\Src\\Tests\\*.Tests.ahk"
+      ],
       "problemMatcher": [],
       "group": {
         "kind": "test",
@@ -35,10 +65,20 @@
       },
       "dependsOn": ["preproc"]
     },
-        {
+    {
       "label": "preproc",
       "type": "shell",
-      "command": "${workspaceFolder}\\Src\\Preproc.ahk",
+      "command": "powershell.exe",
+      "args": [
+        "-NoLogo",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "RemoteSigned",
+        "-File",
+        ".agents\\skills\\autohotkey\\scripts\\AutoHotkey.ps1",
+        "-LiteralPath",
+        ".\\Src\\Preproc.ahk"
+      ],
       "problemMatcher": [],
       "hide": true
     }

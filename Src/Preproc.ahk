@@ -17,8 +17,4 @@ Build()
     FileDelete("Modules.ahk")
   loop files, "Modules\*.ahk", "R"
     FileAppend(Format('#Include "{}"`r`n', A_LoopFilePath), "Modules.ahk", "UTF-8")
-  if FileExist("Tests.ahk")
-    FileDelete("Tests.ahk")
-  loop files, "Tests\*.ahk", "R"
-    FileAppend(Format('#Include "{}"`r`n', A_LoopFilePath), "Tests.ahk", "UTF-8")
 }

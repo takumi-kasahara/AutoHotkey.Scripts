@@ -5,6 +5,7 @@
 #ClipboardTimeout -1
 #NoTrayIcon
 #Include "..\Lib.ahk"
+SetWorkingDir(A_ScriptDir "\..")
 OnError(HandleError)
 OnExit(HandleExit)
 

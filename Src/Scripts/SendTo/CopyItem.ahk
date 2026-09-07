@@ -47,7 +47,7 @@ For:
         prompt := Format('"{}" already exists.', destination)
         continue
       }
-      if MsgBox(Format('Copy from "{}" to "{}" ?', path, destination), , 0x24) == "No"
+      if MsgBox(Format('Copy from "{}" to "{}" ?', path, destination), , 0x24) !== "Yes"
       {
         prompt := defaultPrompt
         continue

@@ -52,7 +52,7 @@ For:
         prompt := Format('"{}" already exists.', destination)
         continue
       }
-      if MsgBox(Format('Create "{}" ?', destination), , 0x24) == "No"
+      if MsgBox(Format('Create "{}" ?', destination), , 0x24) !== "Yes"
       {
         prompt := defaultPrompt
         continue

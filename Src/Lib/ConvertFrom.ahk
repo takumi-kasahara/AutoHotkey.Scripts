@@ -7,15 +7,14 @@
  */
 ConvertFrom_Html(input, to := "commonmark")
 {
-  html := input
   if RegExMatch(input, "(?s)<!--StartFragment-->(.*?)<!--EndFragment-->", &matched)
-    html := matched[1]
+    input := matched[1]
 
-  wshShell := ComObject("WScript.Shell")
-  exec := wshShell.Exec("pandoc -f html -t " to)
-  exec.StdIn.Write(html)
-  exec.StdIn.Close()
-  return exec.StdOut.ReadAll()
+  exitCode := Shell_Exec("pandoc -f html -t " to, input, &stdout, &stderr)
+  if exitCode !== 0
+    throw OSError(stderr, exitCode)
+
+  return stdout
 }
 /**
  * @param {String} input

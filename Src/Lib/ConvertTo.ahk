@@ -31,11 +31,11 @@ ConvertTo_Csv(columns*) => Enumerable_Join(Stream(columns).ToArray(column => Str
  */
 ConvertTo_Html(input, from := "markdown")
 {
-  wshShell := ComObject("WScript.Shell")
-  exec := wshShell.Exec("pandoc -f " from " -t html")
-  exec.StdIn.Write(input)
-  exec.StdIn.Close()
-  return exec.StdOut.ReadAll()
+  exitCode := Shell_Exec("pandoc -f " from " -t html", input, &stdout, &stderr)
+  if exitCode !== 0
+    throw OSError(stderr, exitCode)
+
+  return stdout
 }
 /**
  * @param {String} input

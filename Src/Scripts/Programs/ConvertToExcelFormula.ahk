@@ -12,20 +12,27 @@ Dialog_ConvertToExcelFormula()
 
 Dialog_ConvertToExcelFormula()
 {
-  input := InputBox("Enter a format string.")
-  if input.Result == "Cancel"
-    return
-  if String_IsNullOrWhitespace(input.Value)
+  prompt := "Enter a format string."
+  loop
   {
-    MsgBox("Input is empty.", , 0x30)
-    return
+    input := InputBox(prompt)
+    if input.Result == "Cancel"
+      return
+    if String_IsNullOrWhitespace(input.Value)
+    {
+      prompt := "Input is empty."
+      continue
+    }
+    try
+    {
+      result := ConvertTo_ExcelFormula(input.Value)
+      View_Text(result, "txt")
+      return
+    }
+    catch as ex
+    {
+      prompt := ex.Message
+      continue
+    }
   }
-  try
-    result := ConvertTo_ExcelFormula(input.Value)
-  catch as ex
-  {
-    MsgBox(ex.Message, , 0x30)
-    return
-  }
-  View_Text(result, "txt")
 }

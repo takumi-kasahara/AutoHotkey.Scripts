@@ -48,7 +48,7 @@ View_Text(input, extension := "txt")
   myGui.Opt("-MinimizeBox")
 
   try
-    editText := myGui.AddEdit("Multi ReadOnly Wrap", value)
+    editText := myGui.AddText(, value)
   catch as ex
   {
     OnCopy()
@@ -89,14 +89,11 @@ View_Text(input, extension := "txt")
 
   myGui.OnEvent("Escape", (*) => myGui.Destroy())
 
-  btnCopy := myGui.AddButton(Format("w{} h{}", BUTTON_WIDTH, BUTTON_HEIGHT), "Copy")
-  btnCopy.OnEvent("Click", (*) => OnCopy())
+  btnCopy := myGui.AddButton(Format("w{} h{} Default", BUTTON_WIDTH, BUTTON_HEIGHT), "&Copy")
+  btnCopy.OnEvent("Click", (*) => (OnCopy(), myGui.Destroy()))
 
-  btnSave := myGui.AddButton(Format("w{} h{}", BUTTON_WIDTH, BUTTON_HEIGHT), "Save")
-  btnSave.OnEvent("Click", (*) => (
-    OnSave(),
-    myGui.Destroy()
-  ))
+  btnSave := myGui.AddButton(Format("w{} h{}", BUTTON_WIDTH, BUTTON_HEIGHT), "&Save")
+  btnSave.OnEvent("Click", (*) => (OnSave(), myGui.Destroy()))
 
   Init(width, height)
   myGui.OnEvent("Size", (this, minMax, newW, newH) => Init(newW, newH))
@@ -123,7 +120,6 @@ View_Text(input, extension := "txt")
       Clipboard_SetHtml(value)
     else
       Clipboard_SetText(value)
-    myGui.Destroy()
   }
   OnSave() => Dialog_Save(editText.Value, extension)
 }
@@ -180,17 +176,11 @@ View_Csv(input, header := 0)
 
   myGui.OnEvent("Escape", (*) => myGui.Destroy())
 
-  btnCopy := myGui.AddButton(Format("w{} h{}", BUTTON_WIDTH, BUTTON_HEIGHT), "Copy")
-  btnCopy.OnEvent("Click", (*) => (
-    Clipboard_SetText(value),
-    myGui.Destroy()
-  ))
+  btnCopy := myGui.AddButton(Format("w{} h{}", BUTTON_WIDTH, BUTTON_HEIGHT), "&Copy")
+  btnCopy.OnEvent("Click", (*) => (Clipboard_SetText(value), myGui.Destroy()))
 
-  btnSave := myGui.AddButton(Format("w{} h{}", BUTTON_WIDTH, BUTTON_HEIGHT), "Save")
-  btnSave.OnEvent("Click", (*) => (
-    OnSave(),
-    myGui.Destroy()
-  ))
+  btnSave := myGui.AddButton(Format("w{} h{}", BUTTON_WIDTH, BUTTON_HEIGHT), "&Save")
+  btnSave.OnEvent("Click", (*) => (OnSave(), myGui.Destroy()))
 
   digits := StrLen(String(rows.Length))
   try

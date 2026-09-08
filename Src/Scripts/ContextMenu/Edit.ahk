@@ -114,11 +114,8 @@ ContextMenu_Edit(input)
 
   ctxMarkdown := ContextMenu()
   ctxMarkdown.Add("HTML", () => View_Text(ConvertTo_Html(input), "html"))
-  ctxMarkdown.Add("Blockquote", () => View_Text(StrReplace(input, "`n", "`n> "), "md"))
-  if StrSplit(input, "`n").Length == 1
-    ctxMarkdown.Add("Code", () => View_Text("``" input "``", "md"))
-  else
-    ctxMarkdown.Add("Code", () => View_Text("```````n" input "`n``````", "md"))
+  ctxMarkdown.Add("Blockquote", () => View_Text(String_Edit(input, field => "> " field), "md"))
+  ctxMarkdown.Add("Code", () => View_Text(StrSplit(input, "`n").Length == 1 ? "``" input "``" : "```````n" input "`n``````", "md"))
   ctx.AddSubMenu("Markdown", ctxMarkdown)
 
   ctxSplit := ContextMenu()

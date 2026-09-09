@@ -51,11 +51,20 @@ ContextMenu_Edit(input)
     if links.Length > 0
     {
       ctxHtml := ContextMenu()
-      ctxHtml.Add("Copy Title", () => View_Text(Stream(links).ToArray(link => link.title)))
-      ctxHtml.Add("Copy Link as HTML", () => View_Text(Stream(links).ToArray(link => Document_CreateAnchorElement(link.href, link.title)), "html"))
-      ctxHtml.Add("Copy Link as Markdown", () => View_Text(Stream(links).ToArray(link => Format("[{}]({})", link.title, link.href)), "md"))
-      ctxHtml.Add("Copy Link as Markdown List", () => View_Text(Stream(links).ToArray(link => Format("- [{}]({})", link.title, link.href)), "md"))
-      ctxHtml.Add("Copy Link as Markdown List (Ordered)", () => View_Text(Stream(links).ToArray(link => Format("1. [{}]({})", link.title, link.href)), "md"))
+      ctxHtml.Add("Copy Text", () => View_Text(Stream(links).ToArray(link => link.text)))
+      if links.Length == 1
+      {
+        link := links[1]
+        ctxHtml.Add("Copy Link as HTML", () => View_Text(Document_CreateAnchorElement(link), "html"))
+        ctxHtml.Add("Copy Link as Markdown", () => View_Text("[" link.text "](" link.href ")"), "md")
+      }
+      else
+      {
+        ctxHtml.Add("Copy Link as HTML List", () => View_Text(Document_CreateListElement(links), "html"))
+        ctxHtml.Add("Copy Link as HTML List (Ordered)", () => View_Text(Document_CreateOrderedListElement(links), "html"))
+        ctxHtml.Add("Copy Link as Markdown List", () => View_Text(Stream(links).ToArray(link => "- [" link.text "](" link.href ")"), "md"))
+        ctxHtml.Add("Copy Link as Markdown List (Ordered)", () => View_Text(Stream(links).ToArray(link => "1. [" link.text "](" link.href ")"), "md"))
+      }
       ctxHtml.Add("Download", Dialog_Download.Bind(links))
       ctxHtml.Add("Save", Dialog_SaveUrl.Bind(links))
       ctxUrl.AddSeparator()

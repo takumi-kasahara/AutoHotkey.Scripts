@@ -206,7 +206,7 @@ Clipboard_ExtractUrl(allowFileURI := false)
 }
 /**
  * @param {Boolean} [allowFileURI=false]
- * @returns {Array<{ href: String, title: String }>}
+ * @returns {Array<{ href: String, text: String }>}
  */
 Clipboard_ExtractLink(allowFileURI := false)
 {
@@ -218,7 +218,7 @@ Clipboard_ExtractLink(allowFileURI := false)
     return []
 
   if allowFileURI
-    return Stream(paths).Map(path => Path_GetExtensionName(path) ~= "^(?i:url)$" ? ({ href: Url_Load(path), title: Path_GetBaseName(path) }) : ({ href: Url_Encode(Path_ToURL(path)), title: Path_GetName(path) })).ToArray()
+    return Stream(paths).Map(path => Path_GetExtensionName(path) ~= "^(?i:url)$" ? ({ href: Url_Load(path), text: Path_GetBaseName(path) }) : ({ href: Url_Encode(Path_ToURL(path)), text: Path_GetName(path) })).ToArray()
   else
-    return Stream(paths).Filter(path => Path_GetExtensionName(path) ~= "^(?i:url)$").Map(path => { href: Url_Load(path), title: Path_GetBaseName(path) }).ToArray()
+    return Stream(paths).Filter(path => Path_GetExtensionName(path) ~= "^(?i:url)$").Map(path => { href: Url_Load(path), text: Path_GetBaseName(path) }).ToArray()
 }

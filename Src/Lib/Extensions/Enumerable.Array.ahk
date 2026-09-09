@@ -16,18 +16,25 @@ Array_Equal(a, b, comparer := (x, y) => x == y)
   return true
 }
 /**
+ * @param {Array} this
+ * @param {Any} value
+ * @param {Func | BoundFunc} [comparer]
+ * @returns {Array}
+ */
+Array_IndexOf(array, value, comparer := (x, y) => x == y)
+{
+  for index, item in array
+    if comparer.Call(item, value)
+      return index
+  return 0
+}
+/**
  * @param {Array} array
  * @param {Any} value
  * @param {Func | BoundFunc} [comparer]
  * @returns {Boolean}
  */
-Array_Contains(array, value, comparer := (x, y) => x == y)
-{
-  for item in array
-    if comparer.Call(item, value)
-      return true
-  return false
-}
+Array_Contains(array, value, comparer := (x, y) => x == y) => Array_IndexOf(array, value, comparer) > 0
 /**
  * @param {Array} this
  * @returns {Array}

@@ -29,6 +29,7 @@
 #Include "Lib\Extensions\Enumerable.Array.ahk"
 #Include "Lib\Extensions\Enumerable.Map.ahk"
 #Include "Lib\Gui\Dialog.ahk"
+#Include "Lib\Gui\Edit.ahk"
 #Include "Lib\Gui\View.ahk"
 #Include "Lib\Win32\handleapi.h.ahk"
 #Include "Lib\Win32\minwindef.h.ahk"

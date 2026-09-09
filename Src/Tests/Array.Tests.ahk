@@ -22,13 +22,25 @@ class Array_Tests extends Test
     Assert_IsFalse(Array_Equal(a1, a2))
     Assert_IsFalse(Array_Equal(a2, a3))
   }
+  Array_IndexOf()
+  {
+    a := ["a", "b", "c"]
+    Assert_AreEqual(1, Array_IndexOf(a, "a"))
+    Assert_AreEqual(2, Array_IndexOf(a, "b"))
+    Assert_AreEqual(3, Array_IndexOf(a, "c"))
+    Assert_AreEqual(0, Array_IndexOf(a, "d"))
+    Assert_AreEqual(0, Array_IndexOf(a, "A"))
+    Assert_AreEqual(1, Array_IndexOf(a, "A", (x, y) => StrLower(x) == StrLower(y)))
+  }
   Array_Contains()
   {
-    a := [1, 2, 3]
-    Assert_IsTrue(Array_Contains(a, 1))
-    Assert_IsTrue(Array_Contains(a, 2))
-    Assert_IsTrue(Array_Contains(a, 3))
-    Assert_IsFalse(Array_Contains(a, 4))
+    a := ["a", "b", "c"]
+    Assert_IsTrue(Array_Contains(a, "a"))
+    Assert_IsTrue(Array_Contains(a, "b"))
+    Assert_IsTrue(Array_Contains(a, "c"))
+    Assert_IsFalse(Array_Contains(a, "d"))
+    Assert_IsFalse(Array_Contains(a, "A"))
+    Assert_IsTrue(Array_Contains(a, "A", (x, y) => StrLower(x) == StrLower(y)))
   }
   Array_Reverse() => Assert_IsTrue(Array_Equal([3, 2, 1], Array_Reverse([1, 2, 3])))
   Array_Slice()

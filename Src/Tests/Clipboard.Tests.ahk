@@ -16,7 +16,7 @@ class Clipboard_Tests extends Test
     backup := ClipboardAll()
     try
     {
-      html := Document_CreateAnchorElement("https://www.example.com", "Example")
+      html := Document_CreateAnchorElement({ href: "https://www.example.com", text: "Example Domain" })
       Clipboard_SetHtml(html)
       Assert_AreEqual(html, A_Clipboard)
     }

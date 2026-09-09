@@ -13,20 +13,21 @@ class Document_Tests extends Test
 {
   Document_CreateAnchorElement()
   {
-    url := "https://www.example.com"
-    html := Document_CreateAnchorElement(url, "example")
+    url := "https://example.com"
+    html := Document_CreateAnchorElement({ href: url, title: "example.com", text: "Example Domain", target: "_blank" })
     document := ComObject("HTMLFile")
     document.write(html)
     anchor := document.getElementsByTagName("a").item(0)
 
-    Assert_IsTrue(anchor.href ~= "^https://www\.example\.com/?$")
+    Assert_IsTrue(anchor.href ~= "^https://example\.com/?$")
     Assert_AreEqual("noreferrer", anchor.rel)
+    Assert_AreEqual("example.com", anchor.title)
     Assert_AreEqual("_blank", anchor.target)
-    Assert_AreEqual("example", anchor.innerText)
+    Assert_AreEqual("Example Domain", anchor.innerText)
   }
   Document_CreateBlockquoteElement_1()
   {
-    url := "https://www.example.com"
+    url := "https://example.com"
     text := "lorem ipsum"
     html := Document_CreateBlockquoteElement(url, text)
     document := ComObject("HTMLFile")
@@ -90,9 +91,9 @@ class Document_Tests extends Test
 
     Assert_AreEqual(2, links.Length)
     Assert_IsTrue(links[1].href ~= "^https://example\.com/?$")
-    Assert_AreEqual("url", links[1].title)
+    Assert_AreEqual("url", links[1].text)
     Assert_IsTrue(links[2].href ~= "^file:///C:/Windows/explorer\.exe$")
-    Assert_AreEqual(links[2].href, links[2].title)
+    Assert_AreEqual(links[2].href, links[2].text)
   }
 }
 Document_Tests()

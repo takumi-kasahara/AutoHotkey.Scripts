@@ -29,7 +29,7 @@ Dialog_Save(text, extension := "txt")
   FileAppend(text, path)
 }
 /**
- * @param {Array<{ href: String, title: String }>} links
+ * @param {Array<{ href: String, text: String }>} links
  */
 Dialog_SaveUrl(links)
 {
@@ -37,7 +37,7 @@ Dialog_SaveUrl(links)
     return
   if links.Length == 1
   {
-    path := FileSelect("S" 0x10, Path_Combine(A_Desktop, Path_Escape(links[1].title) ".url"), "Create Shortcut", "Url shortcut (*.url)")
+    path := FileSelect("S" 0x10, Path_Combine(A_Desktop, Path_Escape(links[1].text) ".url"), "Create Shortcut", "Url shortcut (*.url)")
     if path == ""
       return
     Save(path, links[1].href, true)
@@ -89,7 +89,7 @@ Dialog_SaveUrl(links)
   }
 }
 /**
- * @param {Array<{ href: String, title: String }>} links
+ * @param {Array<{ href: String, text: String }>} links
  */
 Dialog_Download(links)
 {
@@ -97,7 +97,7 @@ Dialog_Download(links)
     return
   if links.Length == 1
   {
-    path := FileSelect("S" 0x10, Path_Combine(Reg_FolderDescriptions("Downloads"), Path_Escape(links[1].title)), "Save as", "All files (*.*)")
+    path := FileSelect("S" 0x10, Path_Combine(Reg_FolderDescriptions("Downloads"), Path_Escape(links[1].text)), "Save as", "All files (*.*)")
     if path == ""
       return
     name := Path_GetName(path)

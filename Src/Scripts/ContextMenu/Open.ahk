@@ -40,7 +40,10 @@ ContextMenu_Open(input)
       {
         ctxPath := ContextMenu()
         for path in paths
-          ctxPath.AddSubMenu(Format("{:-3}{}", (StrLen(A_Index) == 1 ? "&" : "") A_Index, (Path_IsRoot(path) ? path : Path_GetName(path)) (Path_IsLink(path) ? "*" : "")), ContextMenu_OpenPath(path, 1), path)
+        {
+          name := Format("{:-3}{}", (StrLen(A_Index) == 1 ? "&" : "") A_Index, (Path_IsRoot(path) ? path : Path_GetName(path)) (Path_IsLink(path) ? "*" : ""))
+          ctxPath.AddSubMenu(name, ContextMenu_OpenPath(path, 1), path)
+        }
         ctx.AddSubMenu(Format("Open", paths.Length), ctxPath)
       }
       ctx.Add(Format("Open ({})", paths.Length), Dialog_OpenPath.Bind(paths))
@@ -71,6 +74,7 @@ ContextMenu_Open(input)
 ContextMenu_OpenPath(path, depth := 0)
 {
   static MAX_DEPTH := Integer(Config_Get("Path", "MAX_DEPTH"))
+  static MAX_SUBMENU := Integer(Config_Get("Path", "MAX_SUBMENU"))
   ctx := ContextMenu()
   if !FileExist(path)
     return ctx
@@ -83,35 +87,44 @@ ContextMenu_OpenPath(path, depth := 0)
   if Path_GetExtensionName(path) ~= "^(?i:library-ms)$"
   {
     locations := Path_GetLibraryLocations(path)
-    ctxLocations := ContextMenu()
-    for location in locations
+    if 0 < locations.Length && locations.Length <= MAX_SUBMENU
     {
-      name := Format("{:-3}{}", (StrLen(A_Index) == 1 ? "&" : "") A_Index, Path_GetName(location))
-      ctxLocations.AddSubMenu(name, ContextMenu_OpenPath(location, depth + 1))
+      ctxLocations := ContextMenu()
+      for location in locations
+      {
+        name := Format("{:-3}{}", (StrLen(A_Index) == 1 ? "&" : "") A_Index, Path_GetName(location))
+        ctxLocations.AddSubMenu(name, ContextMenu_OpenPath(location, depth + 1))
+      }
+      ctx.AddSubMenu(Format("Open in locations ({})", locations.Length), ctxLocations)
     }
-    ctx.AddSubMenu(Format("Open in locations ({})", locations.Length), ctxLocations)
   }
   if Path_IsDirectory(path) && depth < MAX_DEPTH
   {
-    ctxChild := ContextMenu()
     children := Path_GetChildren(path, , 'FD')
-    for child in children
+    if 0 < children.Length && children.Length <= MAX_SUBMENU
     {
-      name := Format("{:-3}{}", (StrLen(A_Index) == 1 ? "&" : "") A_Index, Path_GetName(child))
-      ctxChild.AddSubMenu(name, ContextMenu_OpenPath(child, depth + 1), child)
+      ctxChild := ContextMenu()
+      for child in children
+      {
+        name := Format("{:-3}{}", (StrLen(A_Index) == 1 ? "&" : "") A_Index, Path_GetName(child))
+        ctxChild.AddSubMenu(name, ContextMenu_OpenPath(child, depth + 1), child)
+      }
+      ctx.AddSubMenu(Format("Open children ({})", children.Length), ctxChild)
     }
-    ctx.AddSubMenu(Format("Open children ({})", children.Length), ctxChild)
   }
   if depth == 0
   {
-    ctxParents := ContextMenu()
     parents := Path_GetParents(path)
-    for parent in parents
+    if 0 < parents.Length && parents.Length <= MAX_SUBMENU
     {
-      name := Format("{:-3}{}", (StrLen(A_Index) == 1 ? "&" : "") A_Index, Path_IsRoot(parent) ? parent : Path_GetName(parent))
-      ctxParents.AddSubMenu(name, ContextMenu_OpenPath(parent, depth + A_Index), parent)
+      ctxParents := ContextMenu()
+      for parent in parents
+      {
+        name := Format("{:-3}{}", (StrLen(A_Index) == 1 ? "&" : "") A_Index, Path_IsRoot(parent) ? parent : Path_GetName(parent))
+        ctxParents.AddSubMenu(name, ContextMenu_OpenPath(parent, depth + A_Index), parent)
+      }
+      ctx.AddSubMenu(Format("Open parents ({})", parents.Length), ctxParents)
     }
-    ctx.AddSubMenu(Format("Open parents ({})", parents.Length), ctxParents)
   }
   target := Path_IsDirectory(path) ? path : Path_GetParent(path)
   terminal := Config_Get("Path", "TERMINAL")

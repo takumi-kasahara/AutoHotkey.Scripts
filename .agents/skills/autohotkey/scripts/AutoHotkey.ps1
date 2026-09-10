@@ -86,5 +86,13 @@ process {
     }
   )
   $Switches += '/ErrorStdOut'
-  $items | ForEach-Object { & $ahk @Switches $_.FullName @ArgumentList 2>&1 | Out-Default }
+  $result = $items |
+  ForEach-Object {
+    & $ahk @Switches $_.FullName @ArgumentList 2>&1 | Out-Default
+    return $LASTEXITCODE
+  }
+}
+end {
+  $m = Measure-Object -InputObject $result -Maximum -Minimum
+  exit $m.Maximum -gt 0 -or $m.Minimum -lt 0
 }

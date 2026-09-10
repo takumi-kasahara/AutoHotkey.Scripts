@@ -49,15 +49,13 @@ class RegEx_Tests extends Test
   }
   RegEx_Http_NamedGroups()
   {
-    if RegExMatch("https://example.com:8080/path?query#hash", "(*UCP)^" RegEx_Http() "$", &match)
-    {
-      Assert_AreEqual("https", match.protocol)
-      Assert_AreEqual("example.com", match.host)
-      Assert_AreEqual("8080", match.port)
-      Assert_AreEqual("/path", match.pathname)
-      Assert_AreEqual("query", match.search)
-      Assert_AreEqual("hash", match.hash)
-    }
+    Assert_IsTrue(RegExMatch("https://example.com:8080/path?query#hash", "(*UCP)^" RegEx_Http() "$", &match))
+    Assert_AreEqual("https", match.protocol)
+    Assert_AreEqual("example.com", match.host)
+    Assert_AreEqual("8080", match.port)
+    Assert_AreEqual("/path", match.pathname)
+    Assert_AreEqual("query", match.search)
+    Assert_AreEqual("hash", match.hash)
   }
   RegEx_Http_UnicodeHost()
   {
@@ -81,12 +79,10 @@ class RegEx_Tests extends Test
   }
   RegEx_File_NamedGroups()
   {
-    if RegExMatch("file://server/share/file.txt", "(*UCP)^" RegEx_File() "$", &match)
-    {
-      Assert_AreEqual("file", match.protocol)
-      Assert_AreEqual("server", match.host)
-      Assert_AreEqual("/share/file.txt", match.pathname)
-    }
+    Assert_IsTrue(RegExMatch("file://server/share/file.txt", "(*UCP)^" RegEx_File() "$", &match))
+    Assert_AreEqual("file", match.protocol)
+    Assert_AreEqual("server", match.host)
+    Assert_AreEqual("/share/file.txt", match.pathname)
   }
   RegEx_File_InvalidScheme()
   {

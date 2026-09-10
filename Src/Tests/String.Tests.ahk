@@ -11,6 +11,8 @@ OnExit(HandleExit)
 
 class String_Tests extends Test
 {
+  _a(url) => '<a href="' url '">title</a>'
+  _md(url) => '[title](' url ')'
   String_Normalize()
   {
     Assert_AreEqual("Hello, world!", String_Normalize("Hello, world!"))
@@ -20,16 +22,13 @@ class String_Tests extends Test
   String_ExtractPath_1()
   {
     for path in ["C:\Windows\explorer.exe", "\\localhost\C$\Windows\explorer.exe"]
-      if FileExist(path)
-      {
-        Assert_AreEqual(path, String_ExtractPath(path))
-        Assert_AreEqual(path, String_ExtractPath(" " path "\Dummy"))
-        Assert_AreEqual(path, String_ExtractPath("- " path))
-        Assert_AreEqual(path, String_ExtractPath(StrReplace(path, "\", "/")))
-        Assert_AreEqual(path, String_ExtractPath(StrReplace(path, "\", "\\")))
-      }
-      else
-        this.Log_Write(Format('"{}" not found', path))
+    {
+      Assert_AreEqual(path, String_ExtractPath(path))
+      Assert_AreEqual(path, String_ExtractPath(" " path "\Dummy"))
+      Assert_AreEqual(path, String_ExtractPath("- " path))
+      Assert_AreEqual(path, String_ExtractPath(StrReplace(path, "\", "/")))
+      Assert_AreEqual(path, String_ExtractPath(StrReplace(path, "\", "\\")))
+    }
   }
   String_ExtractPath_2()
   {
@@ -72,8 +71,6 @@ class String_Tests extends Test
       Assert_AreEqual("", String_ExtractUrl(StrReplace(path, "\", "\\")))
     }
   }
-  _a(url) => '<a href="' url '">title</a>'
-  _md(url) => '[title](' url ')'
   String_Clean_1()
   {
     Assert_AreEqual("foo", String_Clean("foo"))
@@ -95,6 +92,7 @@ class String_Tests extends Test
         bar`t
           baz`t
     )"
+
     Assert_AreEqual(clean, String_Clean(clean))
     Assert_AreEqual(clean, String_Clean(indented))
   }
@@ -112,6 +110,7 @@ class String_Tests extends Test
       `tbar`t
       baz`t
     )"
+
     Assert_AreEqual(clean, String_Clean(clean))
     Assert_AreEqual(clean, String_Clean(indented))
   }

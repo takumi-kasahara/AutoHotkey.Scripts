@@ -16,8 +16,10 @@ class Array_Tests extends Test
     a1 := [1, 1]
     a2 := [1, 2]
     a3 := [2, 1]
+
     Assert_IsTrue(a1 == a1)
     Assert_IsFalse(a1 == [1, 1])
+
     Assert_IsTrue(Array_Equal(a1, a1))
     Assert_IsFalse(Array_Equal(a1, a2))
     Assert_IsFalse(Array_Equal(a2, a3))
@@ -25,20 +27,24 @@ class Array_Tests extends Test
   Array_IndexOf()
   {
     a := ["a", "b", "c"]
+
     Assert_AreEqual(1, Array_IndexOf(a, "a"))
     Assert_AreEqual(2, Array_IndexOf(a, "b"))
     Assert_AreEqual(3, Array_IndexOf(a, "c"))
     Assert_AreEqual(0, Array_IndexOf(a, "d"))
+
     Assert_AreEqual(0, Array_IndexOf(a, "A"))
     Assert_AreEqual(1, Array_IndexOf(a, "A", (x, y) => StrLower(x) == StrLower(y)))
   }
   Array_Contains()
   {
     a := ["a", "b", "c"]
+
     Assert_IsTrue(Array_Contains(a, "a"))
     Assert_IsTrue(Array_Contains(a, "b"))
     Assert_IsTrue(Array_Contains(a, "c"))
     Assert_IsFalse(Array_Contains(a, "d"))
+
     Assert_IsFalse(Array_Contains(a, "A"))
     Assert_IsTrue(Array_Contains(a, "A", (x, y) => StrLower(x) == StrLower(y)))
   }
@@ -46,17 +52,22 @@ class Array_Tests extends Test
   Array_Slice()
   {
     a := [1, 2, 3, 4, 5]
+
     Assert_IsTrue(Array_Equal(a, Array_Slice(a, 1)))
     Assert_IsTrue(Array_Equal(a, Array_Slice(a, 1, 5)))
-    Assert_IsTrue(Array_Equal([1, 2, 3], Array_Slice(a, 1, 3)))
-    Assert_IsTrue(Array_Equal([3, 4, 5], Array_Slice(a, -3, -1)))
+
     Assert_IsTrue(Array_Equal([5], Array_Slice(a, 5)))
     Assert_IsTrue(Array_Equal([5], Array_Slice(a, -1)))
+
+    Assert_IsTrue(Array_Equal([1, 2, 3], Array_Slice(a, 1, 3)))
+    Assert_IsTrue(Array_Equal([3, 4, 5], Array_Slice(a, -3, -1)))
+
     Assert_Throws(() => Array_Slice([1, 2, 3], 0), ValueError)
   }
   Array_Unique()
   {
     a := [1, 2, 2, 3, 3, 3]
+
     Assert_IsTrue(Array_Equal([], Array_Unique([])))
     Assert_IsTrue(Array_Equal([1, 2, 3], Array_Unique(a)))
   }
@@ -65,6 +76,7 @@ class Array_Tests extends Test
     a1 := [1, 2, 3]
     a2 := [3, 4, 5]
     a3 := [5, 6, 7]
+
     Assert_IsTrue(Array_Equal([], Array_Union()))
     Assert_IsTrue(Array_Equal([1, 2, 3], Array_Union(a1)))
     Assert_IsTrue(Array_Equal([1, 2, 3, 4, 5], Array_Union(a1, a2)))
@@ -75,9 +87,12 @@ class Array_Tests extends Test
     a1 := [1, 2, 3]
     a2 := [3, 4, 5]
     a3 := [5, 6, 7]
+
     Assert_IsTrue(Array_Equal([], Array_Intersect([], [])))
+
     Assert_IsTrue(Array_Equal([1, 2, 3], Array_Intersect(a1)))
     Assert_IsTrue(Array_Equal([1, 2, 3], Array_Intersect(a1, a1)))
+
     Assert_IsTrue(Array_Equal([3], Array_Intersect(a1, a2)))
     Assert_IsTrue(Array_Equal([], Array_Intersect(a1, a2, a3)))
   }
@@ -86,7 +101,9 @@ class Array_Tests extends Test
     a1 := [1, 2, 3]
     a2 := [3, 4, 5]
     a3 := [5, 6, 7]
+
     Assert_IsTrue(Array_Equal([], Array_Except([])))
+
     Assert_IsTrue(Array_Equal([1, 2, 3], Array_Except(a1)))
     Assert_IsTrue(Array_Equal([1, 2], Array_Except(a1, a2)))
     Assert_IsTrue(Array_Equal([1, 2], Array_Except(a1, a2, a3)))

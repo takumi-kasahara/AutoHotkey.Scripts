@@ -2,6 +2,8 @@
 
 class Test
 {
+  static Failed := 0
+
   __Init() => Log_Trace(this.__Class)
   __New()
   {
@@ -19,7 +21,10 @@ class Test
           if State_Debug()
             throw ex
           else
+          {
             Log_Error(ex)
+            Test.Failed++
+          }
       }
   }
 }

@@ -48,4 +48,7 @@ HandleExit(reason, code)
 {
   Log_Trace(reason, code)
   Log_Flush()
+  if (Test.Failed > 0)
+    Exit(1)
+  Exit(0)
 }

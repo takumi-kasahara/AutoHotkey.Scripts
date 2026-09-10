@@ -46,34 +46,37 @@ ContextMenu_Edit(input)
   if urls.Length > 0
   {
     ctxUrl := ContextMenu()
-    ctxUrl.Add("Plaintext", () => View_Text(Stream(urls).ToArray(url => Url_Decode(url))))
+    ctxUrl.Add("Copy as Plaintext", () => View_Text(Stream(urls).ToArray(url => Url_Decode(url))))
     links := Clipboard_ExtractLink(true)
     if links.Length > 0
     {
       ctxHtml := ContextMenu()
-      ctxHtml.Add("Copy Text", () => View_Text(Stream(links).ToArray(link => link.text)))
       if links.Length == 1
       {
         link := links[1]
+        ctxUrl.Add("Edit", () => Edit_Hyperlink(link))
         ctxHtml.Add("Copy Link as HTML", () => View_Text(Document_CreateAnchorElement(link), "html"))
         ctxHtml.Add("Copy Link as Markdown", () => View_Text("[" link.text "](" link.href ")"), "md")
       }
       else
       {
+        ctxEdit := ContextMenu()
+        for link in links
+          ctxEdit.Add(Format("{:-3}{}", (StrLen(A_Index) == 1 ? "&" : "") A_Index, link.text), Edit_Hyperlink.Bind(link))
+        ctxUrl.AddSubMenu(Format("Edit ({})", links.Length), ctxEdit)
         ctxHtml.Add("Copy Link as HTML List", () => View_Text(Document_CreateListElement(links), "html"))
         ctxHtml.Add("Copy Link as HTML List (Ordered)", () => View_Text(Document_CreateOrderedListElement(links), "html"))
         ctxHtml.Add("Copy Link as Markdown List", () => View_Text(Stream(links).ToArray(link => "- [" link.text "](" link.href ")"), "md"))
         ctxHtml.Add("Copy Link as Markdown List (Ordered)", () => View_Text(Stream(links).ToArray(link => "1. [" link.text "](" link.href ")"), "md"))
       }
+      ctxHtml.AddSeparator()
       ctxHtml.Add("Download", Dialog_Download.Bind(links))
       ctxHtml.Add("Save", Dialog_SaveUrl.Bind(links))
-      ctxUrl.AddSeparator()
       ctxUrl.AddSubMenu(Format("Links ({})", links.Length), ctxHtml)
     }
     ctx.AddSubMenu(Format("URL ({})", urls.Length), ctxUrl)
     ctx.AddSeparator()
   }
-  ctx.Add(Format("Plaintext ({} Chars)", StrLen(input)), () => View_Text(input))
   html := Clipboard_GetHtml()
   if html
   {
@@ -84,23 +87,25 @@ ContextMenu_Edit(input)
     ctxHtml.Add("Markdown (GFM)", () => View_Text(ConvertFrom_Html(html), "gfm"), "md")
     ctxHtml.Add("Raw", () => View_Text(html, "html"))
     ctx.AddSubMenu("HTML", ctxHtml)
+    ctx.AddSeparator()
   }
-  ctx.AddSeparator()
-  ctx.Add("Sort", () => View_Text(Array_Sort(StrSplit(input, "`n"))))
-  ctx.Add("Sort (Unique)", () => View_Text(Array_Unique(StrSplit(input, "`n"))))
+
+  ctxText := ContextMenu()
+  ctxText.Add("Sort", () => View_Text(Array_Sort(StrSplit(input, "`n"))))
+  ctxText.Add("Sort (Unique)", () => View_Text(Array_Unique(StrSplit(input, "`n"))))
 
   ctxCase := ContextMenu()
   ctxCase.Add("Lower", () => View_Text(StrLower(input)))
   ctxCase.Add("Upper", () => View_Text(StrUpper(input)))
   ctxCase.Add("Title", () => View_Text(StrTitle(input)))
-  ctx.AddSubMenu("Case", ctxCase)
+  ctxText.AddSubMenu("Case", ctxCase)
 
   ctxNormalize := ContextMenu()
   ctxNormalize.Add("NFC", () => View_Text(String_Normalize(input, "NFC")))
   ctxNormalize.Add("NFD", () => View_Text(String_Normalize(input, "NFD")))
   ctxNormalize.Add("NFKC", () => View_Text(String_Normalize(input, "NFKC")))
   ctxNormalize.Add("NFKD", () => View_Text(String_Normalize(input, "NFKD")))
-  ctx.AddSubMenu("Normalize", ctxNormalize)
+  ctxText.AddSubMenu("Normalize", ctxNormalize)
 
   ctxConvert := ContextMenu()
   ctxConvertFrom := ContextMenu()
@@ -119,13 +124,13 @@ ContextMenu_Edit(input)
   ctxConvertTo.Add("Visual Basic", () => View_Text(ConvertTo_VisualBasic(input)))
   ctxConvertTo.Add("Visual Basic (Array)", () => View_Text(String_Edit(input, field => ConvertTo_VisualBasic(field) ",")))
   ctxConvert.AddSubMenu("To", ctxConvertTo)
-  ctx.AddSubMenu("Convert", ctxConvert)
+  ctxText.AddSubMenu("Convert", ctxConvert)
 
   ctxMarkdown := ContextMenu()
   ctxMarkdown.Add("HTML", () => View_Text(ConvertTo_Html(input), "html"))
   ctxMarkdown.Add("Blockquote", () => View_Text(String_Edit(input, field => "> " field), "md"))
   ctxMarkdown.Add("Code", () => View_Text(StrSplit(input, "`n").Length == 1 ? "``" input "``" : "```````n" input "`n``````", "md"))
-  ctx.AddSubMenu("Markdown", ctxMarkdown)
+  ctxText.AddSubMenu("Markdown", ctxMarkdown)
 
   ctxSplit := ContextMenu()
   ctxSplit.AddSubMenu("EOL", ContextMenu_Join(input, "\r?\n"))
@@ -134,7 +139,8 @@ ContextMenu_Edit(input)
   ctxSplit.AddSubMenu("period", ContextMenu_Join(input, "(*UCP)\s*\.\s*"))
   ctxSplit.AddSubMenu("colon", ContextMenu_Join(input, "(*UCP)\s*:\s*"))
   ctxSplit.AddSubMenu("semi", ContextMenu_Join(input, "(*UCP)\s*;\s*"))
-  ctx.AddSubMenu("Split by", ctxSplit)
+  ctxText.AddSubMenu("Split by", ctxSplit)
+  ctx.AddSubMenu("Plaintext", ctxText)
 
   return ctx
 }

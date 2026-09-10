@@ -38,7 +38,7 @@ HandleClipboardChange(dataType)
 HandleError(thrown, mode?)
 {
   Log_Error(thrown, mode)
-  return !State_Debug()
+  Log_Flush()
 }
 /**
  * @param {String} reason

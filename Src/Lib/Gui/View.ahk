@@ -91,7 +91,6 @@ View_Text(input, extension := "txt")
 
   btnCopy := myGui.AddButton(Format("w{} h{} Default", BUTTON_WIDTH, BUTTON_HEIGHT), "&Copy")
   btnCopy.OnEvent("Click", (*) => (OnCopy(), myGui.Destroy()))
-
   btnSave := myGui.AddButton(Format("w{} h{}", BUTTON_WIDTH, BUTTON_HEIGHT), "&Save")
   btnSave.OnEvent("Click", (*) => (OnSave(), myGui.Destroy()))
 

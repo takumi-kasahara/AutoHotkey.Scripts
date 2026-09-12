@@ -44,14 +44,17 @@ Edit_Hyperlink(link)
   if link.HasOwnProp("target")
     editTarget.Value := Array_IndexOf(choices, link.target)
 
-  btnCopy := myGui.AddButton(Format("w{} h{} Default", BUTTON_WIDTH, BUTTON_HEIGHT), "&Copy")
-  btnCopy.OnEvent("Click", (*) => (OnCopy(), myGui.Destroy()))
-  btnCopy.Move(CONTROL_X + (CONTROL_WIDTH - BUTTON_WIDTH) / 2, buttonY)
+  baseX := CONTROL_X + (CONTROL_WIDTH - BUTTON_WIDTH * 3 - BUTTON_MARGIN * 2) / 2
+  offset := BUTTON_WIDTH + BUTTON_MARGIN
+  myGui.AddButton(Format("x{} y{} w{} h{}", baseX + offset * 0, buttonY, BUTTON_WIDTH, BUTTON_HEIGHT), "HTML (&1)").OnEvent("Click", (*) => (CopyHtml(), myGui.Destroy()))
+  myGui.AddButton(Format("x{} y{} w{} h{}", baseX + offset * 1, buttonY, BUTTON_WIDTH, BUTTON_HEIGHT), "Markdown (&2)").OnEvent("Click", (*) => (CopyMarkdown(), myGui.Destroy()))
+  myGui.AddButton(Format("x{} y{} w{} h{}", baseX + offset * 2, buttonY, BUTTON_WIDTH, BUTTON_HEIGHT), "Excel (&3)").OnEvent("Click", (*) => (CopyExcel(), myGui.Destroy()))
 
   myGui.OnEvent("Escape", (*) => myGui.Destroy())
-  myGui.OnEvent("Size", (this, minMax, newW, newH) => btnCopy.Move((newW - BUTTON_WIDTH) / 2, newH - BUTTON_HEIGHT - BUTTON_MARGIN))
 
   myGui.Show(Format("w{} h{} AutoSize", WINDOW_WIDTH, WINDOW_HEIGHT))
 
-  OnCopy() => Clipboard_SetHtml(Document_CreateAnchorElement({ href: editAddress.Value, title: editScreenTip.Value, text: editText.Value, target: editTarget.Value }))
+  CopyHtml() => Clipboard_SetHtml(Document_CreateAnchorElement({ href: editAddress.Value, title: editScreenTip.Value, text: editText.Value, target: editTarget.Value }))
+  CopyMarkdown() => Clipboard_SetText("[" editText.Value "](" editAddress.Value ")")
+  CopyExcel() => Clipboard_SetText(Format('=HYPERLINK("{}", "{}")', editAddress.Value, editText.Value))
 }

@@ -89,11 +89,8 @@ View_Text(input, extension := "txt")
 
   myGui.OnEvent("Escape", (*) => myGui.Destroy())
 
-  btnCopy := myGui.AddButton(Format("w{} h{} Default", BUTTON_WIDTH, BUTTON_HEIGHT), "&Copy")
-  btnCopy.OnEvent("Click", (*) => (OnCopy(), myGui.Destroy()))
-
-  btnSave := myGui.AddButton(Format("w{} h{}", BUTTON_WIDTH, BUTTON_HEIGHT), "&Save")
-  btnSave.OnEvent("Click", (*) => (OnSave(), myGui.Destroy()))
+  btnCopy := myGui.AddButton(Format("w{} h{} Default", BUTTON_WIDTH, BUTTON_HEIGHT), "&Copy").OnEvent("Click", (*) => (OnCopy(), myGui.Destroy()))
+  btnSave := myGui.AddButton(Format("w{} h{}", BUTTON_WIDTH, BUTTON_HEIGHT), "&Save").OnEvent("Click", (*) => (OnSave(), myGui.Destroy()))
 
   Init(width, height)
   myGui.OnEvent("Size", (this, minMax, newW, newH) => Init(newW, newH))

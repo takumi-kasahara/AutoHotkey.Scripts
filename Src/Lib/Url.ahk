@@ -144,10 +144,10 @@ Url_Encode(url)
   static initialized := false
   if !initialized
   {
+    /** @see {@link https://learn.microsoft.com/en-us/previous-versions/windows/internet-explorer/ie-developer/platform-apis/aa741364(v=vs.85) } */
     window.execScript("function _encodeURI(value) { return encodeURI(value); }")
     initialized := true
   }
-  /** @see {@link https://learn.microsoft.com/en-us/previous-versions/windows/internet-explorer/ie-developer/platform-apis/aa741364(v=vs.85) } */
   return window._encodeURI(url)
 }
 /**
@@ -161,10 +161,10 @@ Url_Decode(url)
   static initialized := false
   if !initialized
   {
+    /** @see {@link https://learn.microsoft.com/en-us/previous-versions/windows/internet-explorer/ie-developer/platform-apis/aa741364(v=vs.85) } */
     window.execScript("function _decodeURI(value) { return decodeURI(value); }")
     initialized := true
   }
-  /** @see {@link https://learn.microsoft.com/en-us/previous-versions/windows/internet-explorer/ie-developer/platform-apis/aa741364(v=vs.85) } */
   return window._decodeURI(url)
 }
 /**
@@ -183,6 +183,9 @@ Url_Load(path) => IniRead(path, "InternetShortcut", "URL", "")
  * */
 Url_Download(url, target, name, overwrite := false)
 {
+  if !Array_Contains(["http", "https"], Url_GetProtocol(url))
+    throw Error("Unsupported URL protocol: " Url_GetProtocol(url))
+
   req := ComObject("WinHttp.WinHttpRequest.5.1")
   ToolTip(Format('Fetching:"{}"', url))
   try

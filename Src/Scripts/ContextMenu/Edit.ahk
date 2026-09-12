@@ -46,6 +46,16 @@ ContextMenu_Edit(input)
   if urls.Length > 0
   {
     ctxUrl := ContextMenu()
+    if urls.Length == 1
+      ctxUrl.Add("Edit", Edit_Hyperlink.Bind(Url_GetTitle.Bind(urls[1])))
+    else
+    {
+      ctxEdit := ContextMenu()
+      for url in urls
+        ctxEdit.Add(Format("{:-3}{}", (StrLen(A_Index) == 1 ? "&" : "") A_Index, url), Edit_Hyperlink.Bind(Url_GetTitle.Bind(url)))
+      ctxUrl.AddSubMenu("Edit", ctxEdit)
+    }
+    ctxUrl.AddSeparator()
     ctxUrl.Add("Copy as Plaintext", () => View_Text(Stream(urls).ToArray(url => Url_Decode(url))))
     ctxUrl.Add("Copy as Markdown", () => View_Text(Stream(urls).ToArray(url => "<" Url_Decode(url) ">")))
     ctxUrl.Add("Copy as Excel", () => View_Text(Stream(urls).ToArray(url => Format('=HYPERLINK("{}")', Url_Decode(url)))))

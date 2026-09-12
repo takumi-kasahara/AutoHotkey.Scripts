@@ -1,10 +1,16 @@
 ﻿#Requires AutoHotkey v2.0
 
 /**
- * @param {{ href: String, title: String, text: String, target: String }} link
+ * @param {Func | BoundFunc | { href: String, title: String, text: String, target: String }} link
  */
 Edit_Hyperlink(link)
 {
+  switch Type(link)
+  {
+    case "Func", "BoundFunc":
+      link := link.Call()
+  }
+
   static CONTROL_X := 16
   static CONTROL_WIDTH := 300
   static CONTROL_HEIGHT := 24

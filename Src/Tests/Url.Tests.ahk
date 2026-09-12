@@ -69,7 +69,7 @@ class Url_Tests extends Test
     Assert_IsNegative(Url_Compare("https://example.com", "https://www.example.com"))
     Assert_IsNegative(Url_Compare("https://example.com/p1?k=v", "https://example.com/p1/p2"))
   }
-  Url_Download_Example()
+  Url_Download_HttpScheme_1()
   {
     folder := Reg_FolderDescriptions("Downloads")
     name := "example_" A_Now ".html"
@@ -83,7 +83,7 @@ class Url_Tests extends Test
       if FileExist(path)
         FileDelete(path)
   }
-  Url_Download_JsonPlaceholder()
+  Url_Download_HttpScheme_2()
   {
     folder := Reg_FolderDescriptions("Downloads")
     name := "jsonplaceholder_" A_Now ".json"
@@ -96,6 +96,22 @@ class Url_Tests extends Test
     finally
       if FileExist(path)
         FileDelete(path)
+  }
+  Url_Download_FileScheme()
+  {
+    Assert_Throws(() => Url_Download(Path_ToURL(A_ScriptFullPath), Reg_FolderDescriptions("Downloads"), "example.txt"), Error)
+  }
+  Url_GetTitle_HttpScheme()
+  {
+    result := Url_GetTitle("https://www.example.com/")
+    Assert_AreEqual(result.href, "https://www.example.com/")
+    Assert_AreEqual(result.text, "Example Domain")
+  }
+  Url_GetTitle_FileScheme()
+  {
+    result := Url_GetTitle(Path_ToURL(A_ScriptFullPath))
+    Assert_AreEqual(result.href, Path_ToURL(A_ScriptFullPath))
+    Assert_AreEqual(result.text, Path_GetName(A_ScriptFullPath))
   }
 }
 Url_Tests()

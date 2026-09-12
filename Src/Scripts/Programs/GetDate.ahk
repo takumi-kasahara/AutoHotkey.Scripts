@@ -25,7 +25,9 @@ Dialog_GetDate()
   myGui.Opt("-MinimizeBox -MaximizeBox")
 
   dateTime := myGui.AddDateTime(, "LongDate")
+  dateTime.OnEvent("Change", (*) => OnChange())
   cbFormat := myGui.AddComboBox(, ["yyyyMMdd", "yyyy-MM-dd", "yyyy/MM/dd"])
+  cbFormat.OnEvent("Change", (*) => OnChange())
   cbFormat.Value := 1
 
   text := ""
@@ -33,9 +35,6 @@ Dialog_GetDate()
   btnCopy.OnEvent("Click", (*) => (Clipboard_SetText(text), myGui.Destroy()))
 
   myGui.OnEvent("Escape", (*) => myGui.Destroy())
-
-  dateTime.OnEvent("Change", (*) => OnChange())
-  cbFormat.OnEvent("Change", (*) => OnChange())
 
   dateTime.GetPos(, , &dateTimeW, &dateTimeH)
   cbFormat.GetPos(, , &cbFormatW, &cbFormatH)

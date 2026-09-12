@@ -47,46 +47,53 @@ ContextMenu_Edit(input)
   {
     ctxUrl := ContextMenu()
     ctxUrl.Add("Copy as Plaintext", () => View_Text(Stream(urls).ToArray(url => Url_Decode(url))))
-    links := Clipboard_ExtractLink(true)
-    if links.Length > 0
-    {
-      ctxHtml := ContextMenu()
-      if links.Length == 1
-      {
-        link := links[1]
-        ctxUrl.Add("Edit", () => Edit_Hyperlink(link))
-        ctxHtml.Add("Copy Link as HTML", () => View_Text(Document_CreateAnchorElement(link), "html"))
-        ctxHtml.Add("Copy Link as Markdown", () => View_Text("[" link.text "](" link.href ")"), "md")
-      }
-      else
-      {
-        ctxEdit := ContextMenu()
-        for link in links
-          ctxEdit.Add(Format("{:-3}{}", (StrLen(A_Index) == 1 ? "&" : "") A_Index, link.text), Edit_Hyperlink.Bind(link))
-        ctxUrl.AddSubMenu(Format("Edit ({})", links.Length), ctxEdit)
-        ctxHtml.Add("Copy Link as HTML List", () => View_Text(Document_CreateListElement(links), "html"))
-        ctxHtml.Add("Copy Link as HTML List (Ordered)", () => View_Text(Document_CreateOrderedListElement(links), "html"))
-        ctxHtml.Add("Copy Link as Markdown List", () => View_Text(Stream(links).ToArray(link => "- [" link.text "](" link.href ")"), "md"))
-        ctxHtml.Add("Copy Link as Markdown List (Ordered)", () => View_Text(Stream(links).ToArray(link => "1. [" link.text "](" link.href ")"), "md"))
-      }
-      ctxHtml.AddSeparator()
-      ctxHtml.Add("Download", Dialog_Download.Bind(links))
-      ctxHtml.Add("Save", Dialog_SaveUrl.Bind(links))
-      ctxUrl.AddSubMenu(Format("Links ({})", links.Length), ctxHtml)
-    }
+    ctxUrl.Add("Copy as Markdown", () => View_Text(Stream(urls).ToArray(url => "<" Url_Decode(url) ">")))
+    ctxUrl.Add("Copy as Excel", () => View_Text(Stream(urls).ToArray(url => Format('=HYPERLINK("{}")', Url_Decode(url)))))
     ctx.AddSubMenu(Format("URL ({})", urls.Length), ctxUrl)
+    ctx.AddSeparator()
+  }
+  links := Clipboard_ExtractLink(true)
+  if links.Length > 0
+  {
+    ctxLink := ContextMenu()
+    if links.Length == 1
+    {
+      link := links[1]
+      ctxLink.Add("Edit", () => Edit_Hyperlink(link))
+      ctxLink.AddSeparator()
+      ctxLink.Add("Copy Link as HTML", () => View_Text(Document_CreateAnchorElement(link), "html"))
+      ctxLink.Add("Copy Link as Markdown", () => View_Text("[" link.text "](" link.href ")"), "md")
+      ctxLink.Add("Copy Link as Excel", () => View_Text(Format('=HYPERLINK("{}", "{}")', link.text, link.href)))
+    }
+    else
+    {
+      ctxEdit := ContextMenu()
+      for link in links
+        ctxEdit.Add(Format("{:-3}{}", (StrLen(A_Index) == 1 ? "&" : "") A_Index, link.text), Edit_Hyperlink.Bind(link))
+      ctxLink.AddSubMenu("Edit", ctxEdit)
+      ctxLink.AddSeparator()
+      ctxLink.Add("Copy Link as HTML List", () => View_Text(Document_CreateListElement(links), "html"))
+      ctxLink.Add("Copy Link as HTML List (Ordered)", () => View_Text(Document_CreateOrderedListElement(links), "html"))
+      ctxLink.Add("Copy Link as Markdown List", () => View_Text(Stream(links).ToArray(link => "- [" link.text "](" link.href ")"), "md"))
+      ctxLink.Add("Copy Link as Markdown List (Ordered)", () => View_Text(Stream(links).ToArray(link => "1. [" link.text "](" link.href ")"), "md"))
+      ctxLink.Add("Copy Link as Excel", () => View_Text(Stream(links).ToArray(link => Format('=HYPERLINK("{}", "{}")', link.text, link.href))))
+    }
+    ctxLink.AddSeparator()
+    ctxLink.Add("Download", Dialog_Download.Bind(links))
+    ctxLink.Add("Save", Dialog_SaveUrl.Bind(links))
+    ctx.AddSubMenu(Format("Links ({})", links.Length), ctxLink)
     ctx.AddSeparator()
   }
   html := Clipboard_GetHtml()
   if html
   {
-    ctxHtml := ContextMenu()
-    ctxHtml.Add("Blockquote", () => View_Text(Clipboard_GetBlockquote(), "html"))
-    ctxHtml.Add("Code", () => View_Text(Document_CreateCodeElement(input), "html"))
-    ctxHtml.Add("Markdown (CommonMark)", () => View_Text(ConvertFrom_Html(html)), "md")
-    ctxHtml.Add("Markdown (GFM)", () => View_Text(ConvertFrom_Html(html), "gfm"), "md")
-    ctxHtml.Add("Raw", () => View_Text(html, "html"))
-    ctx.AddSubMenu("HTML", ctxHtml)
+    ctxLink := ContextMenu()
+    ctxLink.Add("Blockquote", () => View_Text(Clipboard_GetBlockquote(), "html"))
+    ctxLink.Add("Code", () => View_Text(Document_CreateCodeElement(input), "html"))
+    ctxLink.Add("Markdown (CommonMark)", () => View_Text(ConvertFrom_Html(html)), "md")
+    ctxLink.Add("Markdown (GFM)", () => View_Text(ConvertFrom_Html(html), "gfm"), "md")
+    ctxLink.Add("Raw", () => View_Text(html, "html"))
+    ctx.AddSubMenu("HTML", ctxLink)
     ctx.AddSeparator()
   }
 

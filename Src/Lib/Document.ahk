@@ -1,7 +1,7 @@
 ﻿#Requires AutoHotkey v2.0
 
 /**
- * @param {{ href: String, title: String, text: String, target: String }} link
+ * @param {{ href: String, text: String, title: String, target: String }} link
  * @returns {String}
  */
 Document_CreateAnchorElement(link)
@@ -45,7 +45,7 @@ Document_CreateCodeElement(text)
   return pre.outerHTML
 }
 /**
- * @param {Array<String> | Array<{href: String, title: String, text: String, target: String}>} items
+ * @param {Array<String> | Array<{href: String, text: String, title: String, target: String}>} items
  * @returns {String}
  */
 Document_CreateListElement(items)
@@ -74,7 +74,7 @@ Document_CreateListElement(items)
   return ul.outerHTML
 }
 /**
- * @param {Array<String> | Array<{href: String, title: String, text: String, target: String}>} items
+ * @param {Array<String> | Array<{href: String, text: String, title: String, target: String}>} items
  * @returns {String}
  */
 Document_CreateOrderedListElement(items)
@@ -104,7 +104,7 @@ Document_CreateOrderedListElement(items)
 }
 /**
  * @param {String} html
- * @returns {Array<{ href: String, title: String, text: String, target: String }>}
+ * @returns {Array<{ href: String, text: String, title: String, target: String }>}
  */
 Document_ExtractLinks(html)
 {
@@ -120,7 +120,7 @@ Document_ExtractLinks(html)
     text := Trim(a.innerText)
     if !text
       text := a.href
-    links.Push({ href: a.href, title: a.title, text: text, target: a.target })
+    links.Push({ href: a.href, text: text, title: a.title, target: a.target })
   }
   return links
 }

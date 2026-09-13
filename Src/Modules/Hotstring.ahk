@@ -67,7 +67,7 @@
 }
 :X:`:`:link::
 {
-  links := Stream(Clipboard_ExtractLink(true)).ToArray(link => "[" link.text "](" link.href ")")
+  links := Stream(Clipboard_ExtractLink(true)).ToArray(link => ConvertTo_MarkdownLink(link.href, link.text))
   if links.Length > 0
     Paste(ConvertTo_String(links))
 }

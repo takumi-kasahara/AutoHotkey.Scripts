@@ -98,6 +98,19 @@ ConvertTo_VisualBasic(input)
  * @param {String} input
  * @returns {String}
  */
+ConvertTo_Excel(input)
+{
+  tmp := input
+  tmp := StrReplace(tmp, '"', '""')
+  tmp := StrReplace(tmp, "`r", "")
+  tmp := StrReplace(tmp, "`n", '" & CHAR(10) & "')
+  tmp := StrReplace(tmp, "`t", '" & CHAR(9) & "')
+  return String_Enclose(tmp)
+}
+/**
+ * @param {String} input
+ * @returns {String}
+ */
 ConvertTo_ExcelFormula(input)
 {
   input := StrReplace(input, "{{}", "{")
@@ -133,4 +146,30 @@ ConvertTo_ExcelFormula(input)
     parts.Push('""')
 
   return "=" Enumerable_Join(parts, "&")
+}
+/**
+ * @param {String} href
+ * @param {String} text
+ * @returns {String}
+ */
+ConvertTo_ExcelHyperlink(href, text := "")
+{
+  if !href
+    return ""
+  if !text
+    return Format('=HYPERLINK("{}")', href)
+  return Format('=HYPERLINK("{}", {})', href, ConvertTo_Excel(text))
+}
+/**
+ * @param {String} href
+ * @param {String} text
+ * @returns {String}
+ */
+ConvertTo_MarkdownLink(href, text := "")
+{
+  if !href
+    return ""
+  if !text
+    return "<" href ">"
+  return "[" text "](" href ")"
 }

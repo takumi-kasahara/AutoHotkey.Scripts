@@ -155,6 +155,22 @@ class ConvertTo_Tests extends Test
   {
     Assert_AreEqual('"ab"', ConvertTo_VisualBasic("a`rb"))
   }
+  ConvertTo_Excel_SimpleString()
+  {
+    Assert_AreEqual('"hello"', ConvertTo_Excel("hello"))
+  }
+  ConvertTo_Excel_WithNewlines()
+  {
+    Assert_AreEqual('"a" & CHAR(10) & "b"', ConvertTo_Excel("a`nb"))
+  }
+  ConvertTo_Excel_WithTabs()
+  {
+    Assert_AreEqual('"a" & CHAR(9) & "b"', ConvertTo_Excel("a`tb"))
+  }
+  ConvertTo_Excel_WithCarriageReturn()
+  {
+    Assert_AreEqual('"ab"', ConvertTo_Excel("a`rb"))
+  }
   ConvertTo_ExcelFormula_Empty()
   {
     Assert_AreEqual('=""', ConvertTo_ExcelFormula(""))
@@ -183,6 +199,16 @@ class ConvertTo_Tests extends Test
   ConvertTo_ExcelFormula_EscapeBraces()
   {
     Assert_AreEqual('="{a}"', ConvertTo_ExcelFormula("{{}a{}}"))
+  }
+  ConvertTo_ExcelHyperlink()
+  {
+    Assert_AreEqual('=HYPERLINK("http://example.com")', ConvertTo_ExcelHyperlink("http://example.com"))
+    Assert_AreEqual('=HYPERLINK("http://example.com", "Example Domain")', ConvertTo_ExcelHyperlink("http://example.com", "Example Domain"))
+  }
+  ConvertTo_MarkdownLink()
+  {
+    Assert_AreEqual('<http://example.com>', ConvertTo_MarkdownLink("http://example.com"))
+    Assert_AreEqual('[Example Domain](http://example.com)', ConvertTo_MarkdownLink("http://example.com", "Example Domain"))
   }
 }
 ConvertTo_Tests()

@@ -61,6 +61,6 @@ Edit_Hyperlink(link)
   myGui.Show(Format("w{} h{} AutoSize", WINDOW_WIDTH, WINDOW_HEIGHT))
 
   CopyHtml() => Clipboard_SetHtml(Document_CreateAnchorElement({ href: editAddress.Value, title: editScreenTip.Value, text: editText.Value, target: editTarget.Value }))
-  CopyMarkdown() => Clipboard_SetText("[" editText.Value "](" editAddress.Value ")")
-  CopyExcel() => Clipboard_SetText(Format('=HYPERLINK("{}", "{}")', editAddress.Value, editText.Value))
+  CopyMarkdown() => Clipboard_SetText(ConvertTo_MarkdownLink(editAddress.Value, editText.Value))
+  CopyExcel() => Clipboard_SetText(ConvertTo_ExcelHyperlink(editAddress.Value, editText.Value))
 }

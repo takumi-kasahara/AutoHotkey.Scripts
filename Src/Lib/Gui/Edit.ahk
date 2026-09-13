@@ -1,7 +1,7 @@
 ﻿#Requires AutoHotkey v2.0
 
 /**
- * @param {Func | BoundFunc | { href: String, title: String, text: String, target: String }} link
+ * @param {Func | BoundFunc | { href: String, text: String, title: String, target: String }} link
  */
 Edit_Hyperlink(link)
 {

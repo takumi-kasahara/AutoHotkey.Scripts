@@ -206,7 +206,8 @@ View_Csv(input, header := 0)
   /** @see {@link https://learn.microsoft.com/en-us/windows/win32/controls/lvm-getheader} */
   static LVM_GETHEADER := 0x101F
   headerHwnd := SendMessage(LVM_GETHEADER, 0, 0, listView.Hwnd)
-  headerRect := Buffer(16, 0)
+  /** @see {@link https://learn.microsoft.com/en-us/windows/win32/api/windef/ns-windef-rect} */
+  headerRect := Buffer(4 * 4, 0)
   /** @see {@link https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-getclientrect} */
   if !DllCall("GetClientRect"
     , "Ptr", headerHwnd ; HWND    hWnd
@@ -218,7 +219,8 @@ View_Csv(input, header := 0)
 
   /** @see {@link https://learn.microsoft.com/en-us/windows/win32/controls/lvm-getitemrect} */
   static LVM_GETITEMRECT := 0x100E
-  rowRect := Buffer(16, 0)
+  /** @see {@link https://learn.microsoft.com/en-us/windows/win32/api/windef/ns-windef-rect} */
+  rowRect := Buffer(4 * 4, 0)
   NumPut("Int", 0, rowRect, 0)
   SendMessage(LVM_GETITEMRECT, 0, rowRect.Ptr, listView.Hwnd)
   rowHeight := NumGet(rowRect, 12, "Int") - NumGet(rowRect, 4, "Int")

@@ -34,7 +34,8 @@ Monitor_GetScale(id?)
   else
     MouseGetPos(&x, &y)
 
-  pt := Buffer(8)
+  /** @see {@link https://learn.microsoft.com/en-us/windows/win32/api/windef/ns-windef-point} */
+  pt := Buffer(4 * 2)
   NumPut("Int", x, "Int", y, pt)
   static MONITOR_DEFAULTTONEAREST := 0x00000002
   /** @see {@link https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-monitorfrompoint} */

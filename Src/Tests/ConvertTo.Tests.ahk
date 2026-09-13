@@ -83,6 +83,11 @@ class ConvertTo_Tests extends Test
   {
     Assert_AreEqual('"ab"', ConvertTo_Json("a`rb"))
   }
+  ConvertTo_Json_RoundTrip()
+  {
+    original := "hello`nworld`ttab`"quote`rback"
+    Assert_AreEqual(original, ConvertFrom_Json(ConvertTo_Json(original)))
+  }
   ConvertTo_SQL_SimpleString()
   {
     Assert_AreEqual("'hello'", ConvertTo_SQL("hello"))
@@ -102,6 +107,11 @@ class ConvertTo_Tests extends Test
   ConvertTo_SQL_WithCarriageReturn()
   {
     Assert_AreEqual("'ab'", ConvertTo_SQL("a`rb"))
+  }
+  ConvertTo_SQL_RoundTrip()
+  {
+    original := "hello`nworld`ttab'quote`rback"
+    Assert_AreEqual(original, ConvertFrom_SQL(ConvertTo_SQL(original)))
   }
   ConvertTo_PowerShell_SimpleString()
   {
@@ -135,6 +145,11 @@ class ConvertTo_Tests extends Test
   {
     Assert_AreEqual('"ab"', ConvertTo_PowerShell("a`rb"))
   }
+  ConvertTo_PowerShell_RoundTrip()
+  {
+    original := "hello`nworld`ttab`$var`{path}`"quote`rback"
+    Assert_AreEqual(original, ConvertFrom_PowerShell(ConvertTo_PowerShell(original)))
+  }
   ConvertTo_VisualBasic_SimpleString()
   {
     Assert_AreEqual('"hello"', ConvertTo_VisualBasic("hello"))
@@ -154,6 +169,11 @@ class ConvertTo_Tests extends Test
   ConvertTo_VisualBasic_WithCarriageReturn()
   {
     Assert_AreEqual('"ab"', ConvertTo_VisualBasic("a`rb"))
+  }
+  ConvertTo_VisualBasic_RoundTrip()
+  {
+    original := "hello`nworld`ttab`"quote`rback"
+    Assert_AreEqual(original, ConvertFrom_VisualBasic(ConvertTo_VisualBasic(original)))
   }
   ConvertTo_Excel_SimpleString()
   {

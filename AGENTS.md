@@ -19,13 +19,13 @@ This repository is a collection of scripts for AutoHotkey v2. Below are the main
 1. Run tests from PowerShell with:
 
    ```powershell
-   powershell.exe -NoLogo -NoProfile -File AutoHotkey.ps1 -Path .\Src\Tests\*.Tests.ahk
+   powershell.exe -NoLogo -NoProfile -File .\.agents\skills\autohotkey\scripts\AutoHotkey.ps1 -Path .\Src\Tests\*.Tests.ahk
    ```
 
    To filter by test case name, pass it as an argument:
 
    ```powershell
-   powershell.exe -NoLogo -NoProfile -File AutoHotkey.ps1 -LiteralPath .\Src\Tests\Array.Tests.ahk -ArgumentList Array_Equal
+   powershell.exe -NoLogo -NoProfile -File .\.agents\skills\autohotkey\scripts\AutoHotkey.ps1 -LiteralPath .\Src\Tests\Array.Tests.ahk -ArgumentList Array_Equal
    ```
 
 ## Coding Guidelines

@@ -48,7 +48,7 @@ View_Text(input, extension := "txt")
   myGui.Opt("-MinimizeBox")
 
   try
-    editText := myGui.AddEdit("Multi ReadOnly Wrap", value)
+    editText := myGui.AddEdit("Multi ReadOnly -Wrap", value)
   catch as ex
   {
     OnCopy()
@@ -64,19 +64,19 @@ View_Text(input, extension := "txt")
     return
   }
 
-  /** @see {@link https://learn.microsoft.com/en-us/windows/win32/controls/em-getrect} */
-  static EM_GETRECT := 0x00B2
   /** @see {@link https://learn.microsoft.com/en-us/windows/win32/controls/em-getmargins} */
   static EM_GETMARGINS := 0x00D4
-  editRect := Buffer(16, 0)
-  SendMessage(EM_GETRECT, 0, editRect.Ptr, editText.Hwnd)
-  textAreaW := NumGet(editRect, 8, "Int") - NumGet(editRect, 0, "Int")
-  textAreaH := NumGet(editRect, 12, "Int") - NumGet(editRect, 4, "Int")
+  static SIZE_EPSILON := 6
+  static CARET_PADDING := 2
+
   margins := SendMessage(EM_GETMARGINS, 0, 0, editText.Hwnd)
   leftMargin := margins & 0xFFFF
   rightMargin := (margins >> 16) & 0xFFFF
-  contentW := textAreaW + leftMargin + rightMargin
-  contentH := textAreaH
+
+  lineHeight := GetLineHeight(editText.Hwnd)
+  maxLineWidth := GetMaxLineWidth(editText.Hwnd, value)
+  contentW := leftMargin + maxLineWidth + rightMargin + CARET_PADDING + SIZE_EPSILON
+  contentH := lineCount * lineHeight + SIZE_EPSILON
 
   if contentW <= 0 || contentH <= 0
     editText.GetPos(, , &contentW, &contentH)
@@ -121,6 +121,124 @@ View_Text(input, extension := "txt")
       Clipboard_SetText(value)
   }
   OnSave() => Dialog_Save(editText.Value, extension)
+  /**
+   * @param {Integer} hwnd
+   * @returns {Integer}
+   */
+  GetLineHeight(hwnd)
+  {
+    /** @see {@link https://learn.microsoft.com/en-us/windows/win32/winmsg/wm-getfont} */
+    static WM_GETFONT := 0x0031
+    /** @see {@link https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-getdc} */
+    hdc := DllCall("GetDC"
+      , "Ptr", hwnd ; HWND hWnd
+      , "Ptr"       ; HDC
+    )
+    if hdc == 0
+      throw OSError()
+    oldFont := 0
+    try
+    {
+      hFont := SendMessage(WM_GETFONT, 0, 0, hwnd)
+      /** @see {@link https://learn.microsoft.com/en-us/windows/win32/api/wingdi/nf-wingdi-selectobject} */
+      if hFont
+        oldFont := DllCall("SelectObject"
+          , "Ptr", hdc    ; HDC     hdc
+          , "Ptr", hFont  ; HGDIOBJ h
+          , "Ptr"         ; HGDIOBJ
+        )
+      /** @see {@link https://learn.microsoft.com/en-us/windows/win32/api/wingdi/ns-wingdi-textmetricw} */
+      textMetrics := Buffer(4 * 11 + 2 * 4 + 1 * 5, 0)
+      /** @see {@link https://learn.microsoft.com/en-us/windows/win32/api/wingdi/nf-wingdi-gettextmetricsw} */
+      if !DllCall("GetTextMetricsW"
+        , "Ptr", hdc          ; HDC           hdc
+        , "Ptr", textMetrics  ; LPTEXTMETRICW lptm
+        , "Int"               ; BOOL
+      )
+        throw OSError()
+
+      tmHeight := NumGet(textMetrics, 0, "Int")
+      tmExternalLeading := NumGet(textMetrics, 16, "Int")
+      return Max(1, tmHeight + tmExternalLeading)
+    }
+    finally
+    {
+      if oldFont
+        DllCall("SelectObject"
+          , "Ptr", hdc      ; HDC     hdc
+          , "Ptr", oldFont  ; HGDIOBJ h
+          , "Ptr"           ; HGDIOBJ
+        )
+      /** @see {@link https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-releasedc} */
+      DllCall("ReleaseDC"
+        , "Ptr", hwnd ; HWND hWnd
+        , "Ptr", hdc  ; HDC  hDC
+        , "Int"       ; int
+      )
+    }
+  }
+  /**
+   * @param {Integer} hwnd
+   * @param {String} text
+   * @returns {Integer}
+   */
+  GetMaxLineWidth(hwnd, text)
+  {
+    /** @see {@link https://learn.microsoft.com/en-us/windows/win32/winmsg/wm-getfont} */
+    static WM_GETFONT := 0x0031
+
+    hdc := DllCall("GetDC"
+      , "Ptr", hwnd ; HWND hWnd
+      , "Ptr"       ; HDC
+    )
+    if hdc == 0
+      throw OSError()
+    oldFont := 0
+    maxWidth := 0
+    try
+    {
+      hFont := SendMessage(WM_GETFONT, 0, 0, hwnd)
+      if hFont
+        oldFont := DllCall("SelectObject"
+          , "Ptr", hdc
+          , "Ptr", hFont
+          , "Ptr"
+        )
+      /** @see {@link https://learn.microsoft.com/en-us/windows/win32/api/windef/ns-windef-size} */
+      lineSize := Buffer(4 * 2, 0)
+      loop parse, text, "`n", "`r"
+      {
+        line := A_LoopField
+        /** @see {@link https://learn.microsoft.com/en-us/windows/win32/api/wingdi/nf-wingdi-gettextextentpoint32w} */
+        if !DllCall("GetTextExtentPoint32W"
+          , "Ptr", hdc          ; HDC     hdc
+          , "WStr", line        ; LPCWSTR lpString
+          , "Int", StrLen(line) ; int     c
+          , "Ptr", lineSize     ; LPSIZE  psizl
+          , "Int"               ; BOOL
+        )
+          throw OSError()
+        lineWidth := NumGet(lineSize, 0, "Int")
+        maxWidth := Max(maxWidth, lineWidth)
+      }
+      return maxWidth
+    }
+    finally
+    {
+      if oldFont
+        DllCall("SelectObject"
+          , "Ptr", hdc      ; HDC     hdc
+          , "Ptr", oldFont  ; HGDIOBJ h
+          , "Ptr"           ; HGDIOBJ
+        )
+      /** @see {@link https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-releasedc} */
+      DllCall("ReleaseDC"
+        , "Ptr", hwnd ; HWND  hWnd
+        , "Ptr", hdc  ; HDC   hDC
+        , "Int"       ; int
+      )
+    }
+  }
 }
 /**
  * @param {String} input

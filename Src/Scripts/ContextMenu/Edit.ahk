@@ -108,6 +108,15 @@ ContextMenu_Edit(input)
   }
 
   ctxText := ContextMenu()
+
+  ctxMarkdown := ContextMenu()
+  ctxMarkdown.Add("HTML", () => View_Text(ConvertTo_Html(input), "html"))
+  ctxMarkdown.Add("Blockquote", () => View_Text(String_Edit(input, field => "> " field), "md"))
+  ctxMarkdown.Add("Code", () => View_Text(StrSplit(input, "`n").Length == 1 ? "``" input "``" : "```````n" input "`n``````", "md"))
+  ctxText.AddSubMenu("Markdown", ctxMarkdown)
+
+  ctxText.AddSeparator()
+
   ctxText.Add("Sort", () => View_Text(Array_Sort(StrSplit(input, "`n"))))
   ctxText.Add("Sort (Unique)", () => View_Text(Array_Unique(StrSplit(input, "`n"))))
 
@@ -124,30 +133,15 @@ ContextMenu_Edit(input)
   ctxNormalize.Add("NFKD", () => View_Text(String_Normalize(input, "NFKD")))
   ctxText.AddSubMenu("Normalize", ctxNormalize)
 
+  ctxText.AddSeparator()
+
   ctxConvert := ContextMenu()
-  ctxConvertFrom := ContextMenu()
-  ctxConvertFrom.Add("Json", () => View_Text(ConvertFrom_Json(input)))
-  ctxConvertFrom.Add("SQL", () => View_Text(ConvertFrom_SQL(input)))
-  ctxConvertFrom.Add("PowerShell", () => View_Text(ConvertFrom_PowerShell(input)))
-  ctxConvertFrom.Add("Visual Basic", () => View_Text(ConvertFrom_VisualBasic(input)))
-  ctxConvert.AddSubMenu("From", ctxConvertFrom)
-
-  ctxConvertTo := ContextMenu()
-  ctxConvertTo.Add("Json", () => View_Text(ConvertTo_Json(input)))
-  ctxConvertTo.Add("Json (Array)", () => View_Text(String_Edit(input, field => ConvertTo_Json(field) ",")))
-  ctxConvertTo.Add("SQL", () => View_Text(ConvertTo_SQL(input)))
-  ctxConvertTo.Add("PowerShell", () => View_Text(ConvertTo_PowerShell(input)))
-  ctxConvertTo.Add("PowerShell (Array)", () => View_Text(String_Edit(input, ConvertTo_PowerShell)))
-  ctxConvertTo.Add("Visual Basic", () => View_Text(ConvertTo_VisualBasic(input)))
-  ctxConvertTo.Add("Visual Basic (Array)", () => View_Text(String_Edit(input, field => ConvertTo_VisualBasic(field) ",")))
-  ctxConvert.AddSubMenu("To", ctxConvertTo)
-  ctxText.AddSubMenu("Convert", ctxConvert)
-
-  ctxMarkdown := ContextMenu()
-  ctxMarkdown.Add("HTML", () => View_Text(ConvertTo_Html(input), "html"))
-  ctxMarkdown.Add("Blockquote", () => View_Text(String_Edit(input, field => "> " field), "md"))
-  ctxMarkdown.Add("Code", () => View_Text(StrSplit(input, "`n").Length == 1 ? "``" input "``" : "```````n" input "`n``````", "md"))
-  ctxText.AddSubMenu("Markdown", ctxMarkdown)
+  ctxConvert.AddSubMenu("Plaintext", ContextMenu_ConvertTo(input))
+  ctxConvert.AddSubMenu("Json", ContextMenu_ConvertTo(ConvertFrom_Json(input)))
+  ctxConvert.AddSubMenu("SQL", ContextMenu_ConvertTo(ConvertFrom_SQL(input)))
+  ctxConvert.AddSubMenu("PowerShell", ContextMenu_ConvertTo(ConvertFrom_PowerShell(input)))
+  ctxConvert.AddSubMenu("Visual Basic", ContextMenu_ConvertTo(ConvertFrom_VisualBasic(input)))
+  ctxText.AddSubMenu("Convert from", ctxConvert)
 
   ctxSplit := ContextMenu()
   ctxSplit.AddSubMenu("EOL", ContextMenu_Join(input, "\r?\n"))
@@ -157,6 +151,7 @@ ContextMenu_Edit(input)
   ctxSplit.AddSubMenu("colon", ContextMenu_Join(input, "(*UCP)\s*:\s*"))
   ctxSplit.AddSubMenu("semi", ContextMenu_Join(input, "(*UCP)\s*;\s*"))
   ctxText.AddSubMenu("Split by", ctxSplit)
+
   ctx.AddSubMenu("Plaintext", ctxText)
 
   return ctx
@@ -173,6 +168,26 @@ ContextMenu_FormatPath(values)
   ctx.Add("Copy as Markdown List (Ordered)", () => View_Text(Stream(values).ToArray(v => "1. " v), "md"))
   ctx.Add("Copy as HTML List", () => View_Text(Document_CreateListElement(values), "html"))
   ctx.Add("Copy as HTML List (Ordered)", () => View_Text(Document_CreateOrderedListElement(values), "html"))
+  return ctx
+}
+/**
+ * @param {String} input
+ * @returns {ContextMenu}
+ */
+ContextMenu_ConvertTo(input)
+{
+  ctx := ContextMenu()
+  ctxConvertTo := ContextMenu()
+  ctxConvertTo.Add("Plaintext", () => View_Text(input))
+  ctxConvertTo.Add("Json", () => View_Text(ConvertTo_Json(input)))
+  ctxConvertTo.Add("Json (Array)", () => View_Text(String_Edit(input, field => ConvertTo_Json(field) ",")))
+  ctxConvertTo.Add("PowerShell", () => View_Text(ConvertTo_PowerShell(input)))
+  ctxConvertTo.Add("PowerShell (Array)", () => View_Text(String_Edit(input, ConvertTo_PowerShell)))
+  ctxConvertTo.Add("Visual Basic", () => View_Text(ConvertTo_VisualBasic(input)))
+  ctxConvertTo.Add("Visual Basic (Array)", () => View_Text(String_Edit(input, field => ConvertTo_VisualBasic(field) ",")))
+  ctxConvertTo.Add("Excel", () => View_Text(String_Edit(input, field => ConvertTo_Excel(field) ",")))
+  ctxConvertTo.Add("SQL", () => View_Text(ConvertTo_SQL(input)))
+  ctx.AddSubMenu("Convert to", ctxConvertTo)
   return ctx
 }
 /**

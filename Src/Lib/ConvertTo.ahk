@@ -38,6 +38,24 @@ ConvertTo_Html(input, from := "markdown")
   return stdout
 }
 /**
+ * @see {https://www.autohotkey.com/docs/v2/misc/EscapeChar.htm}
+ * @param {String} input
+ * @returns {String}
+ */
+ConvertTo_AutoHotkey(input)
+{
+  tmp := input
+  tmp := StrReplace(tmp, Chr(96), Chr(96) Chr(96))  ; escape backtick first
+  tmp := StrReplace(tmp, ",", Chr(96) ",")
+  tmp := StrReplace(tmp, ";", Chr(96) ";")
+  tmp := StrReplace(tmp, "%", Chr(96) "%")
+  tmp := StrReplace(tmp, "#", Chr(96) "#")
+  tmp := StrReplace(tmp, ":", Chr(96) ":")
+  tmp := StrReplace(tmp, '"', Chr(96) '"')
+  tmp := StrReplace(tmp, Chr(0), Chr(96) "0")
+  return tmp
+}
+/**
  * @see {https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Lexical_grammar#string_literals}
  * @param {String} input
  * @returns {String}

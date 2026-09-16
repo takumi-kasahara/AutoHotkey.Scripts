@@ -17,6 +17,24 @@ ConvertFrom_Html(input, to := "commonmark")
   return stdout
 }
 /**
+ * @see {https://www.autohotkey.com/docs/v2/misc/EscapeChar.htm}
+ * @param {String} input
+ * @returns {String}
+ */
+ConvertFrom_AutoHotkey(input)
+{
+  tmp := input
+  tmp := StrReplace(tmp, "````", "``")
+  tmp := StrReplace(tmp, "``,", ",")
+  tmp := StrReplace(tmp, "``;", ";")
+  tmp := StrReplace(tmp, "``%", "%")
+  tmp := StrReplace(tmp, "``#", "#")
+  tmp := StrReplace(tmp, "``:", ":")
+  tmp := StrReplace(tmp, '``"', '"')
+  tmp := StrReplace(tmp, "``0", Chr(0))
+  return tmp
+}
+/**
  * @see {https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Lexical_grammar#string_literals}
  * @param {String} input
  * @returns {String}

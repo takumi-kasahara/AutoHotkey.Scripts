@@ -11,6 +11,43 @@ OnExit(HandleExit)
 
 class ConvertFrom_Tests extends Test
 {
+  ConvertFrom_AutoHotkey_SimpleString()
+  {
+    Assert_AreEqual("hello", ConvertFrom_AutoHotkey("hello"))
+  }
+  ConvertFrom_AutoHotkey_WithBacktick()
+  {
+    Assert_AreEqual("a``b", ConvertFrom_AutoHotkey("a````b"))
+  }
+  ConvertFrom_AutoHotkey_WithComma()
+  {
+    Assert_AreEqual("a,b", ConvertFrom_AutoHotkey("a`,b"))
+  }
+  ConvertFrom_AutoHotkey_WithSemicolon()
+  {
+    Assert_AreEqual("a;b", ConvertFrom_AutoHotkey("a`;b"))
+  }
+  ConvertFrom_AutoHotkey_WithPercent()
+  {
+    Assert_AreEqual("a%b", ConvertFrom_AutoHotkey("a`%b"))
+  }
+  ConvertFrom_AutoHotkey_WithHash()
+  {
+    Assert_AreEqual("a#b", ConvertFrom_AutoHotkey("a`#b"))
+  }
+  ConvertFrom_AutoHotkey_WithColon()
+  {
+    Assert_AreEqual("a:b", ConvertFrom_AutoHotkey("a`:b"))
+  }
+  ConvertFrom_AutoHotkey_WithQuote()
+  {
+    Assert_AreEqual('a"b', ConvertFrom_AutoHotkey('a`"b'))
+  }
+  ConvertFrom_AutoHotkey_RoundTrip()
+  {
+    original := "hello`nworld`ttab`"quote`a,b;c%d#e:f`g`0h"
+    Assert_AreEqual(original, ConvertFrom_AutoHotkey(ConvertTo_AutoHotkey(original)))
+  }
   ConvertFrom_Json_SimpleString()
   {
     Assert_AreEqual("hello", ConvertFrom_Json("hello"))

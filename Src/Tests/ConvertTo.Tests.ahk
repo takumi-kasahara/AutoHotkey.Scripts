@@ -55,6 +55,47 @@ class ConvertTo_Tests extends Test
   {
     Assert_AreEqual('""', ConvertTo_Csv(""))
   }
+  ConvertTo_AutoHotkey_SimpleString()
+  {
+    Assert_AreEqual("hello", ConvertTo_AutoHotkey("hello"))
+  }
+  ConvertTo_AutoHotkey_WithBacktick()
+  {
+    Assert_AreEqual("a````b", ConvertTo_AutoHotkey("a``b"))
+  }
+  ConvertTo_AutoHotkey_BacktickOnly()
+  {
+    Assert_AreEqual("````", ConvertTo_AutoHotkey("``"))
+  }
+  ConvertTo_AutoHotkey_WithComma()
+  {
+    Assert_AreEqual("a``,b", ConvertTo_AutoHotkey("a,b"))
+  }
+  ConvertTo_AutoHotkey_WithSemicolon()
+  {
+    Assert_AreEqual("a``;b", ConvertTo_AutoHotkey("a;b"))
+  }
+  ConvertTo_AutoHotkey_WithPercent()
+  {
+    Assert_AreEqual("a``%b", ConvertTo_AutoHotkey("a%b"))
+  }
+  ConvertTo_AutoHotkey_WithHash()
+  {
+    Assert_AreEqual("a``#b", ConvertTo_AutoHotkey("a#b"))
+  }
+  ConvertTo_AutoHotkey_WithColon()
+  {
+    Assert_AreEqual("a``:b", ConvertTo_AutoHotkey("a:b"))
+  }
+  ConvertTo_AutoHotkey_WithQuote()
+  {
+    Assert_AreEqual('a``"b', ConvertTo_AutoHotkey('a"b'))
+  }
+  ConvertTo_AutoHotkey_RoundTrip()
+  {
+    original := "hello`nworld`ttab`"quote`a`b`c`d`e`f`g`h`i`j`k"
+    Assert_AreEqual(original, ConvertFrom_AutoHotkey(ConvertTo_AutoHotkey(original)))
+  }
   ConvertTo_Json_SimpleString()
   {
     Assert_AreEqual('"hello"', ConvertTo_Json("hello"))

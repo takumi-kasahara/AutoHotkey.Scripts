@@ -25,19 +25,15 @@ class ConvertTo_Tests extends Test
   }
   ConvertTo_String_MapInput()
   {
-    m := Map("a", 1, "b", 2)
-    Assert_AreEqual("1`n2", ConvertTo_String(m))
+    Assert_AreEqual("1`n2", ConvertTo_String(Map("a", 1, "b", 2)))
   }
   ConvertTo_String_FuncInput()
   {
-    f := () => "result"
-    Assert_AreEqual("result", ConvertTo_String(f))
+    Assert_AreEqual("result", ConvertTo_String(() => "result"))
   }
   ConvertTo_String_BoundFuncInput()
   {
-    f := (x) => x " " x
-    bf := f.Bind("result")
-    Assert_AreEqual("result result", ConvertTo_String(bf))
+    Assert_AreEqual("result result", ConvertTo_String(((x) => x " " x).Bind("result")))
   }
   ConvertTo_String_UnsupportedType()
   {
@@ -71,7 +67,11 @@ class ConvertTo_Tests extends Test
   {
     Assert_AreEqual('"a\"b"', ConvertTo_Json('a"b'))
   }
-  ConvertTo_Json_WithNewlines()
+  ConvertTo_Json_WithCr()
+  {
+    Assert_AreEqual('"a\rb"', ConvertTo_Json("a`rb"))
+  }
+  ConvertTo_Json_WithLf()
   {
     Assert_AreEqual('"a\nb"', ConvertTo_Json("a`nb"))
   }
@@ -79,13 +79,9 @@ class ConvertTo_Tests extends Test
   {
     Assert_AreEqual('"a\tb"', ConvertTo_Json("a`tb"))
   }
-  ConvertTo_Json_WithCarriageReturn()
-  {
-    Assert_AreEqual('"ab"', ConvertTo_Json("a`rb"))
-  }
   ConvertTo_Json_RoundTrip()
   {
-    original := "hello`nworld`ttab`"quote`rback"
+    original := "hello"
     Assert_AreEqual(original, ConvertFrom_Json(ConvertTo_Json(original)))
   }
   ConvertTo_SQL_SimpleString()
@@ -96,21 +92,45 @@ class ConvertTo_Tests extends Test
   {
     Assert_AreEqual("'it''s'", ConvertTo_SQL("it's"))
   }
-  ConvertTo_SQL_WithNewlines()
+  ConvertTo_SQL_WithCr()
+  {
+    Assert_AreEqual("'a' || CHR(13) || 'b'", ConvertTo_SQL("a`rb"))
+  }
+  ConvertTo_SQL_WithCrOnly()
+  {
+    Assert_AreEqual("CHR(13)", ConvertTo_SQL("`r"))
+  }
+  ConvertTo_SQL_WithLf()
   {
     Assert_AreEqual("'a' || CHR(10) || 'b'", ConvertTo_SQL("a`nb"))
+  }
+  ConvertTo_SQL_WithLfOnly()
+  {
+    Assert_AreEqual("CHR(10)", ConvertTo_SQL("`n"))
+  }
+  ConvertTo_SQL_WithCrLf()
+  {
+    Assert_AreEqual("'a' || CHR(13) || CHR(10) || 'b'", ConvertTo_SQL("a`r`nb"))
   }
   ConvertTo_SQL_WithTabs()
   {
     Assert_AreEqual("'a' || CHR(9) || 'b'", ConvertTo_SQL("a`tb"))
   }
-  ConvertTo_SQL_WithCarriageReturn()
+  ConvertTo_SQL_WithBackspace()
   {
-    Assert_AreEqual("'ab'", ConvertTo_SQL("a`rb"))
+    Assert_AreEqual("'a' || CHR(8) || 'b'", ConvertTo_SQL("a`bb"))
+  }
+  ConvertTo_SQL_WithFormFeed()
+  {
+    Assert_AreEqual("'a' || CHR(12) || 'b'", ConvertTo_SQL("a`fb"))
+  }
+  ConvertTo_SQL_WithVerticalTab()
+  {
+    Assert_AreEqual("'a' || CHR(11) || 'b'", ConvertTo_SQL("a`vb"))
   }
   ConvertTo_SQL_RoundTrip()
   {
-    original := "hello`nworld`ttab'quote`rback"
+    original := "hello`nworld`ttab'quoteback"
     Assert_AreEqual(original, ConvertFrom_SQL(ConvertTo_SQL(original)))
   }
   ConvertTo_PowerShell_SimpleString()
@@ -119,7 +139,7 @@ class ConvertTo_Tests extends Test
   }
   ConvertTo_PowerShell_WithBackticks()
   {
-    Assert_AreEqual('"a`b"', ConvertTo_PowerShell("a`b"))
+    Assert_AreEqual('"a``b"', ConvertTo_PowerShell("a`b"))
   }
   ConvertTo_PowerShell_WithQuotes()
   {
@@ -133,7 +153,11 @@ class ConvertTo_Tests extends Test
   {
     Assert_AreEqual('"a``{b``}"', ConvertTo_PowerShell("a{b}"))
   }
-  ConvertTo_PowerShell_WithNewlines()
+  ConvertTo_PowerShell_WithCr()
+  {
+    Assert_AreEqual('"a``rb"', ConvertTo_PowerShell("a`rb"))
+  }
+  ConvertTo_PowerShell_WithLf()
   {
     Assert_AreEqual('"a``nb"', ConvertTo_PowerShell("a`nb"))
   }
@@ -141,13 +165,29 @@ class ConvertTo_Tests extends Test
   {
     Assert_AreEqual('"a``tb"', ConvertTo_PowerShell("a`tb"))
   }
-  ConvertTo_PowerShell_WithCarriageReturn()
+  ConvertTo_PowerShell_WithAlert()
   {
-    Assert_AreEqual('"ab"', ConvertTo_PowerShell("a`rb"))
+    Assert_AreEqual('"a``ab"', ConvertTo_PowerShell("a`ab"))
+  }
+  ConvertTo_PowerShell_WithBackspace()
+  {
+    Assert_AreEqual('"a``bb"', ConvertTo_PowerShell("a`bb"))
+  }
+  ConvertTo_PowerShell_WithEscape()
+  {
+    Assert_AreEqual('"a``eb"', ConvertTo_PowerShell("a" Chr(27) "b"))
+  }
+  ConvertTo_PowerShell_WithFormFeed()
+  {
+    Assert_AreEqual('"a``fb"', ConvertTo_PowerShell("a`fb"))
+  }
+  ConvertTo_PowerShell_WithVerticalTab()
+  {
+    Assert_AreEqual('"a``vb"', ConvertTo_PowerShell("a`vb"))
   }
   ConvertTo_PowerShell_RoundTrip()
   {
-    original := "hello`nworld`ttab`$var`{path}`"quote`rback"
+    original := "hello`nworld`ttab`$var`{path}`"quoteback"
     Assert_AreEqual(original, ConvertFrom_PowerShell(ConvertTo_PowerShell(original)))
   }
   ConvertTo_VisualBasic_SimpleString()
@@ -158,17 +198,29 @@ class ConvertTo_Tests extends Test
   {
     Assert_AreEqual('"a""b"', ConvertTo_VisualBasic('a"b'))
   }
-  ConvertTo_VisualBasic_WithNewlines()
+  ConvertTo_VisualBasic_WithCr()
   {
-    Assert_AreEqual('"a" & vbNewLine & "b"', ConvertTo_VisualBasic("a`nb"))
+    Assert_AreEqual('"a" & vbCr & "b"', ConvertTo_VisualBasic("a`rb"))
+  }
+  ConvertTo_VisualBasic_WithLf()
+  {
+    Assert_AreEqual('"a" & vbLf & "b"', ConvertTo_VisualBasic("a`nb"))
   }
   ConvertTo_VisualBasic_WithTabs()
   {
     Assert_AreEqual('"a" & vbTab & "b"', ConvertTo_VisualBasic("a`tb"))
   }
-  ConvertTo_VisualBasic_WithCarriageReturn()
+  ConvertTo_VisualBasic_WithBackspace()
   {
-    Assert_AreEqual('"ab"', ConvertTo_VisualBasic("a`rb"))
+    Assert_AreEqual('"a" & vbBack & "b"', ConvertTo_VisualBasic("a`bb"))
+  }
+  ConvertTo_VisualBasic_WithFormFeed()
+  {
+    Assert_AreEqual('"a" & vbFormFeed & "b"', ConvertTo_VisualBasic("a`fb"))
+  }
+  ConvertTo_VisualBasic_WithVerticalTab()
+  {
+    Assert_AreEqual('"a" & vbVerticalTab & "b"', ConvertTo_VisualBasic("a`vb"))
   }
   ConvertTo_VisualBasic_RoundTrip()
   {
@@ -179,17 +231,41 @@ class ConvertTo_Tests extends Test
   {
     Assert_AreEqual('"hello"', ConvertTo_Excel("hello"))
   }
-  ConvertTo_Excel_WithNewlines()
+  ConvertTo_Excel_WithCr()
+  {
+    Assert_AreEqual('"a" & CHAR(13) & "b"', ConvertTo_Excel("a`rb"))
+  }
+  ConvertTo_Excel_WithCrOnly()
+  {
+    Assert_AreEqual('CHAR(13)', ConvertTo_Excel("`r"))
+  }
+  ConvertTo_Excel_WithLf()
   {
     Assert_AreEqual('"a" & CHAR(10) & "b"', ConvertTo_Excel("a`nb"))
+  }
+  ConvertTo_Excel_WithLfOnly()
+  {
+    Assert_AreEqual('CHAR(10)', ConvertTo_Excel("`n"))
+  }
+  ConvertTo_Excel_WithCrLf()
+  {
+    Assert_AreEqual('"a" & CHAR(13) & CHAR(10) & "b"', ConvertTo_Excel("a`r`nb"))
   }
   ConvertTo_Excel_WithTabs()
   {
     Assert_AreEqual('"a" & CHAR(9) & "b"', ConvertTo_Excel("a`tb"))
   }
-  ConvertTo_Excel_WithCarriageReturn()
+  ConvertTo_Excel_WithBackspace()
   {
-    Assert_AreEqual('"ab"', ConvertTo_Excel("a`rb"))
+    Assert_AreEqual('"a" & CHAR(8) & "b"', ConvertTo_Excel("a`bb"))
+  }
+  ConvertTo_Excel_WithFormFeed()
+  {
+    Assert_AreEqual('"a" & CHAR(12) & "b"', ConvertTo_Excel("a`fb"))
+  }
+  ConvertTo_Excel_WithVerticalTab()
+  {
+    Assert_AreEqual('"a" & CHAR(11) & "b"', ConvertTo_Excel("a`vb"))
   }
   ConvertTo_ExcelFormula_Empty()
   {

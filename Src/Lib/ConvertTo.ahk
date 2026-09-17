@@ -146,14 +146,33 @@ ConvertTo_VisualBasic(input)
   tmp := input
   tmp := StrReplace(tmp, '"', '""')
   tmp := StrReplace(tmp, "`r`n", '" & vbCrLf & "')
-  tmp := StrReplace(tmp, "`n", '" & vbLf & "')
   tmp := StrReplace(tmp, "`r", '" & vbCr & "')
+  tmp := StrReplace(tmp, "`n", '" & vbLf & "')
   tmp := StrReplace(tmp, "`t", '" & vbTab & "')
   tmp := StrReplace(tmp, "`b", '" & vbBack & "')
   tmp := StrReplace(tmp, "`f", '" & vbFormFeed & "')
-  tmp := StrReplace(tmp, Chr(0), '" & vbNullChar & "')
   tmp := StrReplace(tmp, "`v", '" & vbVerticalTab & "')
-  return String_Enclose(tmp)
+  tmp := StrReplace(tmp, Chr(0), '" & vbNullChar & "')
+
+  ; Split by VB constants and wrap string parts in quotes
+  parts := []
+  pos := 1
+  while RegExMatch(tmp, '" & vb(CrLf|Cr|Lf|Tab|Back|FormFeed|VerticalTab|NullChar) & "', &m, pos)
+  {
+    before := SubStr(tmp, pos, m.Pos - pos)
+    if before != ""
+      parts.Push(String_Enclose(before))
+    parts.Push("vb" m[1])
+    pos := m.Pos + m.Len
+  }
+  after := SubStr(tmp, pos)
+  if after != ""
+    parts.Push(String_Enclose(after))
+
+  if parts.Length = 0
+    parts.Push('""')
+
+  return Enumerable_Join(parts, " & ")
 }
 /**
  * @param {String} input

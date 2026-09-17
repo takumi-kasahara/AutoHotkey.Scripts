@@ -116,7 +116,7 @@ class ConvertTo_Tests extends Test
   {
     Assert_AreEqual('"a\nb"', ConvertTo_Json("a`nb"))
   }
-  ConvertTo_Json_WithTabs()
+  ConvertTo_Json_WithTab()
   {
     Assert_AreEqual('"a\tb"', ConvertTo_Json("a`tb"))
   }
@@ -153,9 +153,13 @@ class ConvertTo_Tests extends Test
   {
     Assert_AreEqual("'a' || CHR(13) || CHR(10) || 'b'", ConvertTo_SQL("a`r`nb"))
   }
-  ConvertTo_SQL_WithTabs()
+  ConvertTo_SQL_WithTab()
   {
     Assert_AreEqual("'a' || CHR(9) || 'b'", ConvertTo_SQL("a`tb"))
+  }
+  ConvertTo_SQL_WithTabs()
+  {
+    Assert_AreEqual("'a' || CHR(9) || CHR(9) || 'b'", ConvertTo_SQL("a`t`tb"))
   }
   ConvertTo_SQL_WithBackspace()
   {
@@ -239,17 +243,33 @@ class ConvertTo_Tests extends Test
   {
     Assert_AreEqual('"a""b"', ConvertTo_VisualBasic('a"b'))
   }
+  ConvertTo_VisualBasic_WithCrLf()
+  {
+    Assert_AreEqual('"a" & vbCrLf & "b"', ConvertTo_VisualBasic("a`r`nb"))
+  }
   ConvertTo_VisualBasic_WithCr()
   {
     Assert_AreEqual('"a" & vbCr & "b"', ConvertTo_VisualBasic("a`rb"))
+  }
+  ConvertTo_VisualBasic_WithCrOnly()
+  {
+    Assert_AreEqual('vbCr', ConvertTo_VisualBasic("`r"))
   }
   ConvertTo_VisualBasic_WithLf()
   {
     Assert_AreEqual('"a" & vbLf & "b"', ConvertTo_VisualBasic("a`nb"))
   }
-  ConvertTo_VisualBasic_WithTabs()
+  ConvertTo_VisualBasic_WithLfOnly()
+  {
+    Assert_AreEqual('vbLf', ConvertTo_VisualBasic("`n"))
+  }
+  ConvertTo_VisualBasic_WithTab()
   {
     Assert_AreEqual('"a" & vbTab & "b"', ConvertTo_VisualBasic("a`tb"))
+  }
+  ConvertTo_VisualBasic_WithTabs()
+  {
+    Assert_AreEqual('"a" & vbTab & vbTab & "b"', ConvertTo_VisualBasic("a`t`tb"))
   }
   ConvertTo_VisualBasic_WithBackspace()
   {
@@ -292,9 +312,13 @@ class ConvertTo_Tests extends Test
   {
     Assert_AreEqual('"a" & CHAR(13) & CHAR(10) & "b"', ConvertTo_Excel("a`r`nb"))
   }
-  ConvertTo_Excel_WithTabs()
+  ConvertTo_Excel_WithTab()
   {
     Assert_AreEqual('"a" & CHAR(9) & "b"', ConvertTo_Excel("a`tb"))
+  }
+  ConvertTo_Excel_WithTabs()
+  {
+    Assert_AreEqual('"a" & CHAR(9) & CHAR(9) & "b"', ConvertTo_Excel("a`t`tb"))
   }
   ConvertTo_Excel_WithBackspace()
   {

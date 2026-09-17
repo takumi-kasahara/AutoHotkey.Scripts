@@ -199,13 +199,13 @@ ConvertFrom_VisualBasic(input)
   tmp := String_Strip(input)
   tmp := StrReplace(tmp, '""', '"')
   tmp := StrReplace(tmp, '" & vbCrLf & "', "`r`n")
-  tmp := StrReplace(tmp, '" & vbLf & "', "`n")
   tmp := StrReplace(tmp, '" & vbCr & "', "`r")
+  tmp := StrReplace(tmp, '" & vbLf & "', "`n")
   tmp := StrReplace(tmp, '" & vbTab & "', "`t")
   tmp := StrReplace(tmp, '" & vbBack & "', "`b")
   tmp := StrReplace(tmp, '" & vbFormFeed & "', "`f")
-  tmp := StrReplace(tmp, '" & vbNullChar & "', Chr(0))
   tmp := StrReplace(tmp, '" & vbVerticalTab & "', "`v")
+  tmp := StrReplace(tmp, '" & vbNullChar & "', Chr(0))
   return tmp
 }
 /**

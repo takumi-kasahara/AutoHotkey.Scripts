@@ -138,6 +138,11 @@ class ConvertFrom_Tests extends Test
   {
     Assert_AreEqual("", ConvertFrom_SQL(""))
   }
+  ConvertFrom_SQL_Concatenation()
+  {
+    Assert_AreEqual("ab", ConvertFrom_SQL("'a' || 'b'"))
+    Assert_AreEqual("abc", ConvertFrom_SQL("'a' || 'b' || 'c'"))
+  }
   ConvertFrom_SQL_WithCr()
   {
     Assert_AreEqual("a`rb", ConvertFrom_SQL("'a' || CHR(13) || 'b'"))
@@ -203,9 +208,22 @@ class ConvertFrom_Tests extends Test
   {
     Assert_AreEqual("", ConvertFrom_PowerShell(""))
   }
+  ConvertFrom_PowerShell_Concatenation()
+  {
+    Assert_AreEqual("ab", ConvertFrom_PowerShell('"a" + "b"'))
+    Assert_AreEqual("abc", ConvertFrom_PowerShell('"a" + "b" + "c"'))
+  }
+  ConvertFrom_PowerShell_LineContinuation()
+  {
+    Assert_AreEqual("ab", ConvertFrom_PowerShell('"a" ```n + "b"'))
+    Assert_AreEqual("abc", ConvertFrom_PowerShell('"a" ```n + "b" ```n + "c"'))
+  }
   ConvertFrom_PowerShell_WithDollar()
   {
     Assert_AreEqual("$var", ConvertFrom_PowerShell("``$var"))
+    Assert_AreEqual("$var", ConvertFrom_PowerShell("$var"))
+    Assert_AreEqual("$($var)", ConvertFrom_PowerShell("$($var)"))
+    Assert_AreEqual("${var}", ConvertFrom_PowerShell("${var}"))
   }
   ConvertFrom_PowerShell_WithBraces()
   {
@@ -285,6 +303,16 @@ class ConvertFrom_Tests extends Test
   {
     Assert_AreEqual("", ConvertFrom_VisualBasic(""))
   }
+  ConvertFrom_VisualBasic_Concatenation()
+  {
+    Assert_AreEqual("ab", ConvertFrom_VisualBasic('"a" & "b"'))
+    Assert_AreEqual("abc", ConvertFrom_VisualBasic('"a" & "b" & "c"'))
+  }
+  ConvertFrom_VisualBasic_LineContinuation()
+  {
+    Assert_AreEqual("ab", ConvertFrom_VisualBasic('"a" & _`n"b"'))
+    Assert_AreEqual("abc", ConvertFrom_VisualBasic('"a" & _`n"b" & _`n"c"'))
+  }
   ConvertFrom_VisualBasic_WithCr()
   {
     Assert_AreEqual("a`rb", ConvertFrom_VisualBasic('"a" & vbCr & "b"'))
@@ -333,6 +361,11 @@ class ConvertFrom_Tests extends Test
   ConvertFrom_Excel_WithQuotes()
   {
     Assert_AreEqual('a"b', ConvertFrom_Excel('a""b'))
+  }
+  ConvertFrom_Excel_Concatenation()
+  {
+    Assert_AreEqual("ab", ConvertFrom_Excel('"a" & "b"'))
+    Assert_AreEqual("abc", ConvertFrom_Excel('"a" & "b" & "c"'))
   }
   ConvertFrom_Excel_WithCr()
   {

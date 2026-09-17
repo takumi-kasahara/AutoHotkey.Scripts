@@ -120,6 +120,16 @@ ConvertFrom_Json(input)
 ConvertFrom_PowerShell(input)
 {
   tmp := String_Strip(input)
+
+  ; Remove line continuation backticks followed by newline
+  tmp := RegExReplace(tmp, "``\r?\n\s*", "")
+
+  ; Normalize whitespace around concatenation operators
+  tmp := RegExReplace(tmp, "\s*\+\s*", " + ")
+
+  ; Remove quote wrappers and concatenation operators between literals
+  tmp := RegExReplace(tmp, '"\s*\+\s*"', "")
+
   parsed := ""
   fromIndex := 1
   tick := Chr(96)
@@ -178,6 +188,11 @@ ConvertFrom_SQL(input)
 {
   tmp := String_Strip(input, "'")
   tmp := StrReplace(tmp, "''", "'")
+
+  ; Normalize whitespace around concatenation operators first
+  tmp := RegExReplace(tmp, "\s*\|\|\s*", " || ")
+
+  ; Replace CHR(n) concatenations with control characters
   tmp := StrReplace(tmp, "' || CHR(13) || CHR(10) || '", "`r`n")
   tmp := StrReplace(tmp, "' || CHR(13) || '", "`r")
   tmp := StrReplace(tmp, "' || CHR(10) || '", "`n")
@@ -186,6 +201,10 @@ ConvertFrom_SQL(input)
   tmp := StrReplace(tmp, "' || CHR(12) || '", "`f")
   tmp := StrReplace(tmp, "' || CHR(11) || '", "`v")
   tmp := StrReplace(tmp, "' || CHR(0) || '", Chr(0))
+
+  ; Remove remaining quote wrappers and concatenation operators between literals
+  tmp := RegExReplace(tmp, "'\s*\|\|\s*'", "")
+
   return tmp
 }
 /**
@@ -198,6 +217,13 @@ ConvertFrom_VisualBasic(input)
 {
   tmp := String_Strip(input)
   tmp := StrReplace(tmp, '""', '"')
+
+  ; Remove line continuation underscores preceded by whitespace and followed by newline
+  tmp := RegExReplace(tmp, "\s+_\r?\n\s*", "")
+
+  ; Normalize whitespace around concatenation operators
+  tmp := RegExReplace(tmp, "\s*&\s*", " & ")
+
   tmp := StrReplace(tmp, '" & vbCrLf & "', "`r`n")
   tmp := StrReplace(tmp, '" & vbCr & "', "`r")
   tmp := StrReplace(tmp, '" & vbLf & "', "`n")
@@ -206,6 +232,10 @@ ConvertFrom_VisualBasic(input)
   tmp := StrReplace(tmp, '" & vbFormFeed & "', "`f")
   tmp := StrReplace(tmp, '" & vbVerticalTab & "', "`v")
   tmp := StrReplace(tmp, '" & vbNullChar & "', Chr(0))
+
+  ; Remove remaining quote wrappers and concatenation operators between literals
+  tmp := RegExReplace(tmp, '"\s*&\s*"', "")
+
   return tmp
 }
 /**
@@ -215,6 +245,11 @@ ConvertFrom_VisualBasic(input)
 ConvertFrom_Excel(input)
 {
   tmp := String_Strip(input, '"')
+  tmp := StrReplace(tmp, '""', '"')
+
+  ; Normalize whitespace around concatenation operators
+  tmp := RegExReplace(tmp, "\s*&\s*", " & ")
+
   tmp := StrReplace(tmp, '" & CHAR(13) & CHAR(10) & "', "`r`n")
   tmp := StrReplace(tmp, '" & CHAR(13) & "', "`r")
   tmp := StrReplace(tmp, '" & CHAR(10) & "', "`n")
@@ -223,6 +258,9 @@ ConvertFrom_Excel(input)
   tmp := StrReplace(tmp, '" & CHAR(12) & "', "`f")
   tmp := StrReplace(tmp, '" & CHAR(11) & "', "`v")
   tmp := StrReplace(tmp, '" & CHAR(0) & "', Chr(0))
-  tmp := StrReplace(tmp, '""', '"')
+
+  ; Remove remaining quote wrappers and concatenation operators between literals
+  tmp := RegExReplace(tmp, '"\s*&\s*"', "")
+
   return tmp
 }

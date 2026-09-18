@@ -121,6 +121,11 @@ ConvertFrom_PowerShell(input)
 {
   tmp := String_Strip(input)
 
+  ; PowerShell single-quoted strings do not interpret backtick escapes.
+  ; A doubled single quote represents a literal single quote.
+  if RegExMatch(tmp, "^'((?:[^']|'')*)'$", &matched)
+    return StrReplace(matched[1], "''", "'")
+
   ; Remove line continuation backticks followed by newline
   tmp := RegExReplace(tmp, "``\r?\n\s*", "")
 

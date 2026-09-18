@@ -286,6 +286,11 @@ class ConvertFrom_Tests extends Test
   {
     Assert_AreEqual("line1`nline2`ttab`$var`{path}`"quote", ConvertFrom_PowerShell('"line1``nline2``ttab``$var``{path}``"quote"'))
   }
+  ConvertFrom_PowerShell_SingleQuotedString()
+  {
+    Assert_AreEqual("hello", ConvertFrom_PowerShell("'hello'"))
+    Assert_AreEqual("'", ConvertFrom_PowerShell("''''"))
+  }
   ConvertFrom_VisualBasic_SimpleString()
   {
     Assert_AreEqual("hello", ConvertFrom_VisualBasic("hello"))

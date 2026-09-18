@@ -1,11 +1,11 @@
 lockfile_version: "1"
-apm_version: 0.30.0
+apm_version: 0.31.0
 dependencies:
   - repo_url: takumi-kasahara/dotfiles
     materialization_repo_url: takumi-kasahara/Dotfiles
     name: autohotkey
     host: github.com
-    resolved_commit: e26db01aa455908dd7d9e496a63b5cf60ef47ba4
+    resolved_commit: 047b12e132aa6841e63cc70283c7bac9e7058b0a
     version: unknown
     virtual_path: .apm/skills/autohotkey
     is_virtual: true
@@ -15,9 +15,9 @@ dependencies:
       - .agents/skills/autohotkey/SKILL.md
       - .agents/skills/autohotkey/scripts/AutoHotkey.ps1
     deployed_file_hashes:
-      .agents/skills/autohotkey/SKILL.md: sha256:791c616f0bb50c9982585a64825cbe12a68b2e3433c703c8f54c2dae3774c19f
-      .agents/skills/autohotkey/scripts/AutoHotkey.ps1: sha256:e44919f32d955ee8ac0fd417cc34464e8099530833d30083f1b63c2b8a317ee6
-    content_hash: sha256:7a37ef08145bbb0f7465849e8dd2accff4a7c1819c502d4364003eca43592ee6
+      .agents/skills/autohotkey/SKILL.md: sha256:d4954fa9a871c8edceca8bea1d1cef0b7aa0b101f4c1779021e1b4fcbd0285b6
+      .agents/skills/autohotkey/scripts/AutoHotkey.ps1: sha256:fd79cfba80cb01bb23c57bd9ab40565dfff9bade63626966d1002ccc2227183f
+    content_hash: sha256:f88e1d4c912f6b3ea25772cd6c7adf922d8544ad6515a8083a54a1667475c1be
 deployments:
   - kind: project-relative
     target: copilot
@@ -36,7 +36,7 @@ deployments:
     owners:
       - takumi-kasahara/dotfiles/.apm/skills/autohotkey
     active_owner: takumi-kasahara/dotfiles/.apm/skills/autohotkey
-    content_hash: sha256:791c616f0bb50c9982585a64825cbe12a68b2e3433c703c8f54c2dae3774c19f
+    content_hash: sha256:d4954fa9a871c8edceca8bea1d1cef0b7aa0b101f4c1779021e1b4fcbd0285b6
   - kind: project-relative
     target: copilot
     value: .agents/skills/autohotkey/scripts/AutoHotkey.ps1
@@ -45,4 +45,4 @@ deployments:
     owners:
       - takumi-kasahara/dotfiles/.apm/skills/autohotkey
     active_owner: takumi-kasahara/dotfiles/.apm/skills/autohotkey
-    content_hash: sha256:e44919f32d955ee8ac0fd417cc34464e8099530833d30083f1b63c2b8a317ee6
+    content_hash: sha256:fd79cfba80cb01bb23c57bd9ab40565dfff9bade63626966d1002ccc2227183f

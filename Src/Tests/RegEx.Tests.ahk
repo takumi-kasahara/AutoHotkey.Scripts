@@ -92,5 +92,118 @@ class RegEx_Tests extends Test
   {
     Assert_IsTrue(RegExMatch("file:///C:/日本語.txt", "(*UCP)^" RegEx_File() "$"))
   }
+  RegEx_Split_NoMatch()
+  {
+    result := RegEx_Split("hello world", ",")
+    Assert_AreEqual(1, result.Length)
+    Assert_AreEqual("hello world", result[1])
+  }
+  RegEx_Split_SimpleDelimiter()
+  {
+    result := RegEx_Split("a,b,c", ",")
+    Assert_AreEqual(3, result.Length)
+    Assert_AreEqual("a", result[1])
+    Assert_AreEqual("b", result[2])
+    Assert_AreEqual("c", result[3])
+  }
+  RegEx_Split_EmptyRegex()
+  {
+    result := RegEx_Split("hello", "")
+    Assert_AreEqual(1, result.Length)
+    Assert_AreEqual("hello", result[1])
+  }
+  RegEx_Split_EmptyString()
+  {
+    result := RegEx_Split("", ",")
+    Assert_AreEqual(1, result.Length)
+    Assert_AreEqual("", result[1])
+  }
+  RegEx_Split_AdjacentMatches()
+  {
+    result := RegEx_Split("a,,b", ",")
+    Assert_AreEqual(3, result.Length)
+    Assert_AreEqual("a", result[1])
+    Assert_AreEqual("", result[2])
+    Assert_AreEqual("b", result[3])
+  }
+  RegEx_Split_DelimiterAtStart()
+  {
+    result := RegEx_Split(",a,b", ",")
+    Assert_AreEqual(3, result.Length)
+    Assert_AreEqual("", result[1])
+    Assert_AreEqual("a", result[2])
+    Assert_AreEqual("b", result[3])
+  }
+  RegEx_Split_DelimiterAtEnd()
+  {
+    result := RegEx_Split("a,b,", ",")
+    Assert_AreEqual(3, result.Length)
+    Assert_AreEqual("a", result[1])
+    Assert_AreEqual("b", result[2])
+    Assert_AreEqual("", result[3])
+  }
+  RegEx_Split_RegexPattern()
+  {
+    result := RegEx_Split("a1b2c", "\d+")
+    Assert_AreEqual(3, result.Length)
+    Assert_AreEqual("a", result[1])
+    Assert_AreEqual("b", result[2])
+    Assert_AreEqual("c", result[3])
+  }
+  RegEx_Split_OnlyDelimiter()
+  {
+    result := RegEx_Split(",", ",")
+    Assert_AreEqual(2, result.Length)
+    Assert_AreEqual("", result[1])
+    Assert_AreEqual("", result[2])
+  }
+  RegEx_Split_EOL()
+  {
+    result := RegEx_Split("a`r`nb`nc", "(*UCP)\r?\n")
+    Assert_AreEqual(3, result.Length)
+    Assert_AreEqual("a", result[1])
+    Assert_AreEqual("b", result[2])
+    Assert_AreEqual("c", result[3])
+  }
+  RegEx_Split_Tab()
+  {
+    result := RegEx_Split("a `t b `t c", "(*UCP)\s+")
+    Assert_AreEqual(3, result.Length)
+    Assert_AreEqual("a", result[1])
+    Assert_AreEqual("b", result[2])
+    Assert_AreEqual("c", result[3])
+  }
+  RegEx_Split_CommaWithWhitespace()
+  {
+    result := RegEx_Split("a , b , c", "(*UCP)\s*,\s*")
+    Assert_AreEqual(3, result.Length)
+    Assert_AreEqual("a", result[1])
+    Assert_AreEqual("b", result[2])
+    Assert_AreEqual("c", result[3])
+  }
+  RegEx_Split_PeriodWithWhitespace()
+  {
+    result := RegEx_Split("a . b . c", "(*UCP)\s*\.\s*")
+    Assert_AreEqual(3, result.Length)
+    Assert_AreEqual("a", result[1])
+    Assert_AreEqual("b", result[2])
+    Assert_AreEqual("c", result[3])
+  }
+  RegEx_Split_ColonWithWhitespace()
+  {
+    result := RegEx_Split("a : b : c", "(*UCP)\s*:\s*")
+    Assert_AreEqual(3, result.Length)
+    Assert_AreEqual("a", result[1])
+    Assert_AreEqual("b", result[2])
+    Assert_AreEqual("c", result[3])
+  }
+  RegEx_Split_SemicolonWithWhitespace()
+  {
+    result := RegEx_Split("a `; " "b `; c", "(*UCP)\s*;\s*")
+    Assert_AreEqual(3, result.Length)
+    Assert_AreEqual("a", result[1])
+    Assert_AreEqual("b", result[2])
+    Assert_AreEqual("c", result[3])
+  }
 }
 RegEx_Tests()

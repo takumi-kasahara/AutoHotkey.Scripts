@@ -50,7 +50,7 @@ ContextMenu_Open(input)
       ctx.AddSubMenu(Format("Send to ({})", paths.Length), ContextMenu_SendTo(paths*))
       targets := Array_Unique(Stream(paths).ToArray(path => Path_IsDirectory(path) ? path : Path_GetParent(path)), , , Path_Compare)
       terminal := Config_Get("Path", "TERMINAL")
-      if terminal != ""
+      if terminal !== ""
         ctx.Add(Format("Open with Terminal ({})", targets.Length), (xs => Stream(xs).Each(x => Open(terminal, x))).Bind(targets), Path_Resolve("cmd.exe"))
       find := Reg_Find()
       if find !== ""
@@ -128,7 +128,7 @@ ContextMenu_OpenPath(path, depth := 0)
   }
   target := Path_IsDirectory(path) ? path : Path_GetParent(path)
   terminal := Config_Get("Path", "TERMINAL")
-  if terminal != ""
+  if terminal !== ""
     ctx.Add("Open with Terminal", Open.Bind(terminal, target), Path_Resolve("cmd.exe"))
   find := Reg_Find()
   if find !== ""

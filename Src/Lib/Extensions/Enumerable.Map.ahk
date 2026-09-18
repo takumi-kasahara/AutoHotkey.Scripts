@@ -8,7 +8,7 @@
  */
 Map_Equal(a, b, comparer := (x, y) => x == y)
 {
-  if a.Count != b.Count
+  if a.Count !== b.Count
     return false
   for key, value in a
     if !b.Has(key) || !comparer.Call(value, b[key])

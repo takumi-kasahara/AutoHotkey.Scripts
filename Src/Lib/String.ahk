@@ -40,7 +40,7 @@ String_Join(separator, segments*) => Enumerable_Join(segments, separator)
 String_Strip(this, enclosure := '"')
 {
   tmp := Trim(this)
-  if (SubStr(tmp, 1, 1) == enclosure && SubStr(tmp, -1) == enclosure)
+  if SubStr(tmp, 1, 1) == enclosure && SubStr(tmp, -1) == enclosure
     tmp := SubStr(tmp, 2, -1)
   return tmp
 }

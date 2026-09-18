@@ -37,7 +37,7 @@ Install()
   app1Key := "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\AppKey\17"
   if RegRead(app1Key, "ShellExecute", "")
     RegCreateKey(app1Key)
-  if app1 != ""
+  if app1 !== ""
     RegWrite(app1, "REG_SZ", app1Key, "ShellExecute")
   else
     RegDelete(app1Key, "ShellExecute")
@@ -45,7 +45,7 @@ Install()
   app2Key := "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\AppKey\18"
   if RegRead(app2Key, "ShellExecute", "")
     RegCreateKey(app2Key)
-  if app2 != ""
+  if app2 !== ""
     RegWrite(app2, "REG_SZ", app2Key, "ShellExecute")
   else if app2 == ""
     RegDelete(app2Key, "ShellExecute")

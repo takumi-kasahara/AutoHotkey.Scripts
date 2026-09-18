@@ -52,31 +52,31 @@ ConvertFrom_Json(input)
     escaped := SubStr(matched[0], 2)
     switch
     {
-      case escaped = '"':
+      case escaped == '"':
         parsed .= '"'
-      case escaped = "\":
+      case escaped == "\":
         parsed .= "\"
-      case escaped = "/":
+      case escaped == "/":
         parsed .= "/"
-      case escaped = "b":
+      case escaped == "b":
         parsed .= "`b"
-      case escaped = "f":
+      case escaped == "f":
         parsed .= "`f"
-      case escaped = "n":
+      case escaped == "n":
         parsed .= "`n"
-      case escaped = "r":
+      case escaped == "r":
         parsed .= "`r"
-      case escaped = "t":
+      case escaped == "t":
         parsed .= "`t"
-      case escaped = "v":
+      case escaped == "v":
         parsed .= "`v"
-      case escaped = "0":
+      case escaped == "0":
         parsed .= Chr(0)
-      case SubStr(escaped, 1, 1) = "x":
+      case SubStr(escaped, 1, 1) == "x":
         parsed .= Chr(Integer("0x" SubStr(escaped, 2)))
-      case SubStr(escaped, 1, 1) = "u":
+      case SubStr(escaped, 1, 1) == "u":
       {
-        if SubStr(escaped, 2, 1) = "{"
+        if SubStr(escaped, 2, 1) == "{"
         {
           codePoint := Integer("0x" SubStr(escaped, 3, -1))
           parsed .= Chr(codePoint)
@@ -87,9 +87,11 @@ ConvertFrom_Json(input)
           nextIndex := matched.Pos + matched.Len
 
           ; Surrogate pair: \uD800-\uDBFF followed by \uDC00-\uDFFF
-          if (0xD800 <= high && high <= 0xDBFF)
-          && RegExMatch(tmp, "\\u([0-9A-Fa-f]{4})", &nextMatched, nextIndex)
-          && nextMatched.Pos = nextIndex
+          if (
+            0xD800 <= high && high <= 0xDBFF
+            && RegExMatch(tmp, "\\u([0-9A-Fa-f]{4})", &nextMatched, nextIndex)
+            && nextMatched.Pos == nextIndex
+          )
           {
             low := Integer("0x" nextMatched[1])
             if 0xDC00 <= low && low <= 0xDFFF
@@ -147,35 +149,35 @@ ConvertFrom_PowerShell(input)
     escaped := SubStr(matched[0], 2)
     switch
     {
-      case escaped = "0":
+      case escaped == "0":
         parsed .= Chr(0)
-      case escaped = "a":
+      case escaped == "a":
         parsed .= "`a"
-      case escaped = "b":
+      case escaped == "b":
         parsed .= "`b"
-      case escaped = "e":
+      case escaped == "e":
         parsed .= Chr(27)
-      case escaped = "f":
+      case escaped == "f":
         parsed .= "`f"
-      case escaped = "n":
+      case escaped == "n":
         parsed .= "`n"
-      case escaped = "r":
+      case escaped == "r":
         parsed .= "`r"
-      case escaped = "t":
+      case escaped == "t":
         parsed .= "`t"
-      case escaped = "v":
+      case escaped == "v":
         parsed .= "`v"
-      case escaped = Chr(96):
+      case escaped == Chr(96):
         parsed .= Chr(96)
-      case escaped = '"':
+      case escaped == '"':
         parsed .= '"'
-      case escaped = "$":
+      case escaped == "$":
         parsed .= "$"
-      case escaped = "{":
+      case escaped == "{":
         parsed .= "{"
-      case escaped = "}":
+      case escaped == "}":
         parsed .= "}"
-      case SubStr(escaped, 1, 2) = "u{":
+      case SubStr(escaped, 1, 2) == "u{":
         parsed .= Chr(Integer("0x" SubStr(escaped, 3, -1)))
     }
 

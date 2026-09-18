@@ -192,7 +192,7 @@ Url_Download(url, target, name, overwrite := false)
   {
     req.Open("HEAD", url, false)
     req.Send()
-    if (req.Status < 200 || req.Status >= 300)
+    if req.Status < 200 || req.Status >= 300
       throw Error("Failed to fetch URL: " url " with status: " req.Status)
   }
   finally
@@ -228,7 +228,7 @@ Url_Download(url, target, name, overwrite := false)
   {
     req.Open("GET", url, false)
     req.Send()
-    if (req.Status < 200 || req.Status >= 300)
+    if req.Status < 200 || req.Status >= 300
       throw Error("Failed to download URL: " url " with status: " req.Status)
     fs := ComObject("ADODB.Stream")
     fs.Type := 1  ; adTypeBinary
@@ -262,7 +262,7 @@ Url_GetTitle(url)
       req := ComObject("WinHttp.WinHttpRequest.5.1")
       req.Open("GET", url, false)
       req.Send()
-      if (req.Status < 200 || req.Status >= 300)
+      if req.Status < 200 || req.Status >= 300
         throw Error("Failed to fetch URL: " url " with status: " req.Status)
       static document := ComObject("HTMLfile")
       document.write(req.ResponseText)

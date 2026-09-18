@@ -10,7 +10,7 @@
 Shell_Exec(command, stdin?, &stdout?, &stderr?)
 {
   exec := ComObject("WScript.Shell").Exec(command)
-  if (stdin)
+  if stdin
   {
     exec.StdIn.Write(stdin)
     exec.StdIn.Close()

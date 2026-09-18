@@ -8,7 +8,7 @@
  */
 Array_Equal(a, b, comparer := (x, y) => x == y)
 {
-  if a.Length != b.Length
+  if a.Length !== b.Length
     return false
   for key, value in a
     if !b.Has(key) || !comparer.Call(value, b[key])
@@ -64,9 +64,9 @@ Array_Slice(this, start, end?)
   else if end < 0
     end := this.Length + end + 1
 
-  if (Abs(start) > this.Length || Abs(end) > this.Length)
+  if Abs(start) > this.Length || Abs(end) > this.Length
     throw ValueError("Start or end index is out of bounds.")
-  if (start > end)
+  if start > end
     throw ValueError("Start index must be less than or equal to end index.")
   sliced := []
   loop end - start + 1

@@ -124,13 +124,13 @@ ConvertTo_SQL(input)
   while RegExMatch(tmp, "CHR\(\d+\)", &m, pos)
   {
     before := SubStr(tmp, pos, m.Pos - pos)
-    if before != ""
+    if before !== ""
       parts.Push("'" before "'")
     parts.Push(m[0])
     pos := m.Pos + m.Len
   }
   after := SubStr(tmp, pos)
-  if after != ""
+  if after !== ""
     parts.Push("'" after "'")
 
   return Enumerable_Join(parts, " || ")
@@ -160,16 +160,16 @@ ConvertTo_VisualBasic(input)
   while RegExMatch(tmp, '" & vb(CrLf|Cr|Lf|Tab|Back|FormFeed|VerticalTab|NullChar) & "', &m, pos)
   {
     before := SubStr(tmp, pos, m.Pos - pos)
-    if before != ""
+    if before !== ""
       parts.Push(String_Enclose(before))
     parts.Push("vb" m[1])
     pos := m.Pos + m.Len
   }
   after := SubStr(tmp, pos)
-  if after != ""
+  if after !== ""
     parts.Push(String_Enclose(after))
 
-  if parts.Length = 0
+  if parts.Length == 0
     parts.Push('""')
 
   return Enumerable_Join(parts, " & ")
@@ -195,16 +195,16 @@ ConvertTo_Excel(input)
   while RegExMatch(tmp, "CHAR\(\d+\)", &m, pos)
   {
     before := SubStr(tmp, pos, m.Pos - pos)
-    if before != ""
+    if before !== ""
       parts.Push('"' before '"')
     parts.Push(m[0])
     pos := m.Pos + m.Len
   }
   after := SubStr(tmp, pos)
-  if after != ""
+  if after !== ""
     parts.Push('"' after '"')
 
-  if parts.Length = 0
+  if parts.Length == 0
     parts.Push('""')
 
   return Enumerable_Join(parts, " & ")
@@ -224,10 +224,10 @@ ConvertTo_ExcelFormula(input)
   while RegExMatch(input, "\{(\d*)\}", &matched, fromIndex)
   {
     literal := SubStr(input, fromIndex, matched.Pos - fromIndex)
-    if literal != ""
+    if literal !== ""
       parts.Push(String_Enclose(StrReplace(literal, '"', '""')))
 
-    placeholderIndex := matched[1] != "" ? Integer(matched[1]) : implicitIndex++
+    placeholderIndex := matched[1] !== "" ? Integer(matched[1]) : implicitIndex++
     column := ""
     while placeholderIndex > 0
     {
@@ -241,10 +241,10 @@ ConvertTo_ExcelFormula(input)
   }
 
   suffix := SubStr(input, fromIndex)
-  if suffix != ""
+  if suffix !== ""
     parts.Push(String_Enclose(StrReplace(suffix, '"', '""')))
 
-  if parts.Length = 0
+  if parts.Length == 0
     parts.Push('""')
 
   return "=" Enumerable_Join(parts, "&")

@@ -251,7 +251,12 @@ ConvertFrom_VisualBasic(input)
  */
 ConvertFrom_Excel(input)
 {
-  tmp := String_Strip(input, '"')
+  tmp := input
+  ; Strip leading = if present (for Excel formula compatibility)
+  if (SubStr(tmp, 1, 1) = "=")
+    tmp := SubStr(tmp, 2)
+
+  tmp := String_Strip(tmp, '"')
   tmp := StrReplace(tmp, '""', '"')
 
   ; Normalize whitespace around concatenation operators

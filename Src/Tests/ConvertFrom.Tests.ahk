@@ -362,6 +362,7 @@ class ConvertFrom_Tests extends Test
   ConvertFrom_Excel_SimpleString()
   {
     Assert_AreEqual("hello", ConvertFrom_Excel("hello"))
+    Assert_AreEqual("hello", ConvertFrom_Excel('="hello"'))
   }
   ConvertFrom_Excel_WithQuotes()
   {
@@ -375,10 +376,12 @@ class ConvertFrom_Tests extends Test
   ConvertFrom_Excel_WithCr()
   {
     Assert_AreEqual("a`rb", ConvertFrom_Excel('"a" & CHAR(13) & "b"'))
+    Assert_AreEqual("a`rb", ConvertFrom_Excel('="a" & CHAR(13) & "b"'))
   }
   ConvertFrom_Excel_WithLf()
   {
     Assert_AreEqual("a`nb", ConvertFrom_Excel('"a" & CHAR(10) & "b"'))
+    Assert_AreEqual("a`nb", ConvertFrom_Excel('="a" & CHAR(10) & "b"'))
   }
   ConvertFrom_Excel_WithCrLf()
   {
@@ -403,6 +406,7 @@ class ConvertFrom_Tests extends Test
   ConvertFrom_Excel_RoundTrip()
   {
     original := "hello`nworld`ttab`"quote"
+    Assert_AreEqual(original, ConvertFrom_Excel(ConvertTo_Excel(original)))
     Assert_AreEqual(original, ConvertFrom_Excel(ConvertTo_Excel(original)))
   }
   ConvertFrom_Excel_WithEnclosure()

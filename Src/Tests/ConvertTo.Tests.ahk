@@ -290,47 +290,47 @@ class ConvertTo_Tests extends Test
   }
   ConvertTo_Excel_SimpleString()
   {
-    Assert_AreEqual('"hello"', ConvertTo_Excel("hello"))
+    Assert_AreEqual('="hello"', ConvertTo_Excel("hello"))
   }
   ConvertTo_Excel_WithCr()
   {
-    Assert_AreEqual('"a" & CHAR(13) & "b"', ConvertTo_Excel("a`rb"))
+    Assert_AreEqual('="a" & CHAR(13) & "b"', ConvertTo_Excel("a`rb"))
   }
   ConvertTo_Excel_WithCrOnly()
   {
-    Assert_AreEqual('CHAR(13)', ConvertTo_Excel("`r"))
+    Assert_AreEqual('=CHAR(13)', ConvertTo_Excel("`r"))
   }
   ConvertTo_Excel_WithLf()
   {
-    Assert_AreEqual('"a" & CHAR(10) & "b"', ConvertTo_Excel("a`nb"))
+    Assert_AreEqual('="a" & CHAR(10) & "b"', ConvertTo_Excel("a`nb"))
   }
   ConvertTo_Excel_WithLfOnly()
   {
-    Assert_AreEqual('CHAR(10)', ConvertTo_Excel("`n"))
+    Assert_AreEqual('=CHAR(10)', ConvertTo_Excel("`n"))
   }
   ConvertTo_Excel_WithCrLf()
   {
-    Assert_AreEqual('"a" & CHAR(13) & CHAR(10) & "b"', ConvertTo_Excel("a`r`nb"))
+    Assert_AreEqual('="a" & CHAR(13) & CHAR(10) & "b"', ConvertTo_Excel("a`r`nb"))
   }
   ConvertTo_Excel_WithTab()
   {
-    Assert_AreEqual('"a" & CHAR(9) & "b"', ConvertTo_Excel("a`tb"))
+    Assert_AreEqual('="a" & CHAR(9) & "b"', ConvertTo_Excel("a`tb"))
   }
   ConvertTo_Excel_WithTabs()
   {
-    Assert_AreEqual('"a" & CHAR(9) & CHAR(9) & "b"', ConvertTo_Excel("a`t`tb"))
+    Assert_AreEqual('="a" & CHAR(9) & CHAR(9) & "b"', ConvertTo_Excel("a`t`tb"))
   }
   ConvertTo_Excel_WithBackspace()
   {
-    Assert_AreEqual('"a" & CHAR(8) & "b"', ConvertTo_Excel("a`bb"))
+    Assert_AreEqual('="a" & CHAR(8) & "b"', ConvertTo_Excel("a`bb"))
   }
   ConvertTo_Excel_WithFormFeed()
   {
-    Assert_AreEqual('"a" & CHAR(12) & "b"', ConvertTo_Excel("a`fb"))
+    Assert_AreEqual('="a" & CHAR(12) & "b"', ConvertTo_Excel("a`fb"))
   }
   ConvertTo_Excel_WithVerticalTab()
   {
-    Assert_AreEqual('"a" & CHAR(11) & "b"', ConvertTo_Excel("a`vb"))
+    Assert_AreEqual('="a" & CHAR(11) & "b"', ConvertTo_Excel("a`vb"))
   }
   ConvertTo_ExcelFormula_Empty()
   {

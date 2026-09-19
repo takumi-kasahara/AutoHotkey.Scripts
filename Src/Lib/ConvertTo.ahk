@@ -207,7 +207,7 @@ ConvertTo_Excel(input)
   if parts.Length == 0
     parts.Push('""')
 
-  return Enumerable_Join(parts, " & ")
+  return "=" Enumerable_Join(parts, " & ")
 }
 /**
  * @param {String} input
@@ -260,7 +260,7 @@ ConvertTo_ExcelHyperlink(href, text := "")
     return ""
   if !text
     return Format('=HYPERLINK("{}")', href)
-  return Format('=HYPERLINK("{}", {})', href, ConvertTo_Excel(text))
+  return Format('=HYPERLINK("{}", {})', href, RegExReplace(ConvertTo_Excel(text), "^="))
 }
 /**
  * @param {String} href

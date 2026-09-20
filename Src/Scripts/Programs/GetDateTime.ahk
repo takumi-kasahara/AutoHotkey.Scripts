@@ -8,9 +8,9 @@
 SetWorkingDir(A_ScriptDir "\..\..")
 OnError(HandleError)
 
-Dialog_GetDate()
+Dialog_GetDateTime()
 
-Dialog_GetDate()
+Dialog_GetDateTime()
 {
   static BUTTON_MARGIN := 16
   static BUTTON_PADDING := 8
@@ -24,23 +24,23 @@ Dialog_GetDate()
   myGui := Gui()
   myGui.Opt("-MinimizeBox -MaximizeBox")
 
-  dateTime := myGui.AddDateTime(, "LongDate")
-  dateTime.OnEvent("Change", (*) => OnChange())
-  cbFormat := myGui.AddComboBox(, ["yyyyMMdd", "yyyy-MM-dd", "yyyy/MM/dd"])
-  cbFormat.OnEvent("Change", (*) => OnChange())
+  date := myGui.AddDateTime(, "LongDate")
+  time := myGui.AddDateTime(, "Time")
+  cbFormat := myGui.AddComboBox(, ["yyyy-MM-ddTHH:mm:ss", "yyyy-MM-dd", "HH:mm:ss"])
   cbFormat.Value := 1
 
   text := ""
   btnCopy := myGui.AddButton(Format("w{} h{} Default", BUTTON_WIDTH, BUTTON_HEIGHT), "&Copy")
-  btnCopy.OnEvent("Click", (*) => (Clipboard_SetText(text), myGui.Destroy()))
+  btnCopy.OnEvent("Click", (*) => (Clipboard_SetText(FormatTime(FormatTime(date.Value, "yyyyMMdd") FormatTime(time.Value, "HHmmss"), cbFormat.Text)), myGui.Destroy()))
 
   myGui.OnEvent("Escape", (*) => myGui.Destroy())
 
-  dateTime.GetPos(, , &dateTimeW, &dateTimeH)
+  date.GetPos(, , &dateW, &dateH)
+  time.GetPos(, , &timeW, &timeH)
   cbFormat.GetPos(, , &cbFormatW, &cbFormatH)
   buttonsTotalWidth := BUTTON_COUNT * BUTTON_WIDTH + (BUTTON_COUNT - 1) * BUTTON_PADDING
-  guiW := 2 * CONTROL_MARGIN + Max(dateTimeW, cbFormatW, buttonsTotalWidth)
-  guiH := 2 * CONTROL_MARGIN + dateTimeH + CONTROL_PADDING + cbFormatH + BUTTON_MARGIN + BUTTON_HEIGHT
+  guiW := 2 * CONTROL_MARGIN + Max(dateW, timeW, cbFormatW, buttonsTotalWidth)
+  guiH := 2 * CONTROL_MARGIN + dateH + CONTROL_PADDING + timeH + CONTROL_PADDING + cbFormatH + BUTTON_MARGIN + BUTTON_HEIGHT
 
   myGui.Show(Format("w{} h{} Hide", guiW, guiH))
   myGui.GetPos(, , &actualW, &actualH)
@@ -58,15 +58,12 @@ Dialog_GetDate()
    */
   Init(newW, newH)
   {
-    dateTime.Move(CONTROL_MARGIN, CONTROL_MARGIN, newW - 2 * CONTROL_MARGIN, CONTROL_HEIGHT)
-    cbFormat.Move(CONTROL_MARGIN, CONTROL_MARGIN + CONTROL_HEIGHT + CONTROL_PADDING, newW - 2 * CONTROL_MARGIN, CONTROL_HEIGHT)
+    date.Move(CONTROL_MARGIN, CONTROL_MARGIN, newW - 2 * CONTROL_MARGIN, CONTROL_HEIGHT)
+    time.Move(CONTROL_MARGIN, CONTROL_MARGIN + CONTROL_HEIGHT + CONTROL_PADDING, newW - 2 * CONTROL_MARGIN, CONTROL_HEIGHT)
+    cbFormat.Move(CONTROL_MARGIN, CONTROL_MARGIN + CONTROL_HEIGHT + CONTROL_PADDING + CONTROL_HEIGHT + CONTROL_PADDING, newW - 2 * CONTROL_MARGIN, CONTROL_HEIGHT)
     buttonsTotalWidth := BUTTON_COUNT * BUTTON_WIDTH + (BUTTON_COUNT - 1) * BUTTON_PADDING
     firstButtonX := (newW - buttonsTotalWidth) / 2
     offset := BUTTON_WIDTH + BUTTON_PADDING
     btnCopy.Move(firstButtonX + offset * 0, newH - BUTTON_MARGIN - BUTTON_HEIGHT)
-  }
-  OnChange()
-  {
-    text := FormatTime(dateTime.Value, cbFormat.Text)
   }
 }

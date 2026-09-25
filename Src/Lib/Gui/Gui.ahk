@@ -32,7 +32,7 @@ Gui_ShowCentered(gui, width, height, left, top, right, bottom)
  * @param {String | Array | Func | BoundFunc} input
  * @param {String} [extension="txt"]
  */
-View_Text(input, extension := "txt")
+Gui_TextView(input, extension := "txt")
 {
   value := Trim(ConvertTo_String(input), "`r`n")
   if String_IsNullOrWhitespace(value)
@@ -244,7 +244,7 @@ View_Text(input, extension := "txt")
  * @param {String} input
  * @param {Integer} [header=0]
  */
-View_Csv(input, header := 0)
+Gui_CsvView(input, header := 0)
 {
   value := Trim(input, "`r`n")
   if value == ""

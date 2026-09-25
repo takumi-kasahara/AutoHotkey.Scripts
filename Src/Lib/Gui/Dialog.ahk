@@ -137,7 +137,7 @@ Dialog_OpenPath(paths)
         case "No":
           continue
         case "Cancel":
-          View_Text(Array_Slice(paths, A_Index))
+          Gui_TextView(Array_Slice(paths, A_Index))
           return
       }
     if !FileExist(path)
@@ -172,7 +172,7 @@ Dialog_OpenUrl(urls)
         case "No":
           continue
         case "Cancel":
-          View_Text(Array_Slice(urls, A_Index))
+          Gui_TextView(Array_Slice(urls, A_Index))
           return
       }
     Log_Trace("Opened", url)

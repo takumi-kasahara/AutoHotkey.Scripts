@@ -140,7 +140,7 @@ ContextMenu_OpenPath(path, depth := 0)
     ctx.Add("View", () => (
       content := FileRead(path),
       ext := Path_GetExtensionName(path),
-      ext ~= "^(?i:csv)$" ? View_Csv(content) : View_Text(content, ext ?? "txt")
+      ext ~= "^(?i:csv)$" ? Gui_CsvView(content) : Gui_TextView(content, ext ?? "txt")
     ))
   ctx.Add("Properties", Open_Property.Bind(path))
   return ctx

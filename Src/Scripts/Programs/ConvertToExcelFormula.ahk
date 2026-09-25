@@ -26,7 +26,7 @@ Dialog_ConvertToExcelFormula()
     try
     {
       result := ConvertTo_ExcelFormula(input.Value)
-      View_Text(result, "txt")
+      Gui_TextView(result, "txt")
       return
     }
     catch as ex

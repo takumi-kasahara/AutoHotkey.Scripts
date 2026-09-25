@@ -81,21 +81,3 @@ Window_Resize(width, height, id := "A")
   WinMove(, , width * scale, height * scale, id)
   Window_MoveTo("Center", id)
 }
-/**
- * @param {String} [id="A"]
- */
-Window_ResizeTo(id := "A")
-{
-  WinGetPos(, , &w, &h, id)
-  scale := Monitor_GetScale(id)
-  fixedW := Integer(w / scale)
-  fixedH := Integer(h / scale)
-  input := InputBox("Current:`n" fixedW "," fixedH, , , fixedW "," fixedH)
-  if input.Result == "Cancel"
-    return
-  newW := StrSplit(input.Value, ",")[1]
-  newH := StrSplit(input.Value, ",")[2]
-  if !(IsNumber(newW) && IsNumber(newH))
-    return
-  Window_Resize(newW, newH, id)
-}

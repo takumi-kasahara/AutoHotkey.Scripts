@@ -368,3 +368,70 @@ Gui_CsvView(input, header := 0)
   }
   OnSave() => Dialog_Save(value, "csv")
 }
+/**
+ * @param {String} [id="A"]
+ */
+Gui_WindowResize(id := "A")
+{
+  hWnd := WinExist(id)
+  if hWnd == 0
+    return
+  target := "ahk_id " hWnd
+  WinGetPos(, , &w, &h, target)
+  scale := Monitor_GetScale(target)
+  currentW := Integer(w / scale)
+  currentH := Integer(h / scale)
+
+  static CONTROL_X := 16
+  static CONTROL_WIDTH := 300
+  static CONTROL_HEIGHT := 24
+  static LABEL_HEIGHT := 20
+  static ROW_GAP := 12
+  static BUTTON_WIDTH := 80
+  static BUTTON_HEIGHT := 32
+  static BUTTON_MARGIN := 16
+  static BUTTON_PADDING := 16
+  static BUTTON_COUNT := 2
+  static WINDOW_WIDTH := CONTROL_X + CONTROL_WIDTH + BUTTON_MARGIN
+  static WINDOW_HEIGHT := 2 * (LABEL_HEIGHT + ROW_GAP + CONTROL_HEIGHT) + 2 * BUTTON_MARGIN + BUTTON_HEIGHT
+
+  widthTextY := CONTROL_X
+  widthEditY := widthTextY + LABEL_HEIGHT
+  heightTextY := widthEditY + CONTROL_HEIGHT + ROW_GAP
+  heightEditY := heightTextY + LABEL_HEIGHT
+  buttonY := heightEditY + CONTROL_HEIGHT + ROW_GAP
+
+  myGui := Gui(, "Resize Window")
+  myGui.Opt("-MinimizeBox -MaximizeBox")
+
+  myGui.AddText(Format("x{} y{} w{} h{}", CONTROL_X, widthTextY, CONTROL_WIDTH, LABEL_HEIGHT), "Width:")
+  editWidth := myGui.AddEdit(Format("x{} y{} w{} h{}", CONTROL_X, widthEditY, CONTROL_WIDTH, CONTROL_HEIGHT), currentW)
+
+  myGui.AddText(Format("x{} y{} w{} h{}", CONTROL_X, heightTextY, CONTROL_WIDTH, LABEL_HEIGHT), "Height:")
+  editHeight := myGui.AddEdit(Format("x{} y{} w{} h{}", CONTROL_X, heightEditY, CONTROL_WIDTH, CONTROL_HEIGHT), currentH)
+
+  buttonsTotalWidth := BUTTON_COUNT * BUTTON_WIDTH + (BUTTON_COUNT - 1) * BUTTON_PADDING
+  firstButtonX := CONTROL_X + (CONTROL_WIDTH - buttonsTotalWidth) / 2
+  btnResize := myGui.AddButton(Format("x{} y{} w{} h{} Default", firstButtonX, buttonY, BUTTON_WIDTH, BUTTON_HEIGHT), "&Resize")
+  btnCancel := myGui.AddButton(Format("x{} y{} w{} h{}", firstButtonX + BUTTON_WIDTH + BUTTON_PADDING, buttonY, BUTTON_WIDTH, BUTTON_HEIGHT), "&Cancel")
+
+  btnResize.OnEvent("Click", (*) => OnResize())
+  btnCancel.OnEvent("Click", (*) => myGui.Destroy())
+  myGui.OnEvent("Escape", (*) => myGui.Destroy())
+  myGui.OnEvent("Close", (*) => myGui.Destroy())
+
+  Monitor_Find(target, &left, &top, &right, &bottom)
+  Gui_ShowCentered(myGui, WINDOW_WIDTH, WINDOW_HEIGHT, left, top, right, bottom)
+
+  OnResize()
+  {
+    if !(IsNumber(editWidth.Value) && IsNumber(editHeight.Value))
+      return
+    newW := Integer(editWidth.Value)
+    newH := Integer(editHeight.Value)
+    if newW <= 0 || newH <= 0
+      return
+    Window_Resize(newW, newH, target)
+    myGui.Destroy()
+  }
+}

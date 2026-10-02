@@ -115,7 +115,7 @@ Document_ExtractLinks(html)
   loop anchors.length
   {
     a := anchors.item(A_Index - 1)
-    if !(a.protocol ~= "(?:https?|file)")
+    if !(a.protocol ~= "^(?:https?|file):$")
       continue
     text := Trim(a.innerText)
     if !text

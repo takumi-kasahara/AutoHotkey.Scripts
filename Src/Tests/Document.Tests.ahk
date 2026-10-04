@@ -95,5 +95,23 @@ class Document_Tests extends Test
     Assert_IsTrue(links[2].href ~= "^file:///C:/Windows/explorer\.exe$")
     Assert_AreEqual(links[2].href, links[2].text)
   }
+  Document_ExtractLinks_RejectsCustomSchemesWithAllowedTokens()
+  {
+    html := ""
+      . "<a href='httpx://example.org'>custom https scheme</a>"
+      . "<a href='xhttp://example.org'>custom https scheme</a>"
+      . "<a href='filex:///C:/test.txt'>custom file scheme</a>"
+      . "<a href='xfile:///C:/test.txt'>custom file scheme</a>"
+      . "<a href='https://example.com'>valid https</a>"
+      . "<a href='file:///C:/valid.txt'></a>"
+    links := Document_ExtractLinks(html)
+
+    ; Only the valid https and file links should be extracted (2 links)
+    Assert_AreEqual(2, links.Length)
+    Assert_IsTrue(links[1].href ~= "^https://example\.com/?$")
+    Assert_AreEqual("valid https", links[1].text)
+    Assert_IsTrue(links[2].href ~= "^file:///C:/valid\.txt$")
+    Assert_AreEqual(links[2].href, links[2].text)
+  }
 }
 Document_Tests()

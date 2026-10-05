@@ -27,20 +27,15 @@ Browser_Favorites::Launch_App2
 sc03A::+Tab
 +sc03A::CapsLock
 ; #endregion
-; #region Disable Function Keys
-#HotIf WinActive("ahk_group grpF1Disabled")
-F1:: return
-#HotIf
-; #endregion
 ; #region Insert
-#HotIf WinActive("ahk_group grpExplorer")
+#HotIf WinActive("ahk_group grp_explorer")
 /**
  * Create Folder.
  * @hotkey Insert
  * @send   Ctrl + Shift + N
  */
 Insert:: Send("^+n")
-#HotIf !WinActive("ahk_group grpExplorer")
+#HotIf !WinActive("ahk_group grp_explorer")
 /**
  * @hotkey Insert
  * @send   Space

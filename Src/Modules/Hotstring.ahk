@@ -40,14 +40,14 @@
 ::`:`:xl::Excel
 :X:`:`:date::
 {
-  if WinActive("ahk_group grpExplorer")
+  if WinActive("ahk_group grp_explorer")
     Paste(Date_ToString("yyyyMMdd"))
   else
     Paste(Date_ToString("yyyy-MM-dd"))
 }
 :X:`:`:time::
 {
-  if WinActive("ahk_group grpExplorer")
+  if WinActive("ahk_group grp_explorer")
     Paste(Date_ToString("HHmmss"))
   else
     Paste(Date_ToString("HH:mm:ss"))

@@ -89,12 +89,12 @@ sc079 & vkBB:: Send("!+d") ; ;
 #HotIf WinActive("ahk_class XLMAIN") ; Excel
 sc079 & vkBA:: Send("^{vkBA}") ; :
 sc079 & vkBB:: Send("^{vkBB}") ; ;
-#HotIf WinActive("ahk_group grpExplorer")
+#HotIf WinActive("ahk_group grp_explorer")
 sc079 & vkBA:: Paste(Date_ToString("HHmmss")) ; :
 sc079 & vkBB:: Paste(Date_ToString("yyyyMMdd")) ; ;
 sc079 & vkBF:: Paste(Date_ToString("yyyyMMdd")) ; /
 sc079 & vkC0:: Paste(A_Now) ; @
-#HotIf !WinActive("ahk_group grpExplorer")
+#HotIf !WinActive("ahk_group grp_explorer")
 sc079 & vkBA:: Paste(Date_ToString("HH:mm:ss")) ; :
 sc079 & vkBB:: Paste(Date_ToString("yyyy-MM-dd")) ; ;
 sc079 & vkBF:: Paste(Date_ToString("yyyy/MM/dd")) ; /

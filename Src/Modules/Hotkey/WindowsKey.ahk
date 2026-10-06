@@ -133,15 +133,6 @@
  */
 #!v:: Paste(String_Clean(A_Clipboard))
 /**
- * Paste as HTML.
- * @hotkey  Win + Ctrl + Alt + V
- */
-#^!v::
-{
-  html := String_Clean(Clipboard_GetHtml())
-  Paste(html ? html : String_Clean(A_Clipboard))
-}
-/**
  * Run Terminal.
  * @hotkey  Win + Ctrl + X
  */

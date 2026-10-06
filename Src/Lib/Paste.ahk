@@ -11,6 +11,8 @@ Paste(input)
     return
   if StrSplit(value, "`n").Length == 1
     value := RegExReplace(value, "(*UCP)^\s+|\s+$")
+  if WinActive("ahk_group grp_console")
+    value := String_Enclose(value)
   backup := ClipboardAll()
   try
   {

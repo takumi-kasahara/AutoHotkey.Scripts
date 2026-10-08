@@ -51,3 +51,13 @@ Reg_Find()
     throw TargetError(Format('Everything.exe not found at "{}"', exe))
   return exe
 }
+/**
+ * @returns {String}
+ */
+Reg_GitBash()
+{
+  static exe := Path_Canonicalize(Path_Combine(Path_Resolve("git.exe"), "..", "..", "git-bash.exe"))
+  if FileExist(exe)
+    return exe
+  return ""
+}

@@ -131,18 +131,15 @@ Dialog_OpenPath(paths)
       paths.Length > 1
       && remaining > 0
       && Mod(A_Index - 1, PAGE_SIZE) == 0
+      && MsgBox(Format("Open {} path(s)? ({:0" digits "} / {})", Min(remaining, PAGE_SIZE), A_Index - 1, paths.Length), , 0x21) !== "OK"
     )
-      switch MsgBox(Format("Open {} path(s)? ({:0" digits "} / {})", Min(remaining, PAGE_SIZE), A_Index - 1, paths.Length), , 0x23)
-      {
-        case "No":
-          continue
-        case "Cancel":
-          Gui_TextView(Array_Slice(paths, A_Index))
-          return
-      }
+    {
+      Gui_TextView(Array_Slice(paths, A_Index))
+      return
+    }
     if !FileExist(path)
       continue
-    Log_Trace("Opened", path)
+    Log_Trace("Opening", path)
     if Path_IsDirectory(path)
       Open_Explorer(path)
     else
@@ -166,16 +163,13 @@ Dialog_OpenUrl(urls)
       urls.Length > 1
       && remaining > 0
       && Mod(A_Index - 1, PAGE_SIZE) == 0
+      && MsgBox(Format("Open {} URL(s)? ({:0" digits "} / {})", Min(remaining, PAGE_SIZE), A_Index - 1, urls.Length), , 0x21) !== "OK"
     )
-      switch MsgBox(Format("Open {} URL(s)? ({:0" digits "} / {})", Min(remaining, PAGE_SIZE), A_Index - 1, urls.Length), , 0x23)
-      {
-        case "No":
-          continue
-        case "Cancel":
-          Gui_TextView(Array_Slice(urls, A_Index))
-          return
-      }
-    Log_Trace("Opened", url)
+    {
+      Gui_TextView(Array_Slice(urls, A_Index))
+      return
+    }
+    Log_Trace("Opening", url)
     switch Url_GetProtocol(url), false
     {
       case "file":

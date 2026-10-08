@@ -102,6 +102,11 @@ Open_Explorer(path)
   }
 }
 /**
+ * @param {String} path
+ * @returns {Integer} PID
+ */
+Open_Location(path) => Open('explorer.exe /select,"{}"', path)
+/**
  * @param {String*} paths
  * @returns {Integer} PID
  */

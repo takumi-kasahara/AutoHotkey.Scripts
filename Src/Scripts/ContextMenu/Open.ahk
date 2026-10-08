@@ -81,6 +81,7 @@ ContextMenu_OpenPath(path, depth := 0)
   Notify_ToolTip(path)
   friendlyName := Path_IsDirectory(path) ? "" : Path_FriendlyDocName(path)
   ctx.Add(friendlyName == "" ? "Open" : "Open " friendlyName, Path_IsDirectory(path) ? Open_Explorer.Bind(path) : Open.Bind(path), path)
+  ctx.Add("Open location", Open_Location.Bind(path), Path_Resolve("explorer.exe"))
   target := Path_GetLinkTarget(path)
   if target !== path
     ctx.AddSubMenu("Open target", ContextMenu_OpenPath(target, depth + 1))

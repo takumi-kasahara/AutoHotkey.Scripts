@@ -8,12 +8,22 @@ Clipboard_Load()
 }
 /**
  * @param {String | Array | Func | BoundFunc} input
+ * @returns {Boolean}
  */
 Clipboard_SetText(input)
 {
-  value := ConvertTo_String(input)
-  if !String_IsNullOrWhitespace(value)
-    A_Clipboard := value
+  try
+  {
+    value := ConvertTo_String(input)
+    if !String_IsNullOrWhitespace(value)
+      A_Clipboard := value
+    return true
+  }
+  catch as ex
+  {
+    Log_Error(ex)
+    return false
+  }
 }
 /**
  * @returns {String}
@@ -72,27 +82,29 @@ Clipboard_GetBlockquote()
 }
 /**
  * @param {String | Array | Func | BoundFunc} input
+ * @returns {Boolean}
  */
 Clipboard_SetHtml(input)
 {
   value := ConvertTo_String(input)
   if String_IsNullOrWhitespace(value)
-    return
+    return false
   if !OpenClipboard()
-    return
+    return false
   try
   {
     if !EmptyClipboard()
-      return
+      return false
     static CF_UNICODETEXT := 13
     if !SetClipboardData(CF_UNICODETEXT, value, "UTF-16")
-      return
+      return false
     static CF_HTML := RegisterClipboardFormat("HTML Format")
     if !SetClipboardData(CF_HTML, GetClipboardFormat(value), "UTF-8")
-      return
+      return false
   }
   finally
     CloseClipboard()
+  return true
   /**
    * @see {@link https://learn.microsoft.com/en-us/windows/win32/dataxchg/html-clipboard-format}
    * @param {String} html
@@ -144,6 +156,7 @@ Clipboard_SetHtml(input)
     {
       Log_Error(ex)
       GlobalFree(hMem)
+      return false
     }
     /**
      * @param {Integer} size

@@ -405,7 +405,7 @@ Path_GetLinkTarget(path)
     if hFile == INVALID_HANDLE_VALUE
       if A_LastError == ERROR_CANT_ACCESS_FILE
       {
-        Log_Error(OSError().Message)
+        Log_Error(OSError())
         return path
       }
       else

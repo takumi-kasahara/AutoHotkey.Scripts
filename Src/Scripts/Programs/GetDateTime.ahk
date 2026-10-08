@@ -31,7 +31,7 @@ Dialog_GetDateTime()
 
   text := ""
   btnCopy := myGui.AddButton(Format("w{} h{} Default", BUTTON_WIDTH, BUTTON_HEIGHT), "&Copy")
-  btnCopy.OnEvent("Click", (*) => (Clipboard_SetText(FormatTime(FormatTime(date.Value, "yyyyMMdd") FormatTime(time.Value, "HHmmss"), cbFormat.Text)), myGui.Destroy()))
+  btnCopy.OnEvent("Click", (*) => (Clipboard_SetText(FormatTime(FormatTime(date.Value, "yyyyMMdd") FormatTime(time.Value, "HHmmss"), cbFormat.Text)) ? myGui.Destroy() : ""))
 
   myGui.OnEvent("Escape", (*) => myGui.Destroy())
 

@@ -21,12 +21,13 @@ Dialog_Save(text, extension := "txt")
   }
   path := FileSelect("S" 0x10, Path_Combine(A_Desktop, A_Now "." extension), "Save as", filter)
   if path == ""
-    return
+    return false
   if extension !== "" && !(Path_GetExtensionName(path) ~= "^(?i:" extension ")$")
     path .= "." extension
   if FileExist(path)
     FileDelete(path)
   FileAppend(text, path)
+  return true
 }
 /**
  * @param {Array<{ href: String, text: String }>} links

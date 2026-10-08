@@ -90,9 +90,9 @@ Gui_TextView(input, extension := "txt")
   myGui.OnEvent("Escape", (*) => myGui.Destroy())
 
   btnCopy := myGui.AddButton(Format("w{} h{} Default", BUTTON_WIDTH, BUTTON_HEIGHT), "&Copy")
-  btnCopy.OnEvent("Click", (*) => (OnCopy(), myGui.Destroy()))
+  btnCopy.OnEvent("Click", (*) => OnCopy() ? myGui.Destroy() : "")
   btnSave := myGui.AddButton(Format("w{} h{}", BUTTON_WIDTH, BUTTON_HEIGHT), "&Save")
-  btnSave.OnEvent("Click", (*) => (OnSave(), myGui.Destroy()))
+  btnSave.OnEvent("Click", (*) => OnSave() ? myGui.Destroy() : "")
 
   Init(width, height)
   myGui.OnEvent("Size", (this, minMax, newW, newH) => Init(newW, newH))
@@ -116,9 +116,9 @@ Gui_TextView(input, extension := "txt")
   OnCopy()
   {
     if extension ~= "^(?i:html)$"
-      Clipboard_SetHtml(value)
+      return Clipboard_SetHtml(value)
     else
-      Clipboard_SetText(value)
+      return Clipboard_SetText(value)
   }
   OnSave() => Dialog_Save(editText.Value, extension)
   /**
@@ -294,10 +294,10 @@ Gui_CsvView(input, header := 0)
   myGui.OnEvent("Escape", (*) => myGui.Destroy())
 
   btnCopy := myGui.AddButton(Format("w{} h{}", BUTTON_WIDTH, BUTTON_HEIGHT), "&Copy")
-  btnCopy.OnEvent("Click", (*) => (Clipboard_SetText(value), myGui.Destroy()))
+  btnCopy.OnEvent("Click", (*) => (Clipboard_SetText(value) ? myGui.Destroy() : ""))
 
   btnSave := myGui.AddButton(Format("w{} h{}", BUTTON_WIDTH, BUTTON_HEIGHT), "&Save")
-  btnSave.OnEvent("Click", (*) => (OnSave(), myGui.Destroy()))
+  btnSave.OnEvent("Click", (*) => OnSave() ? myGui.Destroy() : "")
 
   digits := StrLen(String(rows.Length))
   try

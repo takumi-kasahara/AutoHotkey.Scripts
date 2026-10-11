@@ -1,11 +1,11 @@
 lockfile_version: '1'
-apm_version: 0.32.0
+apm_version: 0.33.0
 dependencies:
 - repo_url: takumi-kasahara/dotfiles
   materialization_repo_url: takumi-kasahara/Dotfiles
   name: autohotkey
   host: github.com
-  resolved_commit: 5985d58a20a719254c85906424d7db4f921b7815
+  resolved_commit: 7e4751a70f216a5b4633fd2bd74548e6c5c4f39e
   version: unknown
   virtual_path: .apm/skills/autohotkey
   is_virtual: true
@@ -15,9 +15,9 @@ dependencies:
   - .agents/skills/autohotkey/SKILL.md
   - .agents/skills/autohotkey/scripts/AutoHotkey.ps1
   deployed_file_hashes:
-    .agents/skills/autohotkey/SKILL.md: sha256:d4954fa9a871c8edceca8bea1d1cef0b7aa0b101f4c1779021e1b4fcbd0285b6
+    .agents/skills/autohotkey/SKILL.md: sha256:b11504076e5917fbec490600452a064f4b72f41d63c771f0e5da37f1afb053e6
     .agents/skills/autohotkey/scripts/AutoHotkey.ps1: sha256:fd79cfba80cb01bb23c57bd9ab40565dfff9bade63626966d1002ccc2227183f
-  content_hash: sha256:f88e1d4c912f6b3ea25772cd6c7adf922d8544ad6515a8083a54a1667475c1be
+  content_hash: sha256:5e11ff8f15f892af49dc1d15d8cfdcf74c6c6a119ab9f69cf4f6611ffb08983f
 deployments:
 - kind: project-relative
   target: copilot
@@ -36,7 +36,7 @@ deployments:
   owners:
   - takumi-kasahara/dotfiles/.apm/skills/autohotkey
   active_owner: takumi-kasahara/dotfiles/.apm/skills/autohotkey
-  content_hash: sha256:d4954fa9a871c8edceca8bea1d1cef0b7aa0b101f4c1779021e1b4fcbd0285b6
+  content_hash: sha256:b11504076e5917fbec490600452a064f4b72f41d63c771f0e5da37f1afb053e6
 - kind: project-relative
   target: copilot
   value: .agents/skills/autohotkey/scripts/AutoHotkey.ps1

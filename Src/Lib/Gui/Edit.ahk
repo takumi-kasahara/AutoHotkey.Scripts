@@ -52,9 +52,9 @@ Edit_Hyperlink(link)
 
   baseX := CONTROL_X + (CONTROL_WIDTH - BUTTON_WIDTH * 3 - BUTTON_MARGIN * 2) / 2
   offset := BUTTON_WIDTH + BUTTON_MARGIN
-  myGui.AddButton(Format("x{} y{} w{} h{}", baseX + offset * 0, buttonY, BUTTON_WIDTH, BUTTON_HEIGHT), "HTML (&1)").OnEvent("Click", (*) => (CopyHtml(), myGui.Destroy()))
-  myGui.AddButton(Format("x{} y{} w{} h{}", baseX + offset * 1, buttonY, BUTTON_WIDTH, BUTTON_HEIGHT), "Markdown (&2)").OnEvent("Click", (*) => (CopyMarkdown(), myGui.Destroy()))
-  myGui.AddButton(Format("x{} y{} w{} h{}", baseX + offset * 2, buttonY, BUTTON_WIDTH, BUTTON_HEIGHT), "Excel (&3)").OnEvent("Click", (*) => (CopyExcel(), myGui.Destroy()))
+  myGui.AddButton(Format("x{} y{} w{} h{}", baseX + offset * 0, buttonY, BUTTON_WIDTH, BUTTON_HEIGHT), "HTML (&1)").OnEvent("Click", (*) => (CopyHtml() ? myGui.Destroy() : ""))
+  myGui.AddButton(Format("x{} y{} w{} h{}", baseX + offset * 1, buttonY, BUTTON_WIDTH, BUTTON_HEIGHT), "Markdown (&2)").OnEvent("Click", (*) => (CopyMarkdown() ? myGui.Destroy() : ""))
+  myGui.AddButton(Format("x{} y{} w{} h{}", baseX + offset * 2, buttonY, BUTTON_WIDTH, BUTTON_HEIGHT), "Excel (&3)").OnEvent("Click", (*) => (CopyExcel() ? myGui.Destroy() : ""))
 
   myGui.OnEvent("Escape", (*) => myGui.Destroy())
 

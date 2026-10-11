@@ -11,6 +11,9 @@ Path_Combine(segments*) => String_Join("\", segments*)
  */
 Path_Resolve(pattern)
 {
+  static cache := Map()
+  if cache.Has(pattern)
+    return cache.Get(pattern)
   if Path_IsAbsolute(pattern) && FileExist(pattern)
     return pattern
   dirs := StrSplit(EnvGet("PATH"), ";")
@@ -19,7 +22,12 @@ Path_Resolve(pattern)
     if DirExist(dir)
       for ext in exts
         loop files, Path_Combine(dir, pattern ext)
+        {
+          cache.Set(pattern, A_LoopFileFullPath)
           return A_LoopFileFullPath
+        }
+  cache.Set(pattern, "")
+  return ""
 }
 /**
  * @param {Array<String>} paths

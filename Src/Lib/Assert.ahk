@@ -51,5 +51,9 @@ Assert_Throws(fn, cls)
   try
     fn.Call()
   catch as ex
+  {
     Assert_IsTrue(ex is cls)
+    return
+  }
+  throw Error("Expected throw of " cls " but no exception was thrown.")
 }

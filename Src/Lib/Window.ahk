@@ -9,7 +9,7 @@ Window_Close(id := "A")
     try
       WinClose(id)
     catch
-      if MsgBox(Format("Kill PID={} ({} windows) ?", WinGetPID(id), WinGetList(Format("ahk_pid {}", WinGetPID(id))).Length), WinGetProcessName(id), 0x131) == "OK"
+      if MsgBox(Format("Kill PID={} ({} windows) ?", WinGetPID(id), WinGetList("ahk_pid " WinGetPID(id)).Length), WinGetProcessName(id), 0x131) == "OK"
         WinKill(id)
 }
 /**
@@ -25,12 +25,28 @@ Window_Maximize(id := "A")
 /**
  * @param {String} [id="A"]
  */
+Window_MaximizeAll(id := "A")
+{
+  for id in WinGetList(("ahk_exe " WinGetProcessName(id)))
+    WinMaximize(id)
+}
+/**
+ * @param {String} [id="A"]
+ */
 Window_Minimize(id := "A")
 {
   if WinGetMinMax(id) !== -1
     WinMinimize(id)
   else
     WinRestore(id)
+}
+/**
+ * @param {String} [id="A"]
+ */
+Window_MinimizeAll(id := "A")
+{
+  for id in WinGetList(("ahk_exe " WinGetProcessName(id)))
+    WinMinimize(id)
 }
 /**
  * @param {String} position Center | TopLeft | TopRight | BottomLeft | BottomRight

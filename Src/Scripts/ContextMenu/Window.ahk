@@ -30,7 +30,9 @@ ContextMenu_Window()
   ctxResize.Add("&2 960x640", () => Window_Resize(960, 640))
   ctxResize.Add("&3 640x480", () => Window_Resize(640, 480))
   ctx.AddSubMenu("&3 Resize", ctxResize)
-  if WinGetMinMax("A") !== 1
-    ctx.Add("&4 Resize to", () => Gui_WindowResize())
+  ctx.Add("&4 Resize to", () => Gui_WindowResize())
+  ctx.AddSeparator()
+  ctx.Add("&5 Maximize", () => Window_MaximizeAll())
+  ctx.Add("&6 Minimize", () => Window_MinimizeAll())
   return ctx
 }

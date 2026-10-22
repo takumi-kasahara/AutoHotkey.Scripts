@@ -16,11 +16,11 @@ Open_Choice(default, dictionary := {})
   for key, value in dictionary.OwnProps()
     if GetKeyState(key)
       if DirExist(value)
-        return Open_Explorer(value)
+        return Open_Directory(value)
       else
         return Open(value)
   if DirExist(default)
-    return Open_Explorer(default)
+    return Open_Directory(default)
   else
     return Open(default)
 }
@@ -89,7 +89,7 @@ Open_File(path)
  * @param {String} path
  * @returns {Integer} PID
  */
-Open_Explorer(path)
+Open_Directory(path)
 {
   try
     return Open('files-preview.exe "{}" ', path)

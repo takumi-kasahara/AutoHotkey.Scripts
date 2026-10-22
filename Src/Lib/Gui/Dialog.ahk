@@ -142,7 +142,7 @@ Dialog_OpenPath(paths)
       continue
     Log_Trace("Opening", path)
     if Path_IsDirectory(path)
-      Open_Directory(path)
+      Open_Explorer(path)
     else
       Open_File(path)
   }
@@ -180,7 +180,7 @@ Dialog_OpenUrl(urls)
         if !FileExist(path)
           continue
         else if Path_IsDirectory(path)
-          Open_Directory(path)
+          Open_Explorer(path)
         else
           Open_File(path)
         continue

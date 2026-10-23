@@ -1,11 +1,11 @@
-lockfile_version: "1"
-apm_version: 0.33.0
+lockfile_version: '1'
+apm_version: 0.35.0
 dependencies:
   - repo_url: takumi-kasahara/dotfiles
     materialization_repo_url: takumi-kasahara/Dotfiles
     name: autohotkey
     host: github.com
-    resolved_commit: 7e4751a70f216a5b4633fd2bd74548e6c5c4f39e
+    resolved_commit: 3383e38bcf70d0edb4d454abf105b8f18640665b
     version: unknown
     virtual_path: .apm/skills/autohotkey
     is_virtual: true

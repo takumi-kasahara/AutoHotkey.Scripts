@@ -16,17 +16,15 @@ This repository is a collection of scripts for AutoHotkey v2. Below are the main
 
 1. `./Src/Lib.ahk` and `./Src/Modules.ahk` are common include files.
    - If you add or remove files in `./Src/`, run `./Src/Include.ahk` to rebuild includes.
-1. Run tests from PowerShell with:
+1. Run tests from `AutoHotkey.bat`:
 
-   ```powershell
-   powershell.exe -NoLogo -NoProfile -File .\.agents\skills\autohotkey\scripts\AutoHotkey.ps1 -Path .\Src\Tests\*.Tests.ahk
-   ```
+```bat
+".agents\skills\autohotkey\scripts\AutoHotkey.bat" -Path "Script.ahk"
+```
 
-   To filter by test case name, pass it as an argument:
-
-   ```powershell
-   powershell.exe -NoLogo -NoProfile -File .\.agents\skills\autohotkey\scripts\AutoHotkey.ps1 -LiteralPath .\Src\Tests\Array.Tests.ahk -ArgumentList Array_Equal
-   ```
+```powershell
+& '.agents\skills\autohotkey\scripts\AutoHotkey.bat' -Path '.\Script.ahk'
+```
 
 ## Coding Guidelines
 

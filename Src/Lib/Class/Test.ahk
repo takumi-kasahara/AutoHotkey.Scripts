@@ -6,7 +6,6 @@ class Test
   {
     this.Failed := 0
     this.Passed := 0
-    Log_Trace(this.__Class)
   }
   __New()
   {
@@ -34,7 +33,8 @@ class Test
   }
   __Delete()
   {
-    Log_Trace("Passed", this.Passed, "Failed", this.Failed)
+    Log_Trace("Passed", this.Passed)
+    Log_Trace("Failed", this.Failed)
     Exit(this.Failed > 0)
   }
 }

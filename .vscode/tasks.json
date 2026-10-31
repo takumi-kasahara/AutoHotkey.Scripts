@@ -9,14 +9,10 @@
     {
       "label": "build",
       "type": "shell",
-      "command": "powershell.exe",
+      "command": "cmd.exe",
       "args": [
-        "-NoLogo",
-        "-NoProfile",
-        "-ExecutionPolicy",
-        "RemoteSigned",
-        "-File",
-        ".agents\\skills\\autohotkey\\scripts\\AutoHotkey.ps1",
+        "/c",
+        ".agents\\skills\\autohotkey\\scripts\\AutoHotkey.bat",
         "-LiteralPath",
         ".\\Src\\Build.ahk"
       ],
@@ -30,14 +26,10 @@
     {
       "label": "test",
       "type": "shell",
-      "command": "powershell.exe",
+      "command": "cmd.exe",
       "args": [
-        "-NoLogo",
-        "-NoProfile",
-        "-ExecutionPolicy",
-        "RemoteSigned",
-        "-File",
-        ".agents\\skills\\autohotkey\\scripts\\AutoHotkey.ps1",
+        "/c",
+        ".agents\\skills\\autohotkey\\scripts\\AutoHotkey.bat",
         "-Path",
         ".\\Src\\Tests\\*.Tests.ahk"
       ],
@@ -51,14 +43,10 @@
     {
       "label": "preproc",
       "type": "shell",
-      "command": "powershell.exe",
+      "command": "cmd.exe",
       "args": [
-        "-NoLogo",
-        "-NoProfile",
-        "-ExecutionPolicy",
-        "RemoteSigned",
-        "-File",
-        ".agents\\skills\\autohotkey\\scripts\\AutoHotkey.ps1",
+        "/c",
+        ".agents\\skills\\autohotkey\\scripts\\AutoHotkey.bat",
         "-LiteralPath",
         ".\\Src\\Preproc.ahk"
       ],

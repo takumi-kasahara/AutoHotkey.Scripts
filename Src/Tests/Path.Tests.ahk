@@ -154,12 +154,14 @@ class Path_Tests extends Test
   }
   Path_ToLocal_1()
   {
+    EnvSet("HOME", unset)
     v := "USERPROFILE"
     Assert_AreEqual("%" v "%", Path_ToLocal(EnvGet(v)))
     Assert_AreEqual("%" v "%", Path_ToLocal(EnvGet(v) "\"))
   }
   Path_ToLocal_2()
   {
+    EnvSet("HOME", unset)
     v := "USERPROFILE"
     Assert_AreEqual("%" v "%", Path_ToLocal(Path_ToLocal(EnvGet(v))))
     Assert_AreEqual("%" v "%", Path_ToLocal(Path_ToNetwork(EnvGet(v))))

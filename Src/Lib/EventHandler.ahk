@@ -31,6 +31,7 @@ HandleClipboardChange(dataType)
   }
 }
 /**
+ * @see {@link https://www.autohotkey.com/docs/v2/lib/OnError.htm}
  * @param {Error} thrown
  * @param {String} mode
  * @returns {Integer}
@@ -39,6 +40,7 @@ HandleError(thrown, mode?)
 {
   Log_Error(thrown, mode)
   Log_Flush()
+  return 1
 }
 /**
  * @param {String} reason

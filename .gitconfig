@@ -4,4 +4,4 @@
   command = npm run lint && git update-index --again
 [hook "test"]
   event = pre-commit
-  command = .agents/skills/autohotkey/scripts/AutoHotkey.bat -Path ./Src/Tests/
+  command = ./.agents/skills/autohotkey/scripts/run.cmd -Path ./Src/Tests/

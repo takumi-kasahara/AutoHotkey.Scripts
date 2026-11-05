@@ -46,7 +46,7 @@
  * Run WindowSpy.
  * @hotkey  Win + Alt + F12
  */
-#!F12:: Open(Path_Combine(Path_GetParent(A_AhkPath), "..\WindowSpy.ahk"))
+#!F12:: Open("*UIAccess {}", Path_Combine(Path_GetParent(A_AhkPath), "..\WindowSpy.ahk"))
 ; #endregion
 ; #region Win
 #Escape:: WinActivateBottom("ahk_exe " WinGetProcessName("A"))
@@ -62,7 +62,7 @@
   if A_IsCompiled
     Open(Path_Combine(root, "Open.exe"))
   else
-    Open(Path_Combine(root, "Open.ahk"))
+    Open("*UIAccess {}", Path_Combine(root, "Open.ahk"))
 }
 #^+c::#c
 /**
@@ -125,7 +125,7 @@
   if A_IsCompiled
     Open(Path_Combine(root, "Edit.exe"))
   else
-    Open(Path_Combine(root, "Edit.ahk"))
+    Open("*UIAccess {}", Path_Combine(root, "Edit.ahk"))
 }
 /**
  * Paste as Plaintext.
@@ -154,7 +154,7 @@
   if A_IsCompiled
     Open(Path_Combine(root, "Window.exe"))
   else
-    Open(Path_Combine(root, "Window.ahk"))
+    Open("*UIAccess {}", Path_Combine(root, "Window.ahk"))
 }
 /**
  * @hotkey  Win + /

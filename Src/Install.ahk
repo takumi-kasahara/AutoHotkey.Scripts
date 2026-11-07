@@ -31,7 +31,6 @@ Install()
   }
 
   RegWrite(Config_Get("Install", "EnableHexNumpad"), "REG_SZ", "HKCU\Control Panel\Input Method", "EnableHexNumpad")
-  RegWrite(Config_Get("Install", "DisabledHotkeys"), "REG_SZ", "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "DisabledHotkeys")
   ; https://learn.microsoft.com/en-us/windows/win32/inputdev/wm-appcommand
   app1 := Config_Get("Install", "Launch_App1")
   app1Key := "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\AppKey\17"

@@ -5,9 +5,9 @@
 #ClipboardTimeout -1
 #NoTrayIcon
 
-Build()
+Preproc()
 
-Build()
+Preproc()
 {
   if FileExist("Lib.ahk")
     FileDelete("Lib.ahk")

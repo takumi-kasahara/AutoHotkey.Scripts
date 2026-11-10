@@ -1,8 +1,8 @@
 ﻿#Requires AutoHotkey v2.0
 
 /**
- * @see {@link https://support.microsoft.com/en-us/office/use-keyboard-shortcuts-to-create-powerpoint-presentations-ebb3d20e-dcd4-444f-a38e-bb5c5ed180f4}
- * @see {@link https://support.microsoft.com/en-us/office/use-keyboard-shortcuts-to-deliver-powerpoint-presentations-1524ffce-bd2a-45f4-9a7f-f18b992b93a0}
+ * @see {@link https://support.microsoft.com/en-us/accessibility/powerpoint/use-keyboard-shortcuts-to-create-powerpoint-presentations}
+ * @see {@link https://support.microsoft.com/en-us/accessibility/powerpoint/use-keyboard-shortcuts-to-deliver-powerpoint-presentations}
  */
 #HotIf WinActive("ahk_class PPTFrameClass")
 ; #region ComObjActive

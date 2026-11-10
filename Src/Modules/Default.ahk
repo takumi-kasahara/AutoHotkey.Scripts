@@ -22,6 +22,6 @@
 ; #endregion
 ; #region Xbox Game Bar
 /**
- * @see {@link https://support.microsoft.com/en-us/windows/keyboard-shortcuts-for-xbox-game-bar-85d97243-c89b-1ae1-6402-0faf35d6489d}
+ * @see {@link https://support.xbox.com/en-US/help/friends-social-activity/share-socialize/record-game-clips-game-bar-windows-10}
  */
 ; #endregion

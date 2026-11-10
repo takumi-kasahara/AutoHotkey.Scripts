@@ -11,10 +11,15 @@
       "type": "shell",
       "command": "cmd.exe",
       "args": [
-        "/c",
+        "/D",
+        "/E:ON",
+        "/V:OFF",
+        "/S",
+        "/C",
+        "call",
         ".agents\\skills\\autohotkey\\scripts\\run.cmd",
-        "-LiteralPath",
-        ".\\Src\\Build.ahk"
+        "-Path",
+        "${workspaceFolder}\\Src\\Build.ahk"
       ],
       "problemMatcher": [],
       "group": {
@@ -24,31 +29,36 @@
       "dependsOn": ["preproc"]
     },
     {
-      "label": "test",
+      "label": "run",
       "type": "shell",
       "command": "cmd.exe",
       "args": [
-        "/c",
+        "/D",
+        "/E:ON",
+        "/V:OFF",
+        "/S",
+        "/C",
+        "call",
         ".agents\\skills\\autohotkey\\scripts\\run.cmd",
         "-Path",
-        ".\\Src\\Tests\\*.Tests.ahk"
+        "${file}"
       ],
-      "problemMatcher": [],
-      "group": {
-        "kind": "test",
-        "isDefault": true
-      },
-      "dependsOn": ["preproc"]
+      "problemMatcher": []
     },
     {
       "label": "preproc",
       "type": "shell",
       "command": "cmd.exe",
       "args": [
-        "/c",
+        "/D",
+        "/E:ON",
+        "/V:OFF",
+        "/S",
+        "/C",
+        "call",
         ".agents\\skills\\autohotkey\\scripts\\run.cmd",
-        "-LiteralPath",
-        ".\\Src\\Preproc.ahk"
+        "-Path",
+        "${workspaceFolder}\\Src\\Preproc.ahk"
       ],
       "problemMatcher": [],
       "hide": true

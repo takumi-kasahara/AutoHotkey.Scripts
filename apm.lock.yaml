@@ -5,7 +5,7 @@ dependencies:
     materialization_repo_url: takumi-kasahara/Dotfiles
     name: autohotkey
     host: github.com
-    resolved_commit: b18601999b41e130ab028a453add2bf939837555
+    resolved_commit: 965dbcce575f1518341e280a647dffa3f522d2d4
     version: unknown
     virtual_path: .apm/skills/autohotkey
     is_virtual: true
@@ -15,11 +15,13 @@ dependencies:
       - .agents/skills/autohotkey/SKILL.md
       - .agents/skills/autohotkey/scripts/run.cmd
       - .agents/skills/autohotkey/scripts/run.ps1
+      - .agents/skills/autohotkey/scripts/run.ps1.md
     deployed_file_hashes:
       .agents/skills/autohotkey/SKILL.md: sha256:7bda5b04ff25fcab906546eae66856f5b77fc86c00825a88eebba3125b882ce9
-      .agents/skills/autohotkey/scripts/run.cmd: sha256:c59ffd922c3fad9e01755ab55d28f971d64818500d28212cda5eb79b3ac421f7
-      .agents/skills/autohotkey/scripts/run.ps1: sha256:8e5ded259feffaafb89883017d0266bc076b113424cc5a374047a0061b7c7d7c
-    content_hash: sha256:0ae7a4cc9fa7ad4375dcae3d3993d15801d7eb1a51adc677f6cc702b6b58e54a
+      .agents/skills/autohotkey/scripts/run.cmd: sha256:d8298130f9ee65f8df019efa2691fe9de1b4f4305ace55fe9430a52d408fa110
+      .agents/skills/autohotkey/scripts/run.ps1: sha256:efe7824e1d707a02c3a1eb5d872693d5266d6f41ea5cd123a9f3604e032cec4d
+      .agents/skills/autohotkey/scripts/run.ps1.md: sha256:ac96c2b12db594d97f0d236e038e72ed0cdae71caf71f3d2d84853b9c84e125e
+    content_hash: sha256:77a16a528d1fa75cbd3c62281ee2689fd87e435f55b3a5ce01be04f493aaa07c
 deployments:
   - kind: project-relative
     target: copilot
@@ -47,7 +49,7 @@ deployments:
     owners:
       - takumi-kasahara/dotfiles/.apm/skills/autohotkey
     active_owner: takumi-kasahara/dotfiles/.apm/skills/autohotkey
-    content_hash: sha256:c59ffd922c3fad9e01755ab55d28f971d64818500d28212cda5eb79b3ac421f7
+    content_hash: sha256:d8298130f9ee65f8df019efa2691fe9de1b4f4305ace55fe9430a52d408fa110
   - kind: project-relative
     target: copilot
     value: .agents/skills/autohotkey/scripts/run.ps1
@@ -56,4 +58,13 @@ deployments:
     owners:
       - takumi-kasahara/dotfiles/.apm/skills/autohotkey
     active_owner: takumi-kasahara/dotfiles/.apm/skills/autohotkey
-    content_hash: sha256:8e5ded259feffaafb89883017d0266bc076b113424cc5a374047a0061b7c7d7c
+    content_hash: sha256:efe7824e1d707a02c3a1eb5d872693d5266d6f41ea5cd123a9f3604e032cec4d
+  - kind: project-relative
+    target: copilot
+    value: .agents/skills/autohotkey/scripts/run.ps1.md
+    runtime: null
+    scope: project
+    owners:
+      - takumi-kasahara/dotfiles/.apm/skills/autohotkey
+    active_owner: takumi-kasahara/dotfiles/.apm/skills/autohotkey
+    content_hash: sha256:ac96c2b12db594d97f0d236e038e72ed0cdae71caf71f3d2d84853b9c84e125e

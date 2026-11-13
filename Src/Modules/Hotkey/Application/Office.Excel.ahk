@@ -1,7 +1,7 @@
 ﻿#Requires AutoHotkey v2.0
 
 /**
- * @see {@link https://support.microsoft.com/en-us/office/keyboard-shortcuts-in-excel-1798d9d5-842a-42b8-9c99-9b7213f0040f}
+ * @see {@link https://support.microsoft.com/en-us/accessibility/excel/keyboard-shortcuts-in-excel}
  */
 #HotIf WinActive("ahk_class XLMAIN")
 ; #region Disabled

@@ -1,7 +1,7 @@
 ﻿#Requires AutoHotkey v2.0
 
 /**
- * @see {@link https://support.microsoft.com/en-us/office/keyboard-shortcuts-in-word-95ef89dd-7142-4b50-afb2-f762f663ceb2}
+ * @see {@link https://support.microsoft.com/en-us/accessibility/word/keyboard-shortcuts-in-word}
  */
 #HotIf WinActive("ahk_class OpusApp")
 ; #region File (Alt -> F)

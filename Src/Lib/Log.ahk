@@ -19,7 +19,7 @@ Log_Flush()
   buf := Log_State("Buffer")
   if buf.Length == 0
     return
-  FileAppend(Enumerable_Join(buf, "`r`n"), Log_State("Log"))
+  FileAppend(Enumerable_Join(buf), Log_State("Log"))
   Log_State("Buffer", [])
 }
 /**
@@ -30,15 +30,15 @@ Log_Trace(messages*)
   static MAX_BUFFER_COUNT := Config_Get("Log", "MAX_BUFFER_COUNT")
   if messages.Length == 0
     return
-  text := ConvertTo_Csv(A_Now, messages*)
+  text := String_Join("`t", messages*)
   if State_Debug()
     OutputDebug(text)
   else if State_ErrorStdOut()
-    FileAppend(String_Join("`t", messages*) "`n", "*")
+    FileAppend(text "`n", "*")
   else
   {
     buf := Log_State("Buffer")
-    buf.Push(text)
+    buf.Push(ConvertTo_Csv(A_Now, messages*))
     if buf.Length >= MAX_BUFFER_COUNT
       Log_Flush()
   }
@@ -51,14 +51,14 @@ Log_Error(thrown, mode?)
 {
   Log_Flush()
   static log := Path_Combine(A_Temp, A_ScriptName "." A_Now ".err.log")
-  text := ConvertTo_Csv(A_Now, thrown.What, thrown.Message, thrown.Extra, IsSet(mode) ? mode : "")
+  text := thrown.Message "`n" thrown.Stack
   if State_Debug()
     OutputDebug(text)
   else if State_ErrorStdOut()
-    FileAppend(thrown.Message "`n" thrown.Stack, "**")
+    FileAppend(text "`n", "**")
   else
   {
-    FileAppend(text, log)
+    FileAppend(ConvertTo_Csv(A_Now, thrown.What, thrown.Message, thrown.Extra, IsSet(mode) ? mode : ""), log)
     Notify_TrayTip(thrown.What "`n" thrown.Message)
   }
 }

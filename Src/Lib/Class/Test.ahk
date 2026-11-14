@@ -20,10 +20,12 @@ class Test
         {
           method.Call(this)
           this.Passed++
+          Log_Trace("Passed", name)
         }
         catch as ex
         {
           this.Failed++
+          Log_Trace("Failed", name)
           if State_Debug()
             throw ex
           else

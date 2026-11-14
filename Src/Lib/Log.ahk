@@ -8,7 +8,8 @@ Log_State(name, value?)
 {
   static state := Map(
     "Buffer", [],
-    "Log", Path_Combine(A_Temp, A_ScriptName "." A_Now ".out.log")
+    "StdOut", Path_Combine(A_Temp, Path_GetBaseName(A_AhkPath) "." Path_GetBaseName(A_ScriptFullPath) "." A_Now ".out.log"),
+    "StdErr", Path_Combine(A_Temp, Path_GetBaseName(A_AhkPath) "." Path_GetBaseName(A_ScriptFullPath) "." A_Now ".err.log"),
   )
   if IsSet(value)
     state.Set(name, value)
@@ -19,7 +20,7 @@ Log_Flush()
   buf := Log_State("Buffer")
   if buf.Length == 0
     return
-  FileAppend(Enumerable_Join(buf), Log_State("Log"))
+  FileAppend(Enumerable_Join(buf), Log_State("StdOut"))
   Log_State("Buffer", [])
 }
 /**
@@ -50,7 +51,6 @@ Log_Trace(messages*)
 Log_Error(thrown, mode?)
 {
   Log_Flush()
-  static log := Path_Combine(A_Temp, A_ScriptName "." A_Now ".err.log")
   text := thrown.Message "`n" thrown.Stack
   if State_Debug()
     OutputDebug(text)
@@ -58,7 +58,11 @@ Log_Error(thrown, mode?)
     FileAppend(text "`n", "**")
   else
   {
-    FileAppend(ConvertTo_Csv(A_Now, thrown.What, thrown.Message, thrown.Extra, IsSet(mode) ? mode : ""), log)
-    Notify_TrayTip(thrown.What "`n" thrown.Message)
+    static stdout := Log_State("StdOut")
+    static stderr := Log_State("StdErr")
+    FileAppend(ConvertTo_Csv(A_Now, thrown.What, thrown.Message, thrown.Extra, IsSet(mode) ? mode : ""), stderr)
+    static EDITOR := Config_Get("Path", "EDITOR", "{}")
+    Open(EDITOR, stdout)
+    Open(EDITOR, stderr)
   }
 }

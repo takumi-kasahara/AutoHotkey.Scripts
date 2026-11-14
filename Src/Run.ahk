@@ -20,8 +20,5 @@ SetCapsLockState("AlwaysOff")
 SetNumLockState("AlwaysOff")
 SetScrollLockState("AlwaysOff")
 
-Notify_TrayTip(Format("
-(
-A_AhkVersion`t{}
-A_OSVersion`t{}
-)", A_AhkVersion, A_OSVersion))
+Log_Trace("A_AhkVersion", A_AhkVersion)
+Log_Trace("A_OSVersion", A_OSVersion)

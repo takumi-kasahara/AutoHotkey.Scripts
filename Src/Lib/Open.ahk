@@ -38,7 +38,7 @@ Open_Property(path) => (
  */
 Open_File(path)
 {
-  static EDITOR := Config_Get("Path", "EDITOR", "{}")
+  static EDITOR := Config_Get("Path", Log_State("StdOut"), "{}")
   switch Path_GetPerceivedType(path), false
   {
     case "compressed":

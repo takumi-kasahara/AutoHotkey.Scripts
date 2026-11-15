@@ -33,19 +33,3 @@ State_ErrorStdOut()
   static result := Trim(StrReplace(GetCommandLine(), String_Enclose(A_AhkPath))) ~= "i)/ErrorStdOut"
   return result
 }
-/**
- * @returns {Integer}
- */
-State_AvailableGit()
-{
-  static result := RunWait("where.exe git.exe /Q") == 0
-  return result
-}
-/**
- * @returns {Integer}
- */
-State_AvailableSvn()
-{
-  static result := RunWait("where.exe svn.exe /Q") == 0
-  return result
-}

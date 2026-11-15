@@ -21,10 +21,12 @@ class String_Tests extends Test
   }
   String_ExtractPath_1()
   {
+    Assert_AreEqual("", String_ExtractPath(""))
+    Assert_AreEqual("", String_ExtractPath("\"))
+    Assert_AreEqual("", String_ExtractPath("\\"))
     for path in ["C:\Windows\explorer.exe", "\\localhost\C$\Windows\explorer.exe"]
     {
       Assert_AreEqual(path, String_ExtractPath(path))
-      Assert_AreEqual(path, String_ExtractPath(" " path "\Dummy"))
       Assert_AreEqual(path, String_ExtractPath("- " path))
       Assert_AreEqual(path, String_ExtractPath(StrReplace(path, "\", "/")))
       Assert_AreEqual(path, String_ExtractPath(StrReplace(path, "\", "\\")))
@@ -33,19 +35,50 @@ class String_Tests extends Test
   String_ExtractPath_2()
   {
     for url in ["https://example.com", "file:///C:/Windows/explorer.exe", "mailto:postmaster@example.com"]
-    {
       Assert_AreEqual("", String_ExtractPath(url))
-      Assert_AreEqual("", String_ExtractPath(" " url "\Dummy"))
-      Assert_AreEqual("", String_ExtractPath("- " url))
-      Assert_AreEqual("", String_ExtractPath(StrReplace(url, "\", "/")))
-      Assert_AreEqual("", String_ExtractPath(StrReplace(url, "\", "\\")))
-    }
   }
   String_ExtractPath_3()
   {
-    Assert_AreEqual("", String_ExtractPath(""))
-    Assert_AreEqual("", String_ExtractPath("\"))
-    Assert_AreEqual("", String_ExtractPath("\\"))
+    for path in ["C:\Windows\explorer.exe", "\\localhost\C$\Windows\explorer.exe"]
+    {
+      Assert_AreEqual(path, String_ExtractPath('- "' path '"'))
+      Assert_AreEqual(path, String_ExtractPath("- '" path "'"))
+      Assert_AreEqual(path, String_ExtractPath("- (" path ")"))
+      Assert_AreEqual(path, String_ExtractPath("- [" path "]"))
+      Assert_AreEqual(path, String_ExtractPath("- {" path "}"))
+      Assert_AreEqual(path, String_ExtractPath("- <" path ">"))
+    }
+  }
+  String_ExtractPath_4()
+  {
+    for path in ["C:\Windows\explorer.exe", "\\localhost\C$\Windows\explorer.exe"]
+    {
+      Assert_AreEqual(path, String_ExtractPath(path '"'))
+      Assert_AreEqual(path "'", String_ExtractPath(path "'"))
+      Assert_AreEqual(path "(", String_ExtractPath(path "("))
+      Assert_AreEqual(path ")", String_ExtractPath(path ")"))
+      Assert_AreEqual(path "[", String_ExtractPath(path "["))
+      Assert_AreEqual(path "]", String_ExtractPath(path "]"))
+      Assert_AreEqual(path "{", String_ExtractPath(path "{"))
+      Assert_AreEqual(path "}", String_ExtractPath(path "}"))
+      Assert_AreEqual(path, String_ExtractPath(path ">"))
+    }
+  }
+  String_ExtractPath_5()
+  {
+    for path in ["C:\Windows\explorer.exe", "\\localhost\C$\Windows\explorer.exe"]
+    {
+      Assert_AreEqual(path, String_ExtractPath("- " path '"'))
+      Assert_AreEqual(path "'", String_ExtractPath("- " path "'"))
+      Assert_AreEqual(path "(", String_ExtractPath("- " path "("))
+      Assert_AreEqual(path ")", String_ExtractPath("- " path ")"))
+      Assert_AreEqual(path "[", String_ExtractPath("- " path "["))
+      Assert_AreEqual(path "]", String_ExtractPath("- " path "]"))
+      Assert_AreEqual(path "{", String_ExtractPath("- " path "{"))
+      Assert_AreEqual(path "}", String_ExtractPath("- " path "}"))
+      Assert_AreEqual(path, String_ExtractPath("- " path "<"))
+      Assert_AreEqual(path, String_ExtractPath("- " path ">"))
+    }
   }
   String_ExtractUrl_1()
   {
@@ -65,10 +98,84 @@ class String_Tests extends Test
     for path in ["C:\Windows\explorer.exe", "\\localhost\C$\Windows\explorer.exe"]
     {
       Assert_AreEqual("", String_ExtractUrl(path))
-      Assert_AreEqual("", String_ExtractUrl(" " path "\Dummy"))
-      Assert_AreEqual("", String_ExtractUrl("- " path))
       Assert_AreEqual("", String_ExtractUrl(StrReplace(path, "\", "/")))
       Assert_AreEqual("", String_ExtractUrl(StrReplace(path, "\", "\\")))
+    }
+  }
+  String_ExtractUrl_3()
+  {
+    for url in ["file:///C:/Windows/explorer.exe", "https://example.com"]
+    {
+      Assert_AreEqual(url, String_ExtractUrl('- "' url '"'))
+      Assert_AreEqual(url, String_ExtractUrl("- '" url "'"))
+      Assert_AreEqual(url, String_ExtractUrl("- (" url ")"))
+      Assert_AreEqual(url, String_ExtractUrl("- [" url "]"))
+      Assert_AreEqual(url, String_ExtractUrl("- {" url "}"))
+      Assert_AreEqual(url, String_ExtractUrl("- <" url ">"))
+    }
+  }
+  String_ExtractUrl_4()
+  {
+    for url in ["file:///C:/Windows/explorer.exe", "https://example.com"]
+    {
+      Assert_AreEqual(url '"', String_ExtractUrl(url '"'))
+      Assert_AreEqual(url "'", String_ExtractUrl(url "'"))
+      Assert_AreEqual(url "(", String_ExtractUrl(url "("))
+      Assert_AreEqual(url ")", String_ExtractUrl(url ")"))
+      Assert_AreEqual(url "[", String_ExtractUrl(url "["))
+      Assert_AreEqual(url "]", String_ExtractUrl(url "]"))
+      Assert_AreEqual(url "{", String_ExtractUrl(url "{"))
+      Assert_AreEqual(url "}", String_ExtractUrl(url "}"))
+      Assert_AreEqual(url ">", String_ExtractUrl(url ">"))
+      Assert_AreEqual(url "<", String_ExtractUrl(url "<"))
+    }
+  }
+  String_ExtractUrl_5()
+  {
+    for url in ["file:///C:/Windows/explorer.exe", "https://example.com"]
+    {
+      Assert_AreEqual(url '"', String_ExtractUrl("- " url '"'))
+      Assert_AreEqual(url "'", String_ExtractUrl("- " url "'"))
+      Assert_AreEqual(url "(", String_ExtractUrl("- " url "("))
+      Assert_AreEqual(url ")", String_ExtractUrl("- " url ")"))
+      Assert_AreEqual(url "[", String_ExtractUrl("- " url "["))
+      Assert_AreEqual(url "]", String_ExtractUrl("- " url "]"))
+      Assert_AreEqual(url "{", String_ExtractUrl("- " url "{"))
+      Assert_AreEqual(url "}", String_ExtractUrl("- " url "}"))
+      Assert_AreEqual(url "<", String_ExtractUrl("- " url "<"))
+      Assert_AreEqual(url ">", String_ExtractUrl("- " url ">"))
+    }
+  }
+  String_ExtractUrl_6()
+  {
+    for url in ["file:///C:/Windows/explorer.exe", "https://example.com"]
+    {
+      Assert_AreEqual(url '"', String_ExtractUrl(this._md(url '"')))
+      Assert_AreEqual(url "'", String_ExtractUrl(this._md(url "'")))
+      Assert_AreEqual(url "(", String_ExtractUrl(this._md(url "(")))
+      Assert_AreEqual(url ")", String_ExtractUrl(this._md(url ")")))
+      Assert_AreEqual(url "[", String_ExtractUrl(this._md(url "[")))
+      Assert_AreEqual(url "]", String_ExtractUrl(this._md(url "]")))
+      Assert_AreEqual(url "{", String_ExtractUrl(this._md(url "{")))
+      Assert_AreEqual(url "}", String_ExtractUrl(this._md(url "}")))
+      Assert_AreEqual(url "<", String_ExtractUrl(this._md(url "<")))
+      Assert_AreEqual(url ">", String_ExtractUrl(this._md(url ">")))
+    }
+  }
+  String_ExtractUrl_7()
+  {
+    for url in ["file:///C:/Windows/explorer.exe", "https://example.com"]
+    {
+      Assert_AreEqual(url '"', String_ExtractUrl("- " this._md(url '"')))
+      Assert_AreEqual(url "'", String_ExtractUrl("- " this._md(url "'")))
+      Assert_AreEqual(url "(", String_ExtractUrl("- " this._md(url "(")))
+      Assert_AreEqual(url ")", String_ExtractUrl("- " this._md(url ")")))
+      Assert_AreEqual(url "[", String_ExtractUrl("- " this._md(url "[")))
+      Assert_AreEqual(url "]", String_ExtractUrl("- " this._md(url "]")))
+      Assert_AreEqual(url "{", String_ExtractUrl("- " this._md(url "{")))
+      Assert_AreEqual(url "}", String_ExtractUrl("- " this._md(url "}")))
+      Assert_AreEqual(url "<", String_ExtractUrl("- " this._md(url "<")))
+      Assert_AreEqual(url ">", String_ExtractUrl("- " this._md(url ">")))
     }
   }
   String_Clean_1()

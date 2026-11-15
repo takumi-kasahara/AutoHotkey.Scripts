@@ -133,8 +133,16 @@ String_ExtractPath(pathLike)
   if !RegExMatch(path, pattern, &matchs)
     if !RegExMatch(StrReplace(path, "\\", "\"), pattern, &matchs)
       return
-  path := Path_Canonicalize(RTrim(matchs[1], "\"))
-  if FileExist(path) && Path_IsAbsolute(path)
+  extractedPath := matchs[1]
+  trimmedPath := String_TrimUnmatchedClosingWrapper(extractedPath)
+  if trimmedPath !== extractedPath
+  {
+    prefix := SubStr(path, 1, InStr(path, extractedPath) - 1)
+    if InStr(prefix, '"') || InStr(prefix, "'") || InStr(prefix, "(") || InStr(prefix, "[") || InStr(prefix, "{") || InStr(prefix, "<")
+      extractedPath := trimmedPath
+  }
+  path := Path_Canonicalize(RTrim(extractedPath, "\"))
+  if Path_IsAbsolute(path) && Path_IsLiteral(path)
     return path
   loop
   {
@@ -162,12 +170,67 @@ String_ExtractPath(pathLike)
  */
 String_ExtractUrl(urlLike)
 {
+  if RegExMatch(urlLike, "\]\((?<href>.*)\)$", &matchs)
+  {
+    href := matchs.href
+    if String_ExtractHttpUrl(href) !== "" || String_ExtractFileUrl(href) !== ""
+      return href
+  }
   url := String_ExtractHttpUrl(urlLike)
   if url !== ""
-    return url
+    return String_ExtractUrlValue(urlLike, url)
   url := String_ExtractFileUrl(urlLike)
   if url !== ""
+    return String_ExtractUrlValue(urlLike, url)
+}
+/**
+ * @param {String} urlLike
+ * @param {String} url
+ * @returns {String}
+ */
+String_ExtractUrlValue(urlLike, url)
+{
+  urlPosition := InStr(urlLike, url)
+  prefix := SubStr(urlLike, 1, urlPosition - 1)
+  trimmedUrl := String_TrimUnmatchedClosingWrapper(url)
+  if !InStr(prefix, '"') && !InStr(prefix, "'") && !InStr(prefix, "(") && !InStr(prefix, "[") && !InStr(prefix, "{") && !InStr(prefix, "<")
+  {
+    suffix := SubStr(urlLike, urlPosition + StrLen(url))
+    if suffix !== ""
+      return url suffix
     return url
+  }
+  return trimmedUrl
+}
+/**
+ * @param {String} url
+ * @returns {String}
+ */
+String_TrimUnmatchedClosingWrapper(url)
+{
+  static wrappers := Map(
+    ")", "(",
+    "]", "[",
+    "}", "{",
+    "'", "'",
+    '"', '"'
+  )
+  while wrappers.Has(SubStr(url, -1))
+  {
+    closing := SubStr(url, -1)
+    opening := wrappers[closing]
+    closingCount := StrLen(url) - StrLen(StrReplace(url, closing))
+    openingCount := StrLen(url) - StrLen(StrReplace(url, opening))
+    if opening == closing
+    {
+      if Mod(closingCount, 2) == 0
+        break
+    }
+    else if closingCount <= openingCount
+      break
+    url := SubStr(url, 1, -1)
+  }
+  return url
 }
 /**
  * @param {String} urlLike
@@ -175,9 +238,6 @@ String_ExtractUrl(urlLike)
  */
 String_ExtractHttpUrl(urlLike)
 {
-  ; e.g. [title](href)
-  if RegExMatch(urlLike, "(*UCP)\[(?<title>[^\]]*)\]\((?<href>" RegEx_Http() ")\)", &matchs)
-    return matchs.href
   if RegExMatch(urlLike, "(*UCP)(?<href>" RegEx_Http() ")", &matchs)
     return matchs.href
 }

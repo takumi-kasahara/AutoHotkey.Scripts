@@ -11,8 +11,10 @@ OnExit(HandleExit)
 
 class String_Tests extends Test
 {
-  _a(url) => '<a href="' url '">title</a>'
-  _md(url) => '[title](' url ')'
+  _a_1(url) => '<a href="' url '">title</a>'
+  _a_2(url) => "<a href='" url "'>title</a>"
+  _md_1(url) => "[title](" url ")"
+  _md_2(url) => "[title](<" url ">)"
   String_Normalize()
   {
     Assert_AreEqual("Hello, world!", String_Normalize("Hello, world!"))
@@ -85,12 +87,10 @@ class String_Tests extends Test
     for url in ["file:///C:/Windows/explorer.exe", "https://example.com"]
     {
       Assert_AreEqual(url, String_ExtractUrl(url))
-      a := this._a(url)
-      Assert_AreEqual(url, String_ExtractUrl(a))
-      Assert_AreEqual(url, String_ExtractUrl("- " a))
-      md := this._md(url)
-      Assert_AreEqual(url, String_ExtractUrl(md))
-      Assert_AreEqual(url, String_ExtractUrl("- " md))
+      Assert_AreEqual(url, String_ExtractUrl(this._a_1(url)))
+      Assert_AreEqual(url, String_ExtractUrl(this._a_2(url)))
+      Assert_AreEqual(url, String_ExtractUrl(this._md_1(url)))
+      Assert_AreEqual(url, String_ExtractUrl(this._md_2(url)))
     }
   }
   String_ExtractUrl_2()
@@ -150,32 +150,32 @@ class String_Tests extends Test
   {
     for url in ["file:///C:/Windows/explorer.exe", "https://example.com"]
     {
-      Assert_AreEqual(url '"', String_ExtractUrl(this._md(url '"')))
-      Assert_AreEqual(url "'", String_ExtractUrl(this._md(url "'")))
-      Assert_AreEqual(url "(", String_ExtractUrl(this._md(url "(")))
-      Assert_AreEqual(url ")", String_ExtractUrl(this._md(url ")")))
-      Assert_AreEqual(url "[", String_ExtractUrl(this._md(url "[")))
-      Assert_AreEqual(url "]", String_ExtractUrl(this._md(url "]")))
-      Assert_AreEqual(url "{", String_ExtractUrl(this._md(url "{")))
-      Assert_AreEqual(url "}", String_ExtractUrl(this._md(url "}")))
-      Assert_AreEqual(url "<", String_ExtractUrl(this._md(url "<")))
-      Assert_AreEqual(url ">", String_ExtractUrl(this._md(url ">")))
+      Assert_AreEqual(url '"', String_ExtractUrl(this._md_1(url '"')))
+      Assert_AreEqual(url "'", String_ExtractUrl(this._md_1(url "'")))
+      Assert_AreEqual(url "(", String_ExtractUrl(this._md_1(url "(")))
+      Assert_AreEqual(url ")", String_ExtractUrl(this._md_1(url ")")))
+      Assert_AreEqual(url "[", String_ExtractUrl(this._md_1(url "[")))
+      Assert_AreEqual(url "]", String_ExtractUrl(this._md_1(url "]")))
+      Assert_AreEqual(url "{", String_ExtractUrl(this._md_1(url "{")))
+      Assert_AreEqual(url "}", String_ExtractUrl(this._md_1(url "}")))
+      Assert_AreEqual(url "<", String_ExtractUrl(this._md_1(url "<")))
+      Assert_AreEqual(url ">", String_ExtractUrl(this._md_1(url ">")))
     }
   }
   String_ExtractUrl_7()
   {
     for url in ["file:///C:/Windows/explorer.exe", "https://example.com"]
     {
-      Assert_AreEqual(url '"', String_ExtractUrl("- " this._md(url '"')))
-      Assert_AreEqual(url "'", String_ExtractUrl("- " this._md(url "'")))
-      Assert_AreEqual(url "(", String_ExtractUrl("- " this._md(url "(")))
-      Assert_AreEqual(url ")", String_ExtractUrl("- " this._md(url ")")))
-      Assert_AreEqual(url "[", String_ExtractUrl("- " this._md(url "[")))
-      Assert_AreEqual(url "]", String_ExtractUrl("- " this._md(url "]")))
-      Assert_AreEqual(url "{", String_ExtractUrl("- " this._md(url "{")))
-      Assert_AreEqual(url "}", String_ExtractUrl("- " this._md(url "}")))
-      Assert_AreEqual(url "<", String_ExtractUrl("- " this._md(url "<")))
-      Assert_AreEqual(url ">", String_ExtractUrl("- " this._md(url ">")))
+      Assert_AreEqual(url '"', String_ExtractUrl(this._md_2(url '"')))
+      Assert_AreEqual(url "'", String_ExtractUrl(this._md_2(url "'")))
+      Assert_AreEqual(url "(", String_ExtractUrl(this._md_2(url "(")))
+      Assert_AreEqual(url ")", String_ExtractUrl(this._md_2(url ")")))
+      Assert_AreEqual(url "[", String_ExtractUrl(this._md_2(url "[")))
+      Assert_AreEqual(url "]", String_ExtractUrl(this._md_2(url "]")))
+      Assert_AreEqual(url "{", String_ExtractUrl(this._md_2(url "{")))
+      Assert_AreEqual(url "}", String_ExtractUrl(this._md_2(url "}")))
+      Assert_AreEqual(url "<", String_ExtractUrl(this._md_2(url "<")))
+      Assert_AreEqual(url ">", String_ExtractUrl(this._md_2(url ">")))
     }
   }
   String_Clean_1()

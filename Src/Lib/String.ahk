@@ -173,6 +173,8 @@ String_ExtractUrl(urlLike)
   if RegExMatch(urlLike, "\]\((?<href>.*)\)$", &matchs)
   {
     href := matchs.href
+    if SubStr(href, 1, 1) == "<" && SubStr(href, -1) == ">"
+      href := SubStr(href, 2, -1)
     if String_ExtractHttpUrl(href) !== "" || String_ExtractFileUrl(href) !== ""
       return href
   }

@@ -56,8 +56,24 @@ Reg_Find()
  */
 Reg_GitBash()
 {
-  static exe := Path_Canonicalize(Path_Combine(Path_Resolve("git.exe"), "..", "..", "git-bash.exe"))
-  if FileExist(exe)
-    return exe
-  return ""
+  static git := Path_Resolve("git.exe")
+  if !FileExist(git)
+    return ""
+  static exe := Path_Canonicalize(Path_Combine(git, "..", "..", "bin", "bash.exe"))
+  if !FileExist(exe)
+    return TargetError(Format('bash.exe not found at "{}"', exe))
+  return exe
+}
+/**
+ * @returns {String}
+ */
+Reg_GitBashIcon()
+{
+  static git := Path_Resolve("git.exe")
+  if !FileExist(git)
+    return ""
+  static exe := Path_Canonicalize(Path_Combine(git, "..", "..", "ucrt64", "share", "git", "git-for-windows.ico"))
+  if !FileExist(exe)
+    return TargetError(Format('git-for-windows.ico not found at "{}"', exe))
+  return exe
 }

@@ -54,7 +54,10 @@ ContextMenu_Open(input)
         ctx.Add(Format("Open with Terminal ({})", targets.Length), (xs => Stream(xs).Each(x => Open(terminal, x))).Bind(targets), A_ComSpec)
       static bash := Reg_GitBash()
       if bash !== ""
-        ctx.Add(Format("Open with Git Bash ({})", targets.Length), (xs => Stream(xs).Each(x => Open(bash ' "--cd={}"', x))).Bind(targets), bash)
+        ctx.Add(Format("Open with Git Bash ({})", targets.Length), (xs => Stream(xs).Each(x => Open(bash ' "--cd={}"', x))).Bind(targets), Reg_GitBashIcon())
+      static wsl := Path_Resolve("wsl.exe")
+      if wsl !== ""
+        ctx.Add(Format("Open with WSL ({})", targets.Length), (xs => Stream(xs).Each(x => Open(wsl ' --cd "{}"', x))).Bind(targets), wsl)
       static find := Reg_Find()
       if find !== ""
         ctx.Add(Format("Find ({})", targets.Length), Open_Find.Bind(targets*), find)
@@ -156,7 +159,10 @@ ContextMenu_OpenPath(path, depth := 0)
     ctx.Add("Open with Terminal", Open.Bind(terminal, target), A_ComSpec)
   static bash := Reg_GitBash()
   if bash !== ""
-    ctx.Add("Open with Git Bash", Open.Bind(bash ' "--cd={}"', target), bash)
+    ctx.Add("Open with Git Bash", Open.Bind(bash ' "--cd={}"', target), Reg_GitBashIcon())
+  static wsl := Path_Resolve("wsl.exe")
+  if wsl !== ""
+    ctx.Add("Open with WSL", Open.Bind(wsl ' --cd "{}"', target), wsl)
   static find := Reg_Find()
   if find !== ""
     ctx.Add("Find", Open_Find.Bind(target), Reg_Find())

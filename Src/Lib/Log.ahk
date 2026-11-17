@@ -62,7 +62,9 @@ Log_Error(thrown, mode?)
     static stderr := Log_State("StdErr")
     FileAppend(ConvertTo_Csv(A_Now, thrown.What, thrown.Message, thrown.Extra, IsSet(mode) ? mode : ""), stderr)
     static EDITOR := Config_Get("Path", "EDITOR", "{}")
-    Open(EDITOR, stdout)
-    Open(EDITOR, stderr)
+    if FileExist(stdout)
+      Open(EDITOR, stdout)
+    if FileExist(stderr)
+      Open(EDITOR, stderr)
   }
 }

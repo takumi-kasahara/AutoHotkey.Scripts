@@ -59,7 +59,7 @@ Install()
     FileCreateShortcut(A_AhkPath, lnk, , args, , A_AhkPath)
   }
 
-  startMenu := Path_Combine(Reg_FolderDescriptions("Programs"), ".Local\AutoHotkey")
+  startMenu := Path_Combine(A_Programs, ".Local\AutoHotkey")
   if !DirExist(startMenu)
     DirCreate(startMenu)
   else

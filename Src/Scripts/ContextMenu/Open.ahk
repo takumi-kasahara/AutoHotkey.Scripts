@@ -51,7 +51,7 @@ ContextMenu_Open(input)
       targets := Array_Unique(Stream(paths).ToArray(path => Path_IsDirectory(path) ? path : Path_GetParent(path)), , , Path_Compare)
       static terminal := Config_Get("Path", "TERMINAL")
       if terminal !== ""
-        ctx.Add(Format("Open with Terminal ({})", targets.Length), (xs => Stream(xs).Each(x => Open(terminal, x))).Bind(targets), Path_Resolve("cmd.exe"))
+        ctx.Add(Format("Open with Terminal ({})", targets.Length), (xs => Stream(xs).Each(x => Open(terminal, x))).Bind(targets), A_ComSpec)
       static bash := Reg_GitBash()
       if bash !== ""
         ctx.Add(Format("Open with Git Bash ({})", targets.Length), (xs => Stream(xs).Each(x => Open(bash ' "--cd={}"', x))).Bind(targets), bash)
@@ -153,7 +153,7 @@ ContextMenu_OpenPath(path, depth := 0)
   target := Path_IsDirectory(path) ? path : Path_GetParent(path)
   static terminal := Config_Get("Path", "TERMINAL")
   if terminal !== ""
-    ctx.Add("Open with Terminal", Open.Bind(terminal, target), Path_Resolve("cmd.exe"))
+    ctx.Add("Open with Terminal", Open.Bind(terminal, target), A_ComSpec)
   static bash := Reg_GitBash()
   if bash !== ""
     ctx.Add("Open with Git Bash", Open.Bind(bash ' "--cd={}"', target), bash)

@@ -47,20 +47,9 @@ ContextMenu_Open(input)
         ctx.AddSubMenu(Format("Open", paths.Length), ctxPath)
       }
       ctx.Add(Format("Open ({})", paths.Length), Dialog_OpenPath.Bind(paths))
-      ctx.AddSubMenu(Format("Send to ({})", paths.Length), ContextMenu_SendTo(paths*))
       targets := Array_Unique(Stream(paths).ToArray(path => Path_IsDirectory(path) ? path : Path_GetParent(path)), , , Path_Compare)
-      static terminal := Config_Get("Path", "TERMINAL")
-      if terminal !== ""
-        ctx.Add(Format("Open with Terminal ({})", targets.Length), (xs => Stream(xs).Each(x => Open(terminal, x))).Bind(targets), A_ComSpec)
-      static bash := Reg_GitBash()
-      if bash !== ""
-        ctx.Add(Format("Open with Git Bash ({})", targets.Length), (xs => Stream(xs).Each(x => Open(bash ' "--cd={}"', x))).Bind(targets), Reg_GitBashIcon())
-      static wsl := Path_Resolve("wsl.exe")
-      if wsl !== ""
-        ctx.Add(Format("Open with WSL ({})", targets.Length), (xs => Stream(xs).Each(x => Open(wsl ' --cd "{}"', x))).Bind(targets), wsl)
-      static find := Reg_Find()
-      if find !== ""
-        ctx.Add(Format("Find ({})", targets.Length), Open_Find.Bind(targets*), find)
+      ContextMenu_AddActions(ctx, targets)
+      ctx.AddSubMenu(Format("Send to ({})", paths.Length), ContextMenu_SendTo(paths*))
     }
     if urls.Length > 0
     {
@@ -154,29 +143,32 @@ ContextMenu_OpenPath(path, depth := 0)
       ctx.Add(Format("Copy parents as path ({})", parents.Length), () => Gui_TextView(parents))
   }
   target := Path_IsDirectory(path) ? path : Path_GetParent(path)
-  static terminal := Config_Get("Path", "TERMINAL")
-  if terminal !== ""
-    ctx.Add("Open with Terminal", Open.Bind(terminal, target), A_ComSpec)
-  static bash := Reg_GitBash()
-  if bash !== ""
-    ctx.Add("Open with Git Bash", Open.Bind(bash ' "--cd={}"', target), Reg_GitBashIcon())
-  static wsl := Path_Resolve("wsl.exe")
-  if wsl !== ""
-    ctx.Add("Open with WSL", Open.Bind(wsl ' --cd "{}"', target), wsl)
-  static find := Reg_Find()
-  if find !== ""
-    ctx.Add("Find", Open_Find.Bind(target), Reg_Find())
+  ContextMenu_AddActions(ctx, [target])
   ctx.AddSubMenu("Shell", ContextMenu_Shell(path))
   ctx.AddSubMenu("Send to", ContextMenu_SendTo(path))
   ctx.AddSubMenu("Copy as path", ContextMenu_CopyPath(path))
-  if Path_IsText(path)
-    ctx.Add("View", () => (
-      content := FileRead(path),
-      ext := Path_GetExtensionName(path),
-      ext ~= "^(?i:csv)$" ? Gui_CsvView(content) : Gui_TextView(content, ext ?? "txt")
-    ))
   ctx.Add("Properties", Open_Property.Bind(path))
   return ctx
+}
+/**
+ * @param {ContextMenu} ctx
+ * @param {Array<String>} targets
+ */
+ContextMenu_AddActions(ctx, targets)
+{
+  static terminal := Config_Get("Path", "TERMINAL")
+  static bash := Reg_GitBash()
+  static wsl := Path_Resolve("wsl.exe")
+  static find := Reg_Find()
+  suffix := targets.Length > 1 ? " (" targets.Length ")" : ""
+  if terminal !== ""
+    ctx.Add("Open with Terminal" suffix, (xs => Stream(xs).Each(x => Open(terminal, x))).Bind(targets), A_ComSpec)
+  if bash !== ""
+    ctx.Add("Open with Git Bash" suffix, (xs => Stream(xs).Each(x => Open(bash ' "--cd={}"', x))).Bind(targets), Reg_GitBashIcon())
+  if wsl !== ""
+    ctx.Add("Open with WSL" suffix, (xs => Stream(xs).Each(x => Open(wsl ' --cd "{}"', x))).Bind(targets), wsl)
+  if find !== ""
+    ctx.Add("Find" suffix, targets.Length == 1 ? Open_Find.Bind(targets[1]) : Open_Find.Bind(targets*), find)
 }
 /**
  * @param {Array<String>} paths

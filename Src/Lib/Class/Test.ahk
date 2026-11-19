@@ -6,6 +6,7 @@ class Test
   {
     this.Failed := 0
     this.Passed := 0
+    this.TickCount := A_TickCount
   }
   __New()
   {
@@ -20,7 +21,6 @@ class Test
         {
           method.Call(this)
           this.Passed++
-          Log_Trace("Passed", name)
         }
         catch as ex
         {
@@ -35,8 +35,10 @@ class Test
   }
   __Delete()
   {
-    Log_Trace("Passed", this.Passed)
-    Log_Trace("Failed", this.Failed)
+    status := "[" (this.Passed >= 0 && this.Failed == 0 ? "+" : "-") "]"
+    time := A_TickCount - this.TickCount
+    Log_Trace(status " " this.__Class " " time "ms (" this.Passed + this.Failed " tests)")
+    Log_Trace("Passed:", this.Passed ", Failed:", this.Failed)
     Exit(this.Failed > 0)
   }
 }

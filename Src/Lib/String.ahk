@@ -66,7 +66,7 @@ String_Normalize(this, form := "NFC")
     "NFKD", 0x6,
   )
   if !NORM_FORM.Has(form)
-    throw ValueError("Invalid:`t" form)
+    throw ValueError("Invalid: " form)
   buf := ""
   bufSize := 0
   bufSize := NormalizeString()

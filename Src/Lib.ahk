@@ -1,4 +1,4 @@
-﻿#Include "Lib\Assert.ahk"
+#Include "Lib\Assert.ahk"
 #Include "Lib\Clipboard.ahk"
 #Include "Lib\Config.ahk"
 #Include "Lib\ContentType.ahk"

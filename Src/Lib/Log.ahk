@@ -20,7 +20,9 @@ Log_Flush()
   buf := Log_State("Buffer")
   if buf.Length == 0
     return
-  FileAppend(Enumerable_Join(buf), Log_State("StdOut"))
+  static stdout := Log_State("StdOut")
+  text := Enumerable_Join(buf)
+  FileAppend(text "`n", stdout, "`n")
   Log_State("Buffer", [])
 }
 /**
@@ -60,7 +62,8 @@ Log_Error(thrown, mode?)
   {
     static stdout := Log_State("StdOut")
     static stderr := Log_State("StdErr")
-    FileAppend(ConvertTo_Csv(A_Now, thrown.What, thrown.Message, thrown.Extra, IsSet(mode) ? mode : ""), stderr)
+    text := ConvertTo_Csv(A_Now, thrown.What, thrown.Message, thrown.Extra, IsSet(mode) ? mode : "")
+    FileAppend(text "`n", stderr, "`n")
     static EDITOR := Config_Get("Path", "EDITOR", "{}")
     if FileExist(stdout)
       Open(EDITOR, stdout)

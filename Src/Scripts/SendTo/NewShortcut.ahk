@@ -14,7 +14,7 @@ Dialog_NewShortcut()
 {
   paths := Stream(A_Args).Filter(FileExist).ToArray()
   if paths.Length == 0
-    paths := Clipboard_ExtractPath()
+    return
 
   for path In paths
   {

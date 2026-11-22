@@ -199,7 +199,11 @@ String_ExtractUrlValue(urlLike, url)
   {
     suffix := SubStr(urlLike, urlPosition + StrLen(url))
     if suffix !== ""
+    {
+      if RegExMatch(suffix, "\s", &match)
+        suffix := SubStr(suffix, 1, match.Pos - 1)
       return url suffix
+    }
     return url
   }
   return trimmedUrl

@@ -1,4 +1,4 @@
-﻿#Include "Modules\Default.ahk"
+#Include "Modules\Default.ahk"
 #Include "Modules\Hotstring.ahk"
 #Include "Modules\Mouse.ahk"
 #Include "Modules\Hotkey\AppsKey.ahk"

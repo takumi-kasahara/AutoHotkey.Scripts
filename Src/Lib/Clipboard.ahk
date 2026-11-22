@@ -193,7 +193,7 @@ Clipboard_ExtractPath()
   loop parse, A_Clipboard, "`n", "`r"
   {
     path := String_ExtractPath(A_LoopField)
-    if path == ""
+    if path == "" || !FileExist(path)
       continue
     Log_Trace("Extracted", path)
     paths.Push(path)

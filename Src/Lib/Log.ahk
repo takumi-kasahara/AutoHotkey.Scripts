@@ -33,7 +33,7 @@ Log_Trace(messages*)
   static MAX_BUFFER_COUNT := Config_Get("Log", "MAX_BUFFER_COUNT")
   if messages.Length == 0
     return
-  text := String_Join("`t", messages*)
+  text := String_Join(" ", messages*)
   if State_Debug()
     OutputDebug(text)
   else if State_ErrorStdOut()

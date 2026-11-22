@@ -74,7 +74,7 @@ Window_MoveTo(position, id := "A")
     case "BottomRight":
       WinMove(windowRight, windowBottom, , , id)
     default:
-      ValueError("Invalid:`t" position)
+      ValueError("Invalid: " position)
   }
   return
 }

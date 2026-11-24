@@ -19,7 +19,7 @@
         "call",
         ".agents\\skills\\autohotkey\\scripts\\run.cmd",
         "-Path",
-        "${workspaceFolder}\\Src\\Build.ahk"
+        "${workspaceFolder}\\Sources\\Build.ahk"
       ],
       "problemMatcher": [],
       "group": {
@@ -58,7 +58,7 @@
         "call",
         ".agents\\skills\\autohotkey\\scripts\\run.cmd",
         "-Path",
-        "${workspaceFolder}\\Src\\Preproc.ahk"
+        "${workspaceFolder}\\Sources\\Preproc.ahk"
       ],
       "problemMatcher": [],
       "hide": true

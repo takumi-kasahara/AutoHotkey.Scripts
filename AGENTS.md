@@ -4,19 +4,19 @@ This repository is a collection of scripts for AutoHotkey v2. Below are the main
 
 ## Overview
 
-- `Bin\` is the directory for built exe files.
-- `Src\Lib\` contains shared functions and utilities. Place reusable code here.
-- `Src\Modules\` contains modules for hotkeys, hotstrings, and key assignments.
-- `Src\Run.ahk` is the resident script. When launched, it runs in the background and provides hotkey and menu features.
-- `Src\Scripts\ContextMenu\*.ahk` are scripts called from Run.ahk's context menu. Place scripts for specific actions here.
-- `Src\Scripts\SendTo\*.ahk` are scripts for the Windows "Send to" menu. These define individual send actions for the context menu.
-- `Src\Tests\` contains AutoHotkey test scripts.
+- [Bin/](./Bin/) is the directory for built exe files.
+- [Sources/Lib/](./Sources/Lib) contains shared functions and utilities. Place reusable code here.
+- [Sources/Modules/](./Sources/Modules) contains modules for hotkeys, hotstrings, and key assignments.
+- [Sources/Run.ahk](./Sources/Run.ahk) is the resident script. When launched, it runs in the background and provides hotkey and menu features.
+- [Sources/Scripts/ContextMenu/*.ahk](./Sources/Scripts/ContextMenu) are scripts called from [Sources/Run.ahk](./Sources/Run.ahk)'s context menu. Place scripts for specific actions here.
+- [Sources/Scripts/SendTo/*.ahk](./Sources/Scripts/SendTo) are scripts for the Windows "Send to" menu. These define individual send actions for the context menu.
+- [Tests/](./Tests) contains AutoHotkey test scripts.
 
 ## Workflow
 
-1. `Src\Lib.ahk` and `Src\Modules.ahk` are common include files.
-   - If you add or remove files in `Src\`, run `Src\Include.ahk` to rebuild includes.
-2. Run tests from `run.cmd`:
+1. [Lib.ahk](./Sources/Lib.ahk) and [Modules.ahk](./Sources/Modules.ahk) are common include files.
+   - If you add or remove files in [Sources/](./Sources), run [Preproc.ahk](./Sources/Preproc.ahk) to rebuild includes.
+2. Run tests from [run.cmd](./.agents/skills/autohotkey/scripts/run.cmd):
 
 ```bat
 ".agents\skills\autohotkey\scripts\run.cmd" -Path "Script.ahk"

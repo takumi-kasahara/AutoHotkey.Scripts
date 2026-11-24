@@ -105,7 +105,18 @@ Open_Directory(path)
  * @param {String} path
  * @returns {Integer} PID
  */
-Open_Location(path) => Open('explorer.exe /select,"{}"', path)
+Open_Location(path)
+{
+  try
+    return Open('files-preview.exe /select "{}" ', path)
+  catch
+  {
+    try
+      return Open('files-stable.exe /select "{}" ', path)
+    catch
+      return Open('explorer.exe /select,"{}"', path)
+  }
+}
 /**
  * @param {String*} paths
  * @returns {Integer} PID

@@ -33,6 +33,12 @@ class String_Tests extends Test
       Assert_AreEqual(path, String_ExtractPath(StrReplace(path, "\", "/")))
       Assert_AreEqual(path, String_ExtractPath(StrReplace(path, "\", "\\")))
     }
+    for value in ["%20", " ", "`t"]
+    {
+      url := Trim("https://example.com?key=" value)
+      text := "curl " url " > /var/tmp/html"
+      Assert_AreEqual(url, String_ExtractUrl(text))
+    }
   }
   String_ExtractPath_2()
   {

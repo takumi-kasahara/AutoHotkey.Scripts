@@ -9,24 +9,20 @@ winget install --id AutoHotkey.AutoHotkey
 
 ## Overview
 
-- `Src\Run.ahk` is a resident script that provides hotkeys and menu features.
-- `Src\Lib\` contains shared libraries and utilities.
-- `Src\Modules\` contains modules that define hotkeys and hotstrings.
-- `Src\Scripts\SendTo\` contains scripts for the Windows "Send to" context menu.
+- [Sources/Run.ahk](./Sources/Run.ahk) is a resident script that provides hotkeys and menu features.
+- [Sources/Lib/](./Sources/Lib) contains shared libraries and utilities.
+- [Sources/Modules/](./Sources/Modules) contains modules that define hotkeys and hotstrings.
+- [Sources/Scripts/SendTo/](./Sources/Scripts/SendTo) contains scripts for the Windows "Send to" context menu.
 
 ## Usage
 
-1. Run `Src\Run.ahk` to start the resident script.
-2. If needed, build with `Src\Build.ahk`.
-   - Built exe files are placed in `Bin\`.
+1. Run [Sources/Run.ahk](./Sources/Run.ahk) to start the resident script.
+2. If needed, build with [Sources/Build.ahk](./Sources/Build.ahk).
+   - Built exe files are placed in [Bin/](./Bin/).
    - The exe files work even on environments without AutoHotkey installed.
-3. Run `Src\Install.ahk` to perform installation steps.
-4. Run `Src\Tests.ahk` to execute tests.
+3. Run [Sources/Install.ahk](./Sources/Install.ahk) to perform installation steps.
 
 ## Additional Information
 
-- Place built executables in `Bin\`.
-- `Src\Include.ahk` is a common include file for the project.
-- Individual test scripts are located under `Src\Tests\`.
-- AutoHotkey cannot output results to standard output, so results must be written to a file and then read.
-- If a test script fails, a stack trace will be output to `Log\`.
+- Place built executables in [Bin/](./Bin/).
+- Individual test scripts are located under [Tests/](./Tests).

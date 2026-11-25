@@ -4,8 +4,8 @@
 #WinActivateForce
 #ClipboardTimeout -1
 #NoTrayIcon
-#Include "..\Lib.ahk"
-SetWorkingDir(A_ScriptDir "\..")
+#Include "..\Sources\Lib.ahk"
+SetWorkingDir(A_ScriptDir "\..\Sources")
 OnError(HandleError)
 OnExit(HandleExit)
 

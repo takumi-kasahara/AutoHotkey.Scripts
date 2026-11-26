@@ -72,7 +72,7 @@ ContextMenu_Edit(input)
       ctxLink.Add("Edit", () => Edit_Hyperlink(link))
       ctxLink.AddSeparator()
       ctxLink.Add("Copy Link as HTML", () => Gui_TextView(Document_CreateAnchorElement(link), "html"))
-      ctxLink.Add("Copy Link as Markdown", () => Gui_TextView(ConvertTo_MarkdownLink(link.href, link.text)), "md")
+      ctxLink.Add("Copy Link as Markdown", () => Gui_TextView(ConvertTo_MarkdownLink(link.href, link.text), "md"))
       ctxLink.Add("Copy Link as Excel", () => Gui_TextView(ConvertTo_ExcelHyperlink(link.href, link.text)))
     }
     else

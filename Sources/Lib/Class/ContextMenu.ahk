@@ -28,6 +28,14 @@ class ContextMenu
    */
   __New() => this._menu := Menu()
   /**
+   * Menu item names can be up to MAX_PATH characters long.
+   * Longer names are truncated to the first MAX_PATH characters.
+   * @param {String} itemName
+   * @returns {String}
+   * @see {@link https://www.autohotkey.com/docs/v2/lib/Menu.htm#MenuItemName}
+   */
+  static TruncateName(itemName) => StrLen(itemName) <= MAX_PATH ? itemName : SubStr(itemName, 1, MAX_PATH)
+  /**
    * @param {String} itemName
    * @param {Func | BoundFunc} fn
    * @param {String} iconName
@@ -35,9 +43,10 @@ class ContextMenu
    */
   Add(itemName, fn, iconName?, iconNumber := 1)
   {
-    this._menu.Add(itemName, (itemName, itemPos, myMenu) => fn.Call())
+    name := ContextMenu.TruncateName(itemName)
+    this._menu.Add(name, (itemName, itemPos, myMenu) => fn.Call())
     if IsSet(iconName)
-      this.SetIcon(itemName, iconName, iconNumber)
+      this.SetIcon(name, iconName, iconNumber)
   }
   /**
    * @param {String} itemName
@@ -47,9 +56,10 @@ class ContextMenu
    */
   AddSubMenu(itemName, that, iconName?, iconNumber := 1)
   {
-    this._menu.Add(itemName, that._menu)
+    name := ContextMenu.TruncateName(itemName)
+    this._menu.Add(name, that._menu)
     if IsSet(iconName)
-      this.SetIcon(itemName, iconName, iconNumber)
+      this.SetIcon(name, iconName, iconNumber)
   }
   SetIcon(itemName, iconName, iconNumber := 1)
   {

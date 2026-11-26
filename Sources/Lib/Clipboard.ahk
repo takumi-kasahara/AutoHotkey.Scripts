@@ -201,10 +201,9 @@ Clipboard_ExtractPath()
   return Array_Unique(paths, , , Path_Compare)
 }
 /**
- * @param {Boolean} [allowFileURI=false]
  * @returns {Array<String>}
  */
-Clipboard_ExtractUrl(allowFileURI := false)
+Clipboard_ExtractUrl()
 {
   urls := []
   loop parse, A_Clipboard, "`n", "`r"
@@ -215,13 +214,12 @@ Clipboard_ExtractUrl(allowFileURI := false)
     Log_Trace("Extracted", url)
     urls.Push(url)
   }
-  return Array_Sort(Array_Unique(Array_Union(urls, Stream(Clipboard_ExtractLink(allowFileURI)).ToArray(link => link.href))), , , Url_Compare)
+  return Array_Sort(Array_Unique(Array_Union(urls, Stream(Clipboard_ExtractLink()).ToArray(link => link.href))), , , Url_Compare)
 }
 /**
- * @param {Boolean} [allowFileURI=false]
  * @returns {Array<{ href: String, text: String }>}
  */
-Clipboard_ExtractLink(allowFileURI := false)
+Clipboard_ExtractLink()
 {
   html := Clipboard_GetHtml()
   if html
@@ -230,8 +228,5 @@ Clipboard_ExtractLink(allowFileURI := false)
   if paths.Length == 0
     return []
 
-  if allowFileURI
-    return Stream(paths).Map(path => Path_GetExtensionName(path) ~= "^(?i:url)$" ? ({ href: Url_Load(path), text: Path_GetBaseName(path) }) : ({ href: Url_Encode(Path_ToURL(path)), text: Path_GetName(path) })).ToArray()
-  else
-    return Stream(paths).Filter(path => Path_GetExtensionName(path) ~= "^(?i:url)$").Map(path => { href: Url_Load(path), text: Path_GetBaseName(path) }).ToArray()
+  return Stream(paths).Filter(path => Path_GetExtensionName(path) ~= "^(?i:url)$").Map(path => { href: Url_Load(path), text: Path_GetBaseName(path) }).ToArray()
 }

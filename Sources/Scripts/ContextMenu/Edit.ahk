@@ -52,7 +52,7 @@ ContextMenu_Edit(input)
     {
       ctxEdit := ContextMenu()
       for url in urls
-        ctxEdit.Add(Format("{:-3}{}", (StrLen(A_Index) == 1 ? "&" : "") A_Index, url), Edit_Hyperlink.Bind(Url_GetTitle.Bind(url)))
+        ctxEdit.Add(Format("{:-3}{}", (StrLen(A_Index) == 1 ? "&" : "") A_Index, Url_Decode(url)), Edit_Hyperlink.Bind(Url_GetTitle.Bind(url)))
       ctxUrl.AddSubMenu("Edit", ctxEdit)
     }
     ctxUrl.AddSeparator()

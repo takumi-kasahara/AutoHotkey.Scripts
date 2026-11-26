@@ -113,5 +113,44 @@ class Url_Tests extends Test
     Assert_AreEqual(result.href, Path_ToURL(A_ScriptFullPath))
     Assert_AreEqual(result.text, Path_GetName(A_ScriptFullPath))
   }
+  Url_GetCharsetFromContentType_None()
+  {
+    Assert_AreEqual("", Url_GetCharsetFromContentType("text/html"))
+    Assert_AreEqual("", Url_GetCharsetFromContentType(""))
+  }
+  Url_GetCharsetFromContentType_Charset()
+  {
+    Assert_AreEqual("utf-8", Url_GetCharsetFromContentType("text/html; charset=utf-8"))
+    Assert_AreEqual("shift_jis", Url_GetCharsetFromContentType("text/html; charset=Shift_JIS"))
+    Assert_AreEqual("euc-jp", Url_GetCharsetFromContentType('text/html; charset="EUC-JP"'))
+    Assert_AreEqual("utf-8", Url_GetCharsetFromContentType("text/html;charset=UTF8"))
+  }
+  Url_GetCharsetFromMeta_CharsetAttribute()
+  {
+    Assert_AreEqual("shift_jis", Url_GetCharsetFromMetaElement('<meta charset="shift_jis" />'))
+    Assert_AreEqual("utf-8", Url_GetCharsetFromMetaElement("<meta charset='utf-8'>"))
+  }
+  Url_GetCharsetFromMetaElement_HttpEquiv()
+  {
+    Assert_AreEqual("euc-jp", Url_GetCharsetFromMetaElement('<meta http-equiv="Content-Type" content="text/html; charset=euc-jp" />'))
+  }
+  Url_GetCharsetFromMetaElement_None()
+  {
+    Assert_AreEqual("", Url_GetCharsetFromMetaElement("<html><head></head><body></body></html>"))
+  }
+  Url_NormalizeCharset_Aliases()
+  {
+    Assert_AreEqual("utf-8", Url_NormalizeCharset("UTF8"))
+    Assert_AreEqual("shift_jis", Url_NormalizeCharset("Shift-JIS"))
+    Assert_AreEqual("shift_jis", Url_NormalizeCharset("cp932"))
+    Assert_AreEqual("unicode", Url_NormalizeCharset("utf-16"))
+    Assert_AreEqual("iso-8859-1", Url_NormalizeCharset("ISO-8859-1"))
+  }
+  Url_GetResponseCharset_Precedence()
+  {
+    Assert_AreEqual("shift_jis", Url_GetResponseCharset("text/html; charset=shift_jis", '<meta charset="euc-jp" />'))
+    Assert_AreEqual("euc-jp", Url_GetResponseCharset("text/html", '<meta charset="euc-jp" />'))
+    Assert_AreEqual("utf-8", Url_GetResponseCharset("text/html", "<html></html>"))
+  }
 }
 Url_Tests()

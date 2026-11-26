@@ -248,24 +248,42 @@ Url_Download(url, target, name, overwrite := false)
  */
 Url_GetTitle(url)
 {
-  switch Url_GetProtocol(url)
-  {
-    case "file":
-      path := Path_FromURL(url)
-      if !FileExist(path)
-        path := Path_FromURL(Url_Decode(url))
-      if !FileExist(path)
-        throw Error("File not found: " path)
-      return { href: url, text: Path_GetName(path) }
-    default:
-      static WinHttpRequestOption_URL := 1
-      req := ComObject("WinHttp.WinHttpRequest.5.1")
-      req.Open("GET", url, false)
-      req.Send()
-      if req.Status < 200 || req.Status >= 300
-        throw Error("Failed to fetch URL: " url " with status: " req.Status)
-      static document := ComObject("HTMLfile")
-      document.write(req.ResponseText)
-      return { href: req.Option(WinHttpRequestOption_URL), text: document.title }
-  }
+  static cache := Map()
+  if cache.Has(url)
+    return cache.Get(url)
+
+  static delay := Integer(Config_Get("Delay", "KEY"))
+  try
+    switch Url_GetProtocol(url)
+    {
+      case "file":
+        path := Path_FromURL(url)
+        if !FileExist(path)
+          path := Path_FromURL(Url_Decode(url))
+        if !FileExist(path)
+          throw Error("File not found: " path)
+        value := { href: url, text: Path_GetName(path) }
+        cache.Set(url, value)
+        return value
+      default:
+        Notify_ToolTip("Fetch:" url)
+        static WinHttpRequestOption_URL := 1
+        req := ComObject("WinHttp.WinHttpRequest.5.1")
+        req.Open("GET", url, false)
+        req.Send()
+        Log_Trace("Fetch", url, req.Status)
+        if req.Status < 200 || req.Status >= 300
+        {
+          value := { href: url, text: url }
+          cache.Set(url, value)
+          return value
+        }
+        document := ComObject("HTMLfile")
+        document.write(req.ResponseText)
+        value := { href: req.Option(WinHttpRequestOption_URL), text: document.title }
+        cache.Set(url, value)
+        return value
+    }
+  finally
+    SetTimer(() => Notify_ToolTip(), -delay)
 }

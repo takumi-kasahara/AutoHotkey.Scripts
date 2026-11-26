@@ -52,7 +52,7 @@ ContextMenu_Edit(input)
     {
       ctxEdit := ContextMenu()
       for url in urls
-        ctxEdit.Add(Format("{:-3}{}", (StrLen(A_Index) == 1 ? "&" : "") A_Index, url), Edit_Hyperlink.Bind(Url_GetTitle.Bind(url)))
+        ctxEdit.Add(Format("{:-3}{}", (StrLen(A_Index) == 1 ? "&" : "") A_Index, Url_Decode(url)), Edit_Hyperlink.Bind(Url_GetTitle.Bind(url)))
       ctxUrl.AddSubMenu("Edit", ctxEdit)
     }
     ctxUrl.AddSeparator()
@@ -72,7 +72,7 @@ ContextMenu_Edit(input)
       ctxLink.Add("Edit", () => Edit_Hyperlink(link))
       ctxLink.AddSeparator()
       ctxLink.Add("Copy Link as HTML", () => Gui_TextView(Document_CreateAnchorElement(link), "html"))
-      ctxLink.Add("Copy Link as Markdown", () => Gui_TextView(ConvertTo_MarkdownLink(link.href, link.text)), "md")
+      ctxLink.Add("Copy Link as Markdown", () => Gui_TextView(ConvertTo_MarkdownLink(link.href, link.text), "md"))
       ctxLink.Add("Copy Link as Excel", () => Gui_TextView(ConvertTo_ExcelHyperlink(link.href, link.text)))
     }
     else

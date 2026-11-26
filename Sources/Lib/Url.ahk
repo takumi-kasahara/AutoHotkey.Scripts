@@ -186,14 +186,14 @@ Url_Download(url, target, name, overwrite := false)
   if !Array_Contains(["http", "https"], Url_GetProtocol(url))
     throw Error("Unsupported URL protocol: " Url_GetProtocol(url))
 
-  req := ComObject("WinHttp.WinHttpRequest.5.1")
+  whr := ComObject("WinHttp.WinHttpRequest.5.1")
   Notify_ToolTip("Fetching:" url)
   try
   {
-    req.Open("HEAD", url, false)
-    req.Send()
-    if req.Status < 200 || req.Status >= 300
-      throw Error("Failed to fetch URL: " url " with status: " req.Status)
+    whr.Open("HEAD", url, false)
+    whr.Send()
+    if whr.Status < 200 || whr.Status >= 300
+      throw Error("Failed to fetch URL: " url " with status: " whr.Status)
   }
   finally
     Notify_ToolTip()
@@ -204,7 +204,7 @@ Url_Download(url, target, name, overwrite := false)
   ext := Path_GetExtensionName(name)
   if ext == ""
   {
-    mimeType := StrSplit(req.GetResponseHeader("Content-Type"), ";")[1]
+    mimeType := StrSplit(whr.GetResponseHeader("Content-Type"), ";")[1]
     ext := ContentType_ToExtension(mimeType)
     if ext == ""
       throw Error("Failed to determine file extension for URL: " url " with MIME type: " mimeType)
@@ -226,14 +226,14 @@ Url_Download(url, target, name, overwrite := false)
   Notify_ToolTip("Downloading:" url " as " name)
   try
   {
-    req.Open("GET", url, false)
-    req.Send()
-    if req.Status < 200 || req.Status >= 300
-      throw Error("Failed to download URL: " url " with status: " req.Status)
+    whr.Open("GET", url, false)
+    whr.Send()
+    if whr.Status < 200 || whr.Status >= 300
+      throw Error("Failed to download URL: " url " with status: " whr.Status)
     fs := ComObject("ADODB.Stream")
     fs.Type := 1  ; adTypeBinary
     fs.Open()
-    fs.Write(req.ResponseBody)
+    fs.Write(whr.ResponseBody)
     fs.SaveToFile(path, 2)  ; adSaveCreateOverWrite
     fs.Close()
     return true
@@ -242,30 +242,186 @@ Url_Download(url, target, name, overwrite := false)
     Notify_ToolTip()
 }
 /**
+ * @see {@link https://learn.microsoft.com/en-us/office/client-developer/access/desktop-database-reference/stream-object-ado-reference}
+ * @param {ComObject} whr
+ * @returns {String}
+ */
+Url_GetResponseText(whr)
+{
+  text := ""
+  try
+    text := whr.ResponseText
+  catch
+    text := ""
+  charset := Url_GetResponseCharset(whr.GetResponseHeader("Content-Type"), text)
+  try
+    return Url_DecodeResponseBody(whr.ResponseBody, charset)
+  catch
+    return text
+}
+/**
+ * Resolves the charset of a response body.
+ * The `Content-Type` header takes precedence, then the `<meta>` declarations, and finally the default `utf-8`.
+ * @param {String} contentType
+ * @param {String} text
+ * @returns {String}
+ */
+Url_GetResponseCharset(contentType, text)
+{
+  charset := Url_GetCharsetFromContentType(contentType)
+  if charset !== ""
+    return charset
+  charset := Url_GetCharsetFromMetaElement(text)
+  if charset !== ""
+    return charset
+  return "utf-8"
+}
+/**
+ * @param {String} contentType
+ * @returns {String}
+ */
+Url_GetCharsetFromContentType(contentType)
+{
+  if RegExMatch(contentType, "i)\bcharset\s*=\s*([^;\s]+)", &match)
+    return Url_NormalizeCharset(Trim(match[1], "`"'"))
+  return ""
+}
+/**
+ * @param {String} text
+ * @returns {String}
+ */
+Url_GetCharsetFromMetaElement(text)
+{
+  try
+  {
+    document := ComObject("HTMLfile")
+    document.write(text)
+    metas := document.getElementsByTagName("meta")
+    loop metas.length
+    {
+      meta := metas.item(A_Index - 1)
+      charset := ""
+      try
+        charset := meta.charset
+      catch
+        charset := ""
+      if charset !== ""
+        return Url_NormalizeCharset(charset)
+      try
+        if StrLower(meta.httpEquiv) == "content-type"
+          charset := Url_GetCharsetFromContentType(meta.content)
+      catch
+        charset := ""
+      if charset !== ""
+        return charset
+    }
+  }
+  catch
+    return ""
+  return ""
+}
+/**
+ * Normalizes a charset name to one accepted by `ADODB.Stream`.
+ * @param {String} charset
+ * @returns {String}
+ */
+Url_NormalizeCharset(charset)
+{
+  static aliases := Map(
+    "ascii", "us-ascii",
+    "cp1252", "windows-1252",
+    "cp932", "shift_jis",
+    "eucjp", "euc-jp",
+    "latin1", "iso-8859-1",
+    "ms_kanji", "shift_jis",
+    "shift-jis", "shift_jis",
+    "sjis", "shift_jis",
+    "utf-16", "unicode",
+    "utf-16be", "unicodeFFFE",
+    "utf-16le", "unicode",
+    "utf16", "unicode",
+    "utf8", "utf-8",
+    "windows-31j", "shift_jis",
+    "x-sjis", "shift_jis",
+  )
+  key := StrLower(Trim(charset))
+  return aliases.Has(key) ? aliases[key] : key
+}
+/**
+ * @param {Any} body
+ * @param {String} charset
+ * @returns {String}
+ */
+Url_DecodeResponseBody(body, charset)
+{
+  try
+    return Url_DecodeResponseBodyWith(body, charset)
+  catch
+    return Url_DecodeResponseBodyWith(body, "utf-8")
+}
+/**
+ * @param {Any} body
+ * @param {String} charset
+ * @returns {String}
+ */
+Url_DecodeResponseBodyWith(body, charset)
+{
+  fs := ComObject("ADODB.Stream")
+  try
+  {
+    fs.Type := 1  ; adTypeBinary
+    fs.Open()
+    fs.Write(body)
+    fs.Position := 0
+    fs.Type := 2  ; adTypeText
+    fs.Charset := charset
+    return fs.ReadText()
+  }
+  finally
+    fs.Close()
+}
+/**
  * @see {@link https://learn.microsoft.com/ja-jp/windows/win32/winhttp/winhttprequestoption}
  * @param {String} url
  * @returns {{ href: String, text: String }}
  */
 Url_GetTitle(url)
 {
-  switch Url_GetProtocol(url)
-  {
-    case "file":
-      path := Path_FromURL(url)
-      if !FileExist(path)
-        path := Path_FromURL(Url_Decode(url))
-      if !FileExist(path)
-        throw Error("File not found: " path)
-      return { href: url, text: Path_GetName(path) }
-    default:
-      static WinHttpRequestOption_URL := 1
-      req := ComObject("WinHttp.WinHttpRequest.5.1")
-      req.Open("GET", url, false)
-      req.Send()
-      if req.Status < 200 || req.Status >= 300
-        throw Error("Failed to fetch URL: " url " with status: " req.Status)
-      static document := ComObject("HTMLfile")
-      document.write(req.ResponseText)
-      return { href: req.Option(WinHttpRequestOption_URL), text: document.title }
-  }
+  static cache := Map()
+  if cache.Has(url)
+    return cache.Get(url)
+
+  try
+    switch Url_GetProtocol(url)
+    {
+      case "file":
+        path := Path_FromURL(url)
+        if !FileExist(path)
+          path := Path_FromURL(Url_Decode(url))
+        if !FileExist(path)
+          throw Error("File not found: " path)
+        value := { href: url, text: Path_GetName(path) }
+        cache.Set(url, value)
+        return value
+      default:
+        Notify_ToolTip("Fetching:" url)
+        static WinHttpRequestOption_URL := 1
+        whr := ComObject("WinHttp.WinHttpRequest.5.1")
+        whr.Open("GET", url, false)
+        whr.Send()
+        Log_Trace("Fetch", url, whr.Status)
+        if whr.Status < 200 || whr.Status >= 300
+        {
+          value := { href: url, text: url }
+          cache.Set(url, value)
+          return value
+        }
+        document := ComObject("HTMLfile")
+        document.write(Url_GetResponseText(whr))
+        value := { href: whr.Option(WinHttpRequestOption_URL), text: document.title }
+        cache.Set(url, value)
+        return value
+    }
+  finally
+    Notify_ToolTip()
 }

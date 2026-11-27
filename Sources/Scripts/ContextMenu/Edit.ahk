@@ -42,7 +42,7 @@ ContextMenu_Edit(input)
     ctx.AddSubMenu(Format("Path ({})", paths.Length), ctxPath)
     ctx.AddSeparator()
   }
-  urls := Clipboard_ExtractUrl(true)
+  urls := Clipboard_ExtractUrl()
   if urls.Length > 0
   {
     ctxUrl := ContextMenu()
@@ -62,7 +62,7 @@ ContextMenu_Edit(input)
     ctx.AddSubMenu(Format("URL ({})", urls.Length), ctxUrl)
     ctx.AddSeparator()
   }
-  links := Clipboard_ExtractLink(true)
+  links := Clipboard_ExtractLink()
   if links.Length > 0
   {
     ctxLink := ContextMenu()

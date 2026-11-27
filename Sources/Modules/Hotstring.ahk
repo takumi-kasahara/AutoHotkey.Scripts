@@ -38,20 +38,6 @@
 ::`:`:ws::workspace
 ::`:`:wt::Windows Terminal
 ::`:`:xl::Excel
-:X:`:`:date::
-{
-  if WinActive("ahk_group grp_explorer")
-    Paste(Date_ToString("yyyyMMdd"))
-  else
-    Paste(Date_ToString("yyyy-MM-dd"))
-}
-:X:`:`:time::
-{
-  if WinActive("ahk_group grp_explorer")
-    Paste(Date_ToString("HHmmss"))
-  else
-    Paste(Date_ToString("HH:mm:ss"))
-}
 :X:`:`:code::
 {
   input := Clipboard_GetText()
@@ -64,11 +50,5 @@
   input := Clipboard_GetText()
   if input
     Paste("> " StrReplace(input, "`n", "`n> "))
-}
-:X:`:`:link::
-{
-  links := Stream(Clipboard_ExtractLink(true)).ToArray(link => ConvertTo_MarkdownLink(link.href, link.text))
-  if links.Length > 0
-    Paste(ConvertTo_String(links))
 }
 #HotIf

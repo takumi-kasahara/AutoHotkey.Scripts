@@ -1,11 +1,13 @@
-lockfile_version: '1'
-apm_version: 0.36.1
+lockfile_version: '4'
+apm_version: 0.39.1
+manifest_targets:
+  - copilot
 dependencies:
   - repo_url: takumi-kasahara/dotfiles
     materialization_repo_url: takumi-kasahara/Dotfiles
     name: autohotkey
     host: github.com
-    resolved_commit: 967ceef010aeacc69aa4fa0a17d831b9cc221454
+    resolved_commit: 29b40a451081461e506584a6391ca91c1d4c605c
     version: unknown
     virtual_path: .apm/skills/autohotkey
     is_virtual: true
@@ -23,7 +25,7 @@ dependencies:
       .agents/skills/autohotkey/scripts/run.cmd: sha256:d8298130f9ee65f8df019efa2691fe9de1b4f4305ace55fe9430a52d408fa110
       .agents/skills/autohotkey/scripts/run.ps1: sha256:b6718322f8e7790e21d1e312089a4c16230f7613a24a427e1c3752237e349769
       .agents/skills/autohotkey/scripts/run.ps1.md: sha256:ac96c2b12db594d97f0d236e038e72ed0cdae71caf71f3d2d84853b9c84e125e
-    content_hash: sha256:310b34612b07311c5b9f43cd2f401d81783c81c48229bf951274c1c359d02ac0
+    content_hash: sha256:dde5e8eb47e4bd6bd89426203b03f5fa9c59eb492b3a3021dd47fed9eecf02ff
     carried_licenses:
       - path: LICENSE
         source: LICENSE
